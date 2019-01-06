@@ -3,10 +3,13 @@
  
 #include <memory>
 #include <utility>
-#include "utilities\top.hpp"
-#include "classfile\class_file_stream.hpp"
 #include <stdio.h>
 #include <stdlib.h>
+
+
+#include "utilities\top.hpp"
+#include "classfile\class_file_stream.hpp"
+#include "classfile\class_file_type.hpp"
 
 #define MAX_CLASS_FILE_SIZE  1024*1024*1024
 

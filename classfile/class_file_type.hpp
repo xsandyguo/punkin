@@ -4,52 +4,83 @@
 #include "utilities/top.hpp"
 
 
-#define ACC_PUBLIC				0x0001
-#define ACC_FINAL				0x0010
-#define ACC_SUPER				0x0020
-#define ACC_INTERFACE			0x0200
-#define ACC_ABSTRACT			0x0400 
-#define ACC_SYNTHETIC			0x1000
+#define CLASS_FILE_ACC_PUBLIC				    0x0001
+#define CLASS_FILE_ACC_FINAL				    0x0010
+#define CLASS_FILE_ACC_SUPER				    0x0020
+#define CLASS_FILE_ACC_INTERFACE		    0x0200
+#define CLASS_FILE_ACC_ABSTRACT			    0x0400 
+#define CLASS_FILE_ACC_SYNTHETIC		    0x1000
+#define CLASS_FILE_ACC_ANNOTATION       0x2000
+#define CLASS_FILE_ACC_ENUM             0x4000
 
 
-#define FIELD_INFO_ACC_PUBLIC		0x0001
-#define FIELD_INFO_ACC_PRIVATE		0x0002
-#define FIELD_INFO_ACC_PROTECTED	0x0004
-#define FIELD_INFO_ACC_STATIC		0x0008
-#define FIELD_INFO_ACC_FINAL		0x0010
-#define FIELD_INFO_ACC_VOLATILE 0x0040
-#define FIELD_INFO_ACC_TRANSIENT 0x0080
-#define FIELD_INFO_ACC_SYNTHETIC 0x1000 
-#define FIELD_INFO_ACC_ENUM 0x4000
+#define FIELD_INFO_ACC_PUBLIC           0x0001
+#define FIELD_INFO_ACC_PRIVATE		      0x0002
+#define FIELD_INFO_ACC_PROTECTED	      0x0004
+#define FIELD_INFO_ACC_STATIC		        0x0008
+#define FIELD_INFO_ACC_FINAL		        0x0010
+#define FIELD_INFO_ACC_VOLATILE         0x0040
+#define FIELD_INFO_ACC_TRANSIENT        0x0080
+#define FIELD_INFO_ACC_SYNTHETIC        0x1000 
+#define FIELD_INFO_ACC_ENUM             0x4000
 
 
-#define METHOD_INFO_ACC_PUBLIC 0x0001
-#define METHOD_INFO_ACC_PRIVATE 0x0002
-#define METHOD_INFO_ACC_PROTECTED 0x0004
-#define METHOD_INFO_ACC_STATIC 0x0008
-#define METHOD_INFO_ACC_FINAL 0x0010
-#define METHOD_INFO_ACC_SYNCHRONIZED 0x0020
-#define METHOD_INFO_ACC_BRIDGE 0x0040
-#define METHOD_INFO_ACC_VARARGS 0x0080
-#define METHOD_INFO_ACC_NATIVE 0x0100
-#define METHOD_INFO_ACC_ABSTRACT 0x0400
-#define METHOD_INFO_ACC_STRICT 0x0800
-#define METHOD_INFO_ACC_SYNTHETIC 0x1000
+#define METHOD_INFO_ACC_PUBLIC          0x0001
+#define METHOD_INFO_ACC_PRIVATE         0x0002
+#define METHOD_INFO_ACC_PROTECTED       0x0004
+#define METHOD_INFO_ACC_STATIC          0x0008
+#define METHOD_INFO_ACC_FINAL           0x0010
+#define METHOD_INFO_ACC_SYNCHRONIZED    0x0020
+#define METHOD_INFO_ACC_BRIDGE          0x0040
+#define METHOD_INFO_ACC_VARARGS         0x0080
+#define METHOD_INFO_ACC_NATIVE          0x0100
+#define METHOD_INFO_ACC_ABSTRACT        0x0400
+#define METHOD_INFO_ACC_STRICT          0x0800
+#define METHOD_INFO_ACC_SYNTHETIC       0x1000
 
-#define  CONSTANT_Class 7
-#define 	CONSTANT_Fieldref 9 
-#define 	CONSTANT_Methodref 10 
-#define 	CONSTANT_InterfaceMethodref 11 
-#define 	CONSTANT_String 8 
-#define 	CONSTANT_Integer 3 
-#define 	CONSTANT_Float 4 
-#define 	CONSTANT_Long 5 
-#define 	CONSTANT_Double 6 
-#define 	CONSTANT_NameAndType 12 
-#define 	CONSTANT_Utf8 1 
-#define 	CONSTANT_MethodHandle 15 
-#define 	CONSTANT_MethodType 16 
-#define 	CONSTANT_InvokeDynamic 18
+
+#define INNER_CALSS_ACC_PUBLIC          0x0001
+#define INNER_CALSS_ACC_PRIVATE         0x0002
+#define INNER_CALSS_ACC_PROTECTED       0x0004
+#define INNER_CALSS_ACC_STATIC          0x0008
+#define INNER_CALSS_ACC_FINAL           0x0010
+#define INNER_CALSS_ACC_INTERFACE       0x0200
+#define INNER_CALSS_ACC_ABSTRACT        0x0400
+#define INNER_CALSS_ACC_SYNTHETIC       0x1000
+#define INNER_CALSS_ACC_ANNOTATION      0x2000
+#define INNER_CALSS_ACC_ENUM            0x4000
+
+#define CONSTANT_POOL_TAG_CLASS                 7
+#define CONSTANT_POOL_TAG_FIELD_REF             9 
+#define CONSTANT_POOL_TAG_METHOD_REF            10 
+#define CONSTANT_POOL_TAG_INTERFACE_METHOD_REF  11
+#define CONSTANT_POOL_TAG_STRING                8 
+#define CONSTANT_POOL_TAG_INTERGER              3 
+#define CONSTANT_POOL_TAG_FLOAT                 4 
+#define CONSTANT_POOL_TAG_LONG                  5 
+#define CONSTANT_POOL_TAG_DOUBLE                6 
+#define CONSTANT_POOL_TAG_NAME_AND_TYPE         12 
+#define CONSTANT_POOL_TAG_UTF8                  1 
+#define CONSTANT_POOL_TAG_METHOD_HANDLE         15 
+#define CONSTANT_POOL_TAG_METHOD_TYPE           16 
+#define CONSTANT_POOL_TAG_INVOKE_DYNAMIC        18
+
+
+#define ELEMENT_VALUE_TAG_BYTE          'B'
+#define ELEMENT_VALUE_TAG_CHAR          'C'
+#define ELEMENT_VALUE_TAG_DOUBLE        'D'
+#define ELEMENT_VALUE_TAG_FLOAT         'F'
+#define ELEMENT_VALUE_TAG_INT           'I'
+#define ELEMENT_VALUE_TAG_LONG          'J'
+#define ELEMENT_VALUE_TAG_SHORT         'S'
+#define ELEMENT_VALUE_TAG_BOOL          'Z'
+#define ELEMENT_VALUE_TAG_REF           'L'
+#define ELEMENT_VALUE_TAG_STRING			  's'
+#define ELEMENT_VALUE_TAG_ENUM_CONST		'e'
+#define ELEMENT_VALUE_TAG_CLASS				  'c'
+#define ELEMENT_VALUE_TAG_ANNO_TYPE	    '@'
+#define ELEMENT_VALUE_TAG_ARRAY				  '['
+
 
 struct CONSTANT_Class_info { 
 	u1 tag;
@@ -109,8 +140,8 @@ struct CONSTANT_NameAndType_info {
 
 struct CONSTANT_Utf8_info {
 	u1 tag; 
-u2 length; 
-u1 bytes[length]; 
+	u2 length; 
+	u1* bytes; //u1[length] 
 };
 
 struct CONSTANT_MethodHandle_info {
@@ -130,17 +161,24 @@ struct CONSTANT_InvokeDynamic_info {
 	u2 name_and_type_index; 
 };
 
+
+struct attribute_info{
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u1* info;//u1[attribute_length]
+};
+
 struct method_info{
 	u2 access_flags;
 	u2 name_index;
 	u2 descriptor_index; 
 	u2 attributes_count;
-	attribute_info attributes[attributes_count];
+	attribute_info* attributes; //attribute_info[arrtribute_count]
 };
 
 struct cp_info{
 	u1 tag; 
-	u1 info[];
+	u1* info;
 };
 
 struct field_info{
@@ -148,14 +186,9 @@ struct field_info{
 	u2 name_index; 
 	u2 descriptor_index; 
 	u2 attributes_count; 
-	attribute_info attributes[attributes_count];
+	attribute_info* attributes;//attribute_info[arrtribute_count]
 };
 
-struct attribute_info{
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 info[attribute_length];
-};
 
 struct ConstantValue_attribute { 
 	u2 attribute_name_index;
@@ -169,7 +202,7 @@ struct Code_attribute {
 	u2 max_stack;
 	u2 max_locals;
 	u4 code_length;
-	u1 code[code_length];
+	u1* code;//code[code_length];
 	u2 exception_table_length; 
 	{
 	u2 start_pc;
@@ -258,6 +291,172 @@ struct Exceptions_attribute {
 	u4 attribute_length; 
 	u2 number_of_exceptions; 
 	u2 exception_index_table[number_of_exceptions]; 
+};
+
+
+struct InnerClasses_attribute {
+	u2 attribute_name_index; 
+	u4 attribute_length;
+	u2 number_of_classes;
+	{ 
+		u2 inner_class_info_index; 
+	u2 outer_class_info_index;
+	u2 inner_name_index; 
+	u2 inner_class_access_flags;
+	} 
+	classes[number_of_classes];
+};
+
+struct EnclosingMethod_attribute { 
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u2 class_index u2 method_index;
+};
+
+struct Synthetic_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+};
+
+struct Signature_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u2 signature_index; 
+};
+
+struct SourceFile_attribute { 
+	u2 attribute_name_index; 
+	u4 attribute_length; 
+	u2 sourcefile_index; 
+};
+
+struct SourceDebugExtension_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u1 debug_extension[attribute_length];
+};
+
+struct LineNumberTable_attribute {
+	u2 attribute_name_index; u4 attribute_length; 
+	u2 line_number_table_length; 
+	{
+		u2 start_pc; 
+	u2 line_number;
+	}
+	line_number_table[line_number_table_length]; 
+};
+
+struct LocalVariableTable_attribute { 
+	u2 attribute_name_index; 
+	u4 attribute_length;
+	u2 local_variable_table_length; 
+	{
+		u2 start_pc;
+		u2 length;
+		u2 name_index;
+		u2 descriptor_index;u2 index; 
+} 
+	local_variable_table[local_variable_table_length];
+};
+
+struct LocalVariableTypeTable_attribute { 
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u2 local_variable_type_table_length;
+	{ 
+		u2 start_pc;
+	u2 length;
+	u2 name_index;
+	u2 signature_index; 
+	u2 index;
+	}
+
+	local_variable_type_table[local_variable_type_table_length];
+};
+
+struct Deprecated_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+};
+
+struct element_value { 
+	u1 tag;
+	union {
+		u2 const_value_index;
+		{
+			u2 type_name_index;
+			u2 const_name_index; 
+		} 
+		enum_const_value;
+		u2 class_info_index; 
+		annotation annotation_value; 
+		{ 
+			u2 num_values;
+			element_value values[num_values]; 
+		} array_value;
+	}value;
+};
+
+struct annotation { 
+	u2 type_index; 
+	u2 num_element_value_pairs; 
+	union { 
+		u2 element_name_index;
+		element_value value;
+	}
+	element_value_pairs[num_element_value_pairs]; 
+};
+
+
+struct RuntimeVisibleAnnotations_attribute { 
+	u2 attribute_name_index; 
+	u4 attribute_length;
+	u2 num_annotations;
+	annotation annotations[num_annotations];
+};
+
+struct RuntimeInvisibleAnnotations_attribute {
+	u2 attribute_name_index; 
+	u4 attribute_length; 
+	u2 num_annotations; 
+	annotation annotations[num_annotations];
+};
+
+struct RuntimeVisibleParameterAnnotations_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u1 num_parameters; 
+	{ 
+		u2 num_annotations; 
+	annotation annotations[num_annotations];
+	} parameter_annotations[num_parameters];
+};
+
+struct RuntimeInvisibleParameterAnnotations_attribute {
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u1 num_parameters; 
+	{ 
+		u2 num_annotations; 
+		annotation annotations[num_annotations];
+	}
+	parameter_annotations[num_parameters];
+};
+
+struct AnnotationDefault_attribute { 
+	u2 attribute_name_index;
+	u4 attribute_length;
+	element_value default_value; 
+};
+
+struct BootstrapMethods_attribute { 
+	u2 attribute_name_index;
+	u4 attribute_length;
+	u2 num_bootstrap_methods; 
+	union{ u2 bootstrap_method_ref;
+	u2 num_bootstrap_arguments; 
+	u2 bootstrap_arguments[num_bootstrap_arguments];
+	} bootstrap_methods[num_bootstrap_methods];
 };
 
 struct ClassFileMeta{
