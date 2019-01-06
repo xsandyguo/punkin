@@ -68,7 +68,7 @@
     <ClCompile Include="precompile\precompile.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="jvm\punkin.cpp">
+    <ClCompile Include="jvm\main.cpp">
       <Filter>jvm</Filter>
     </ClCompile>
   </ItemGroup>

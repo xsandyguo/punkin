@@ -3,6 +3,7 @@
 
 #include "utilities/top.hpp"
 
+#define CLASS_FILE_MAGIC                0xCAFEBABE
 
 #define CLASS_FILE_ACC_PUBLIC				    0x0001
 #define CLASS_FILE_ACC_FINAL				    0x0010
@@ -50,20 +51,20 @@
 #define INNER_CALSS_ACC_ANNOTATION      0x2000
 #define INNER_CALSS_ACC_ENUM            0x4000
 
-#define CONSTANT_POOL_TAG_CLASS                 7
-#define CONSTANT_POOL_TAG_FIELD_REF             9 
-#define CONSTANT_POOL_TAG_METHOD_REF            10 
-#define CONSTANT_POOL_TAG_INTERFACE_METHOD_REF  11
-#define CONSTANT_POOL_TAG_STRING                8 
-#define CONSTANT_POOL_TAG_INTERGER              3 
-#define CONSTANT_POOL_TAG_FLOAT                 4 
-#define CONSTANT_POOL_TAG_LONG                  5 
-#define CONSTANT_POOL_TAG_DOUBLE                6 
-#define CONSTANT_POOL_TAG_NAME_AND_TYPE         12 
-#define CONSTANT_POOL_TAG_UTF8                  1 
-#define CONSTANT_POOL_TAG_METHOD_HANDLE         15 
-#define CONSTANT_POOL_TAG_METHOD_TYPE           16 
-#define CONSTANT_POOL_TAG_INVOKE_DYNAMIC        18
+#define CONSTANT_POOL_TYPE_CLASS                 7
+#define CONSTANT_POOL_TYPE_FIELD_REF             9 
+#define CONSTANT_POOL_TYPE_METHOD_REF            10 
+#define CONSTANT_POOL_TYPE_INTERFACE_METHOD_REF  11
+#define CONSTANT_POOL_TYPE_STRING                8 
+#define CONSTANT_POOL_TYPE_INTERGER              3 
+#define CONSTANT_POOL_TYPE_FLOAT                 4 
+#define CONSTANT_POOL_TYPE_LONG                  5 
+#define CONSTANT_POOL_TYPE_DOUBLE                6 
+#define CONSTANT_POOL_TYPE_NAME_AND_TYPE         12 
+#define CONSTANT_POOL_TYPE_UTF8                  1 
+#define CONSTANT_POOL_TYPE_METHOD_HANDLE         15 
+#define CONSTANT_POOL_TYPE_METHOD_TYPE           16 
+#define CONSTANT_POOL_TYPE_INVOKE_DYNAMIC        18
 
 
 #define ELEMENT_VALUE_TAG_BYTE          'B'
@@ -92,136 +93,116 @@
 #define METHOD_REF_KIND_newInvokeSpecial    8
 #define METHOD_REF_KIND_invokeInterface     9
 
-struct Const_Pool_Class_Info { 
-	u1 tag;
-	u2 name_index; 
+
+struct ConstPoolInfo{
+    u1 tag; 
 };
 
-struct Const_Pool_Fieldref_Info { 
-	u1 tag; 
-	u2 class_index; 
-	u2 name_and_type_index; 
+struct ConstPoolClassInfo : ConstPoolInfo{  
+    u2 name_index; 
 };
 
-struct Const_Pool_Methodref_Info { 
-	u1 tag;
-	u2 class_index;
-	u2 name_and_type_index; 
+struct ConstPoolFieldRefInfo : ConstPoolInfo{ 
+    u2 class_index; 
+    u2 name_and_type_index; 
 };
 
-struct Const_Pool_InterfaceMethodref_Info { 
-	u1 tag; 
-	u2 class_index; 
-	u2 name_and_type_index; 
+struct ConstPoolMethodRefInfo : ConstPoolInfo{ 
+    u2 class_index;
+    u2 name_and_type_index; 
 };
 
-struct Const_Pool_String_Info {
-	u1 tag;
-	u2 string_index; 
+struct ConstPoolInterfaceMethodRefInfo : ConstPoolInfo{ 
+    u2 class_index; 
+    u2 name_and_type_index; 
 };
 
-struct Const_Pool_Integer_Info {
-	u1 tag; 
-	u4 bytes; 
+struct ConstPoolStringInfo: ConstPoolInfo{ 
+    u2 string_index; 
 };
 
-struct Const_Pool_Float_Info {
-	u1 tag; 
-	u4 bytes;
+struct ConstPoolIntegerInfo: ConstPoolInfo{ 
+    u4 bytes; 
 };
 
-struct Const_Pool_Long_Info {
-	u1 tag;
-	u4 high_bytes;
-	u4 low_bytes;
+struct ConstPoolFloatInfo: ConstPoolInfo{ 
+    u4 bytes;
 };
 
-struct Const_Pool_Double_Info {
-	u1 tag; 
-	u4 high_bytes; 
-	u4 low_bytes; 
+struct ConstPoolLongInfo : ConstPoolInfo{ 
+    u4 high_bytes;
+    u4 low_bytes;
 };
 
-struct Const_Pool_NameAndType_Info {
-	u1 tag;
-	u2 name_index; 
-	u2 descriptor_index; 
+struct ConstPoolDoubleInfo : ConstPoolInfo{ 
+    u4 high_bytes; 
+    u4 low_bytes; 
 };
 
-struct Const_Pool_Utf8_Info {
-	u1 tag; 
-	u2 length; 
-	u1* bytes; //u1[length] 
+struct ConstPoolNameAndTypeInfo: ConstPoolInfo{ 
+    u2 name_index; 
+    u2 descriptor_index; 
 };
 
-struct Const_Pool_MethodHandle_Info {
-	u1 tag; 
-	u1 reference_kind; 
-	u2 reference_index;
+struct ConstPoolUtf8Info: ConstPoolInfo{ 
+    u2 length; 
+    u1* bytes; //u1[length] 
 };
 
-struct Const_Pool_MethodType_Info {
-	u1 tag; 
-	u2 descriptor_index; 
+struct ConstPoolMethodHandleInfo : ConstPoolInfo{ 
+    u1 reference_kind; 
+    u2 reference_index;
 };
 
-struct Const_Pool_InvokeDynamic_Info {
-	u1 tag; 
-	u2 bootstrap_method_attr_index; 
-	u2 name_and_type_index; 
+struct ConstPoolMethodTypeInfo: ConstPoolInfo{ 
+    u2 descriptor_index; 
 };
 
-
-struct const_pool_info {
-	u1 tag; 
-	u1* info;
+struct ConstPoolInvokeDynamicInfo : ConstPoolInfo{ 
+    u2 bootstrap_method_attr_index; 
+    u2 name_and_type_index; 
 };
 
-struct attribute_info {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1* info;//u1[attribute_length]
+struct AttributeInfo {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u1 type;
 };
 
-struct field_info {
-	u2 access_flags; 
-	u2 name_index; 
-	u2 descriptor_index; 
-	u2 attributes_count; 
-	attribute_info* attributes;//attribute_info[arrtribute_count]
+struct FieldInfo {
+    u2 access_flags; 
+    u2 name_index; 
+    u2 descriptor_index; 
+    u2 attributes_count; 
+    AttributeInfo** attributes;//attribute_info[arrtribute_count]
 };
 
-struct method_info {
-	u2 access_flags;
-	u2 name_index;
-	u2 descriptor_index; 
-	u2 attributes_count;
-	attribute_info* attributes; //attribute_info[arrtribute_count]
+struct MethodInfo {
+    u2 access_flags;
+    u2 name_index;
+    u2 descriptor_index; 
+    u2 attributes_count;
+    AttributeInfo* attributes; //attribute_info[arrtribute_count]
 };
 
-struct ConstantValueAttribute { 
-	u2 attribute_name_index;
-	u4 attribute_length; 
-	u2 constantvalue_index; 
+struct ConstantValueAttribute : AttributeInfo{ 
+    u2 constantvalue_index; 
 };
 
-struct CodeAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length; 
-	u2 max_stack;
-	u2 max_locals;
-	u4 code_length;
-	u1* code;//code[code_length];
-	u2 exception_table_length; 
-	union{
-	    u2 start_pc;
-	    u2 end_pc; 
-	    u2 handler_pc;
-	    u2 catch_type;
-	}*exception_table;//exception_table[exception_table_length];
-
-	u2 attributes_count; 
-	attribute_info* attributes;//attributes[attributes_count];
+struct CodeAttribute : AttributeInfo{ 
+    u2 max_stack;
+    u2 max_locals;
+    u4 code_length;
+    u1* code;//code[code_length];
+    u2 exception_table_length; 
+    union{
+        u2 start_pc;
+        u2 end_pc; 
+        u2 handler_pc;
+        u2 catch_type;
+    }*exception_table;//exception_table[exception_table_length];
+    u2 attributes_count; 
+    AttributeInfo* attributes;//attributes[attributes_count];
 };
 
 #define STACK_MAP_FRAME_TYPE_SAME_START                         0
@@ -235,15 +216,15 @@ struct CodeAttribute {
 #define STACK_MAP_FRAME_TYPE_APPEND_BEGIN                       252
 #define STACK_MAP_FRAME_TYPE_APPEND_END                         254
 
-#define VARIFICATION_TYPE_TAG_TOP           0
-#define VARIFICATION_TYPE_TAG_INTEGER       1
-#define VARIFICATION_TYPE_TAG_FLOAT         2
-#define VARIFICATION_TYPE_TAG_LONG          3
-#define VARIFICATION_TYPE_TAG_DOUBLE        4
-#define VARIFICATION_TYPE_TAG_NULL          5
-#define VARIFICATION_TYPE_TAG_UNINIT_THIS   6
-#define VARIFICATION_TYPE_TAG_OBJECT        7
-#define VARIFICATION_TYPE_TAG_UNINIT        8
+#define STACK_MAP_FRAME_VARIFY_TYPE_TOP           0
+#define STACK_MAP_FRAME_VARIFY_TYPE_INTEGER       1
+#define STACK_MAP_FRAME_VARIFY_TYPE_FLOAT         2
+#define STACK_MAP_FRAME_VARIFY_TYPE_LONG          3
+#define STACK_MAP_FRAME_VARIFY_TYPE_DOUBLE        4
+#define STACK_MAP_FRAME_VARIFY_TYPE_NULL          5
+#define STACK_MAP_FRAME_VARIFY_TYPE_UNINIT_THIS   6
+#define STACK_MAP_FRAME_VARIFY_TYPE_OBJECT        7
+#define STACK_MAP_FRAME_VARIFY_TYPE_UNINIT        8
 
 struct TopVariableInfo { 
     u1 tag; /* 0 */
@@ -283,252 +264,216 @@ struct UninitializedVariableInfo {
     u2 offset; 
 };
 
-union verification_type_info { 
-	TopVariableInfo top_info; 
-	IntegerVariableInfo integer_info;
-	FloatVariableInfo float_info; 
-	LongVariableInfo long_info; 
-	DoubleVariableInfo double_info;
-	NullVariableInfo null_info; 
-	UninitializedThisVariableInfo uninit_this_info;
-	ObjectVariableInfo object_info;
-	UninitializedVariableInfo uninit_info; 
+union VerificationTypeInfo { 
+    TopVariableInfo top_info; 
+    IntegerVariableInfo integer_info;
+    FloatVariableInfo float_info; 
+    LongVariableInfo long_info; 
+    DoubleVariableInfo double_info;
+    NullVariableInfo null_info; 
+    UninitializedThisVariableInfo uninit_this_info;
+    ObjectVariableInfo object_info;
+    UninitializedVariableInfo uninit_info; 
 };
 
 struct SameFrame {
-	u1 frame_type; /* 0-63 */ 
+    u1 frame_type; /* 0-63 */ 
 };
 
 struct SameLocals1StackItemFrame { 
-	u1 frame_type;/* 64-127 */ 
-	verification_type_info stack[1]; 
+    u1 frame_type;/* 64-127 */ 
+    VerificationTypeInfo stack[1]; 
 };
 
 struct SameLocals1StackItemFrameExtended {
-	u1 frame_type;/* 247 */ 
-	u2 offset_delta; 
-  verification_type_info stack[1]; 
+    u1 frame_type;/* 247 */ 
+    u2 offset_delta; 
+    VerificationTypeInfo stack[1]; 
 };
 
 struct ChopFrame { 
-	u1 frame_type;/* 248-250 */ 
-  u2 offset_delta; 
+    u1 frame_type;/* 248-250 */ 
+    u2 offset_delta; 
 };
 
 struct SameFrameExtended { 
-	u1 frame_type; /* 251 */
-	u2 offset_delta;
+    u1 frame_type; /* 251 */
+    u2 offset_delta;
 };
 
 struct AppendFrame { 
-	u1 frame_type; /* 252-254 */
-	u2 offset_delta; 
-	verification_type_info * locals;// locals[frame_type - 251]; 
+    u1 frame_type; /* 252-254 */
+    u2 offset_delta; 
+    VerificationTypeInfo * locals;// locals[frame_type - 251]; 
 };
 
-union stack_map_frame { 
-	SameFrame same_frame;
-	SameLocals1StackItemFrame same_locals_1_stack_item_frame;
-	SameLocals1StackItemFrameExtended same_locals_1_stack_item_frame_extended;
-	ChopFrame chop_frame;
-	SameFrameExtended same_frame_extended;
-	AppendFrame append_frame;
-	//full_frame; 
+union StackMapFrame { 
+    SameFrame same_frame;
+    SameLocals1StackItemFrame item_frame;
+    SameLocals1StackItemFrameExtended item_frame_extended;
+    ChopFrame chop_frame;
+    SameFrameExtended same_frame_extended;
+    AppendFrame append_frame;
+    //full_frame; 
 };
 
-struct StackMapTableAttribute { 
-	u2 attribute_name_index; 
-	u4 attribute_length; 
-	u2 number_of_entries; 
-	stack_map_frame* entries; // entries[number_of_entries];
+struct StackMapTableAttribute : AttributeInfo{ 
+    u2 number_of_entries; 
+    StackMapFrame* entries; // entries[number_of_entries];
 };
 
-struct ExceptionsAttribute {
-	u2 attribute_name_index; 
-	u4 attribute_length; 
-	u2 number_of_exceptions; 
-	u2* exception_index_table;// exception_index_table[number_of_exceptions]; 
+struct ExceptionsAttribute : AttributeInfo{ 
+    u2 number_of_exceptions; 
+    u2* exception_index_table;// exception_index_table[number_of_exceptions]; 
 };
 
 
-struct InnerClassesAttribute {
-	u2 attribute_name_index; 
-	u4 attribute_length;
-	u2 number_of_classes;
-	union{ 
-    u2 inner_class_info_index; 
-    u2 outer_class_info_index;
-    u2 inner_name_index; 
-    u2 inner_class_access_flags;
-	}* classes;// classes[number_of_classes];
+struct InnerClassesAttribute : AttributeInfo{ 
+    u2 number_of_classes;
+    union{ 
+        u2 inner_class_info_index; 
+        u2 outer_class_info_index;
+        u2 inner_name_index; 
+        u2 inner_class_access_flags;
+    }* classes;// classes[number_of_classes];
 };
 
-struct EnclosingMethodAttribute { 
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 class_index;
-  u2 method_index;
+struct EnclosingMethodAttribute : AttributeInfo{ 
+    u2 class_index;
+    u2 method_index;
 };
 
-struct SyntheticAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
+struct SyntheticAttribute : AttributeInfo{ 
 };
 
-struct SignatureAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 signature_index; 
+struct SignatureAttribute : AttributeInfo{ 
+    u2 signature_index; 
 };
 
-struct SourceFileAttribute { 
-	u2 attribute_name_index; 
-	u4 attribute_length; 
-	u2 sourcefile_index; 
+struct SourceFileAttribute : AttributeInfo{ 
+    u2 sourcefile_index; 
 };
 
-struct SourceDebugExtensionAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1* debug_extension;// debug_extension[attribute_length];
+struct SourceDebugExtensionAttribute : AttributeInfo{ 
+    u1* debug_extension;// debug_extension[attribute_length];
 };
 
-struct LineNumberTableAttribute {
-	u2 attribute_name_index; 
-  u4 attribute_length; 
-	u2 line_number_table_length; 
-	union{
-		u2 start_pc; 
-	  u2 line_number;
-	}* line_number_table;//line_number_table[line_number_table_length]; 
+struct LineNumberTableAttribute: AttributeInfo{ 
+    u2 line_number_table_length; 
+    union{
+        u2 start_pc; 
+        u2 line_number;
+    }* line_number_table;//line_number_table[line_number_table_length]; 
 };
 
-struct LocalVariableTableAttribute { 
-	u2 attribute_name_index; 
-	u4 attribute_length;
-	u2 local_variable_table_length; 
-	union{
-		u2 start_pc;
-		u2 length;
-		u2 name_index;
-		u2 descriptor_index;u2 index; 
+struct LocalVariableTableAttribute: AttributeInfo{ 
+    u2 local_variable_table_length; 
+    union{
+        u2 start_pc;
+        u2 length;
+        u2 name_index;
+        u2 descriptor_index;u2 index; 
     }* local_variable_table;//local_variable_table[local_variable_table_length];
 };
 
-struct LocalVariableTypeTableAttribute { 
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 local_variable_type_table_length;
-	union{ 
-    u2 start_pc;
-    u2 length;
-    u2 name_index;
-    u2 signature_index; 
-    u2 index;
-	}*local_variable_type_table;//local_variable_type_table[local_variable_type_table_length];
+struct LocalVariableTypeTableAttribute: AttributeInfo{ 
+    u2 local_variable_type_table_length;
+    union{ 
+        u2 start_pc;
+        u2 length;
+        u2 name_index;
+        u2 signature_index; 
+        u2 index;
+    }*local_variable_type_table;//local_variable_type_table[local_variable_type_table_length];
 };
 
-struct DeprecatedAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
+struct DeprecatedAttribute: AttributeInfo{ 
 };
 
-struct annotation;
-struct element_value { 
-	u1 tag;
-	union {
-		u2 const_value_index;
-		union{
-			u2 type_name_index;
-			u2 const_name_index; 
-		}enum_const_value;
-		u2 class_info_index; 
-		annotation* annotation_value; //trick
-		union{ 
-			u2 num_values;
-			element_value* values;// values[num_values]; 
-		} array_value;
-	}value;
+struct Annotation;
+struct ElementValue { 
+    u1 tag;
+    union {
+        u2 const_value_index;
+        union{
+            u2 type_name_index;
+            u2 const_name_index; 
+        }enum_const_value;
+        u2 class_info_index; 
+        Annotation* annotation_value; //trick
+        union{ 
+            u2 num_values;
+            ElementValue* values;// values[num_values]; 
+        } array_value;
+    }value;
 };
 
-struct annotation { 
-	u2 type_index; 
-	u2 num_element_value_pairs; 
-	union { 
-		u2 element_name_index;
-		element_value value;
-	}* element_value_pairs;// element_value_pairs[num_element_value_pairs]; 
+struct Annotation { 
+    u2 type_index; 
+    u2 num_element_value_pairs; 
+    union { 
+        u2 element_name_index;
+        ElementValue value;
+    }* element_value_pairs;// element_value_pairs[num_element_value_pairs]; 
 };
 
 
-struct RuntimeVisibleAnnotationsAttribute { 
-	u2 attribute_name_index; 
-	u4 attribute_length;
-	u2 num_annotations;
-	annotation* annotations;// annotations[num_annotations];
+struct RuntimeVisibleAnnotationsAttribute : AttributeInfo{ 
+    u2 num_annotations;
+    Annotation* annotations;// annotations[num_annotations];
 };
 
-struct RuntimeInvisibleAnnotationsAttribute {
-	u2 attribute_name_index; 
-	u4 attribute_length; 
-	u2 num_annotations; 
-	annotation* annotations;// annotations[num_annotations];
+struct RuntimeInvisibleAnnotationsAttribute: AttributeInfo{ 
+    u2 num_annotations; 
+    Annotation* annotations;// annotations[num_annotations];
 };
 
-struct RuntimeVisibleParameterAnnotationsAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 num_parameters; 
-	union{ 
-		u2 num_annotations; 
-	  annotation* annotations;// annotations[num_annotations];
-	}*parameter_annotations;// parameter_annotations[num_parameters];
+struct RuntimeVisibleParameterAnnotationsAttribute: AttributeInfo{ 
+    u1 num_parameters; 
+    union{ 
+        u2 num_annotations; 
+        Annotation* annotations;// annotations[num_annotations];
+    }*parameter_annotations;// parameter_annotations[num_parameters];
 };
 
-struct RuntimeInvisibleParameterAnnotationsAttribute {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 num_parameters; 
-	union{ 
-		u2 num_annotations; 
-		annotation*annotations;// annotations[num_annotations];
-	}*parameter_annotations;//parameter_annotations[num_parameters];
+struct RuntimeInvisibleParameterAnnotationsAttribute : AttributeInfo{ 
+    u1 num_parameters; 
+    union{ 
+        u2 num_annotations; 
+        Annotation*annotations;// annotations[num_annotations];
+    }*parameter_annotations;//parameter_annotations[num_parameters];
 };
 
-struct AnnotationDefaultAttribute { 
-	u2 attribute_name_index;
-	u4 attribute_length;
-	element_value default_value; 
+struct AnnotationDefaultAttribute : AttributeInfo{ 
+    ElementValue default_value; 
 };
 
-struct BootstrapMethodsAttribute { 
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u2 num_bootstrap_methods; 
-	union{
-      u2 bootstrap_method_ref;
-	    u2 num_bootstrap_arguments; 
-	    u2* bootstrap_arguments;// bootstrap_arguments[num_bootstrap_arguments];
-	}*bootstrap_methods;// bootstrap_methods[num_bootstrap_methods];
+struct BootstrapMethodsAttribute : AttributeInfo{ 
+    u2 num_bootstrap_methods; 
+    union{
+        u2 bootstrap_method_ref;
+        u2 num_bootstrap_arguments; 
+        u2* bootstrap_arguments;// bootstrap_arguments[num_bootstrap_arguments];
+    }*bootstrap_methods;// bootstrap_methods[num_bootstrap_methods];
 };
 
 struct ClassFileInfo{
-	u4 magic;
-	u2 minor_version;
-	u2 major_version; 
-	u2 constant_pool_count; 
-	const_pool_info* constant_pool;// constant_pool[constant_pool_count-1]; 
-	u2 access_flags; 
-	u2 this_class; 
-	u2 super_class; 
-	u2 interfaces_count; 
-	u2* interfaces;//interfaces[interfaces_count]; 
-	u2 fields_count; 
-	field_info* fields;// fields[fields_count]; 
-	u2 methods_count; 
-	method_info *methods;// methods[methods_count]; 
-	u2 attributes_count; 
-	attribute_info * attributes; //attributes[attributes_count];
+    u4 magic;
+    u2 minor_version;
+    u2 major_version; 
+    u2 constant_pool_count; 
+    ConstPoolInfo** constant_pool;// constant_pool[constant_pool_count-1]; 
+    u2 access_flags; 
+    u2 this_class; 
+    u2 super_class; 
+    u2 interfaces_count; 
+    u2* interfaces;//interfaces[interfaces_count]; 
+    u2 fields_count; 
+    FieldInfo** fields;// fields[fields_count]; 
+    u2 methods_count; 
+    MethodInfo *methods;// methods[methods_count]; 
+    u2 attributes_count; 
+    AttributeInfo * attributes; //attributes[attributes_count];
 };
 
 

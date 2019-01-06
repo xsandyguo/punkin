@@ -104,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp" />
-    <ClCompile Include="jvm\punkin.cpp" />
+    <ClCompile Include="jvm\main.cpp" />
     <ClCompile Include="precompile\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

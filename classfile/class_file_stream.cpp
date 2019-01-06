@@ -34,6 +34,24 @@ u2 ClassFileStream::get_u2() {
   return Bytes::get_Java_u2(tmp);
 }
 
+
+int ClassFileStream::get_u1(u1* buffer, int size){
+  if (_need_verify) {
+    guarantee_more(size);
+  } else {
+    assert(size <= _buffer_end - _current, "buffer overflow");
+  }
+  u1* tmp = _current;
+  _current += size;
+
+  for(int i = 0;i < size; ++i){
+    buffer[i] = *tmp++;
+  }
+
+  return size;
+}
+
+
 u4 ClassFileStream::get_u4() {
   if (_need_verify) {
     guarantee_more(4);
