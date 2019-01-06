@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{e5812f59-eec4-4e56-a703-2745fe15d902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="classfile">
+      <UniqueIdentifier>{1282e948-bf0e-4036-8b55-f71dbc07d123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="runtime">
+      <UniqueIdentifier>{6a412054-dd87-4a95-b110-823fddfef197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jvm">
+      <UniqueIdentifier>{1cee77a2-bb68-4b26-a694-9b9a76f2e73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{cc8ee831-d8d6-4697-86dd-12e55e4efb1a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utilities\types.hpp">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\top.hpp">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_stream.hpp">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\bytes.hpp">
+      <Filter>runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\debug.hpp">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="jvm\vm_symbols.hpp">
+      <Filter>jvm</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\auto_any.h" />
+    <ClInclude Include="base\basictypes.h" />
+    <ClInclude Include="base\debug.h" />
+    <ClInclude Include="base\error.h" />
+    <ClInclude Include="base\scoped_any.h" />
+    <ClInclude Include="base\scoped_ptr.h" />
+    <ClInclude Include="base\shared_any.h" />
+    <ClInclude Include="base\shared_ptr.h" />
+    <ClInclude Include="base\smart_any_fwd.h" />
+    <ClInclude Include="base\utility.h" />
+    <ClInclude Include="classfile\class_file_type.hpp" />
+    <ClInclude Include="classfile\class_file_type.cpp" />
+    <ClInclude Include="precompile\precompile.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="classfile\class_file_stream.cpp">
+      <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\debug.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="precompile\precompile.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="jvm\punkin.cpp">
+      <Filter>jvm</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
