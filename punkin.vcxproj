@@ -91,6 +91,7 @@
     <ClInclude Include="base\shared_ptr.h" />
     <ClInclude Include="base\smart_any_fwd.h" />
     <ClInclude Include="base\utility.h" />
+    <ClInclude Include="classfile\class_file_reader.hpp" />
     <ClInclude Include="classfile\class_file_type.cpp" />
     <ClInclude Include="classfile\class_file_stream.hpp" />
     <ClInclude Include="classfile\class_file_type.hpp" />
@@ -103,7 +104,9 @@
     <ClInclude Include="utilities\types.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="classfile\class_file_reader.cpp" />
     <ClCompile Include="classfile\class_file_stream.cpp" />
+    <ClCompile Include="classfile\class_file_type.cpp" />
     <ClCompile Include="jvm\main.cpp" />
     <ClCompile Include="precompile\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

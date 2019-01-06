@@ -1,6 +1,6 @@
 
-#ifndef SHARE_VM_CLASSFILE_CLASSFILESTREAM_HPP
-#define SHARE_VM_CLASSFILE_CLASSFILESTREAM_HPP
+#ifndef CLASSFILE_CLASSFILESTREAM_HPP
+#define CLASSFILE_CLASSFILESTREAM_HPP
 
 #include "utilities/top.hpp" 
 #include "runtime/Bytes.hpp"

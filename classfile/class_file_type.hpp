@@ -1,9 +1,10 @@
-#ifndef CLASS_FILE_TYPE_HPP
-#define CLASS_FILE_TYPE_HPP
+#ifndef CLASSFILE_CLASS_FILE_TYPE_HPP
+#define CLASSFILE_CLASS_FILE_TYPE_HPP
 
 #include "utilities/top.hpp"
 
 #define CLASS_FILE_MAGIC                0xCAFEBABE
+#define CLASS_FILE_MAX_SIZE             1024*1024*1024
 
 #define CLASS_FILE_ACC_PUBLIC				    0x0001
 #define CLASS_FILE_ACC_FINAL				    0x0010
@@ -82,6 +83,50 @@
 #define ELEMENT_VALUE_TAG_ANNO_TYPE	    '@'
 #define ELEMENT_VALUE_TAG_ARRAY				  '['
 
+
+
+#define ATTRIBUTE_TYPE_CONSTANT_VALUE                         1
+#define ATTRIBUTE_TYPE_STACK_MAP_TABLE                        2
+#define ATTRIBUTE_TYPE_EXCEPTION                              3
+#define ATTRIBUTE_TYPE_INNER_CLASSES                          4
+#define ATTRIBUTE_TYPE_ENCLOSING_METHOD                       5
+#define ATTRIBUTE_TYPE_SYNTHETIC                              6
+#define ATTRIBUTE_TYPE_SIGNATURE                              7
+#define ATTRIBUTE_TYPE_SOURCE_FILE                            8
+#define ATTRIBUTE_TYPE_SOURCE_DEBUG_EXCEPTION                 9
+#define ATTRIBUTE_TYPE_LINE_NUMBER_TABLE                      10
+#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TABLE                   11
+#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TYPE_TABLE              12
+#define ATTRIBUTE_TYPE_DEPRECATED                             13
+#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_ANNOTATIONS            14
+#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_ANNOTATIONS          15
+#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS  16
+#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_PARAMETER_ANNTATIONS 17
+#define ATTRIBUTE_TYPE_ANNOTATION_DEFAULT                     18
+#define ATTRIBUTE_TYPE_BOOTSTRAP_METHODS                      19
+#define ATTRIBUTE_TYPE_MAX                                    19
+
+#define CONST_SYMBOLE_CONSTANT_VALUE                            "ConstantValue"
+#define CONST_SYMBOLE_STACK_MAP_TABLE                           "StackMapTable"
+#define CONST_SYMBOLE_EXCEPTION                                 "Exceptions"
+#define CONST_SYMBOLE_INNER_CLASSES                             "InnerClasses"
+#define CONST_SYMBOLE_ENCLOSING_METHOD                          "EnclosingMethod"
+#define CONST_SYMBOLE_SYNTHETIC                                 "Synthetic"
+#define CONST_SYMBOLE_SIGNATURE                                 "Signature"
+#define CONST_SYMBOLE_SOURCE_FILE                               "SourceFile"
+#define CONST_SYMBOLE_SOURCE_DEBUG_EXCEPTION                    "SourceDebugExtension"
+#define CONST_SYMBOLE_LINE_NUMBER_TABLE                         "LineNumberTable"
+#define CONST_SYMBOLE_LOCAL_VARIABLE_TABLE                      "LocalVariableTable"
+#define CONST_SYMBOLE_LOCAL_VARIABLE_TYPE_TABLE                 "LocalVariableTypeTable"
+#define CONST_SYMBOLE_DEPRECATED                                "Deprecated"
+#define CONST_SYMBOLE_RUNTIME_VISIBLE_ANNOTATIONS               "RuntimeVisibleAnnotations"
+#define CONST_SYMBOLE_RUNTIME_INVISIBLE_ANNOTATIONS             "RuntimeInvisibleAnnotations"
+#define CONST_SYMBOLE_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS     "RuntimeVisibleParameterAnnotations"
+#define CONST_SYMBOLE_RUNTIME_INVISIBLE_PARAMETER_ANNTATIONS    "RuntimeInvisibleParameterAnnotations"
+#define CONST_SYMBOLE_ANNOTATION_DEFAULT                        "AnnotationDefault"
+#define CONST_SYMBOLE_BOOTSTRAP_METHODS                         "BootstrapMethods"
+
+extern const char* attribute_type_map[];
 
 #define METHOD_REF_KIND_getField            1
 #define METHOD_REF_KIND_getStatic           2
@@ -182,7 +227,7 @@ struct MethodInfo {
     u2 name_index;
     u2 descriptor_index; 
     u2 attributes_count;
-    AttributeInfo* attributes; //attribute_info[arrtribute_count]
+    AttributeInfo** attributes; //attribute_info[arrtribute_count]
 };
 
 struct ConstantValueAttribute : AttributeInfo{ 
@@ -471,9 +516,9 @@ struct ClassFileInfo{
     u2 fields_count; 
     FieldInfo** fields;// fields[fields_count]; 
     u2 methods_count; 
-    MethodInfo *methods;// methods[methods_count]; 
+    MethodInfo** methods;// methods[methods_count]; 
     u2 attributes_count; 
-    AttributeInfo * attributes; //attributes[attributes_count];
+    AttributeInfo** attributes; //attributes[attributes_count];
 };
 
 
