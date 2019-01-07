@@ -2,6 +2,7 @@
 
 const char* attribute_type_map[] = {
     CONST_SYMBOLE_CONSTANT_VALUE                          ,
+    CONST_SYMBOLE_CODE                                    ,
     CONST_SYMBOLE_STACK_MAP_TABLE                         ,
     CONST_SYMBOLE_EXCEPTION                               ,
     CONST_SYMBOLE_INNER_CLASSES                           ,

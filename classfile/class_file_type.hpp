@@ -86,27 +86,29 @@
 
 
 #define ATTRIBUTE_TYPE_CONSTANT_VALUE                         1
-#define ATTRIBUTE_TYPE_STACK_MAP_TABLE                        2
-#define ATTRIBUTE_TYPE_EXCEPTION                              3
-#define ATTRIBUTE_TYPE_INNER_CLASSES                          4
-#define ATTRIBUTE_TYPE_ENCLOSING_METHOD                       5
-#define ATTRIBUTE_TYPE_SYNTHETIC                              6
-#define ATTRIBUTE_TYPE_SIGNATURE                              7
-#define ATTRIBUTE_TYPE_SOURCE_FILE                            8
-#define ATTRIBUTE_TYPE_SOURCE_DEBUG_EXCEPTION                 9
-#define ATTRIBUTE_TYPE_LINE_NUMBER_TABLE                      10
-#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TABLE                   11
-#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TYPE_TABLE              12
-#define ATTRIBUTE_TYPE_DEPRECATED                             13
-#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_ANNOTATIONS            14
-#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_ANNOTATIONS          15
-#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS  16
-#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_PARAMETER_ANNTATIONS 17
-#define ATTRIBUTE_TYPE_ANNOTATION_DEFAULT                     18
-#define ATTRIBUTE_TYPE_BOOTSTRAP_METHODS                      19
-#define ATTRIBUTE_TYPE_MAX                                    19
+#define ATTRIBUTE_TYPE_CODE                                   2
+#define ATTRIBUTE_TYPE_STACK_MAP_TABLE                        3
+#define ATTRIBUTE_TYPE_EXCEPTION                              4
+#define ATTRIBUTE_TYPE_INNER_CLASSES                          5
+#define ATTRIBUTE_TYPE_ENCLOSING_METHOD                       6
+#define ATTRIBUTE_TYPE_SYNTHETIC                              7
+#define ATTRIBUTE_TYPE_SIGNATURE                              8
+#define ATTRIBUTE_TYPE_SOURCE_FILE                            9
+#define ATTRIBUTE_TYPE_SOURCE_DEBUG_EXCEPTION                 10
+#define ATTRIBUTE_TYPE_LINE_NUMBER_TABLE                      11
+#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TABLE                   12
+#define ATTRIBUTE_TYPE_LOCAL_VARIABLE_TYPE_TABLE              13
+#define ATTRIBUTE_TYPE_DEPRECATED                             14
+#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_ANNOTATIONS            15
+#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_ANNOTATIONS          16
+#define ATTRIBUTE_TYPE_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS  17
+#define ATTRIBUTE_TYPE_RUNTIME_INVISIBLE_PARAMETER_ANNTATIONS 18
+#define ATTRIBUTE_TYPE_ANNOTATION_DEFAULT                     19
+#define ATTRIBUTE_TYPE_BOOTSTRAP_METHODS                      20
+#define ATTRIBUTE_TYPE_MAX                                    20
 
 #define CONST_SYMBOLE_CONSTANT_VALUE                            "ConstantValue"
+#define CONST_SYMBOLE_CODE                                      "Code"
 #define CONST_SYMBOLE_STACK_MAP_TABLE                           "StackMapTable"
 #define CONST_SYMBOLE_EXCEPTION                                 "Exceptions"
 #define CONST_SYMBOLE_INNER_CLASSES                             "InnerClasses"
@@ -240,14 +242,14 @@ struct CodeAttribute : AttributeInfo{
     u4 code_length;
     u1* code;//code[code_length];
     u2 exception_table_length; 
-    union{
+    struct ExceptionTable{
         u2 start_pc;
         u2 end_pc; 
         u2 handler_pc;
         u2 catch_type;
     }*exception_table;//exception_table[exception_table_length];
     u2 attributes_count; 
-    AttributeInfo* attributes;//attributes[attributes_count];
+    AttributeInfo** attributes;//attributes[attributes_count];
 };
 
 #define STACK_MAP_FRAME_TYPE_SAME_START                         0
@@ -260,6 +262,7 @@ struct CodeAttribute : AttributeInfo{
 #define STACK_MAP_FRAME_TYPE_SAME_FRAME_EXTENDED                251
 #define STACK_MAP_FRAME_TYPE_APPEND_BEGIN                       252
 #define STACK_MAP_FRAME_TYPE_APPEND_END                         254
+#define STACK_MAP_FRAME_TYPE_FULL                               255
 
 #define STACK_MAP_FRAME_VARIFY_TYPE_TOP           0
 #define STACK_MAP_FRAME_VARIFY_TYPE_INTEGER       1
@@ -271,95 +274,82 @@ struct CodeAttribute : AttributeInfo{
 #define STACK_MAP_FRAME_VARIFY_TYPE_OBJECT        7
 #define STACK_MAP_FRAME_VARIFY_TYPE_UNINIT        8
 
-struct TopVariableInfo { 
-    u1 tag; /* 0 */
+struct VerificationTypeInfo { 
+    u1 tag; 
 };
 
-struct IntegerVariableInfo { 
-    u1 tag; /* 1 */ 
+struct TopVariableInfo :VerificationTypeInfo{  
 };
 
-struct FloatVariableInfo {
-    u1 tag; /* 2 */ 
+struct IntegerVariableInfo:VerificationTypeInfo {  
 };
 
-struct LongVariableInfo { 
-    u1 tag; /* 4 */ 
+struct FloatVariableInfo:VerificationTypeInfo { 
 };
 
-struct DoubleVariableInfo { 
-    u1 tag; /* 3 */ 
+struct LongVariableInfo:VerificationTypeInfo {  
 };
 
-struct NullVariableInfo {
-    u1 tag; /* 5 */ 
+struct DoubleVariableInfo :VerificationTypeInfo{  
 };
 
-struct UninitializedThisVariableInfo {
-    u1 tag; /* 6 */ 
+struct NullVariableInfo :VerificationTypeInfo{ 
 };
 
-struct ObjectVariableInfo { 
-    u1 tag; /* 7 */ 
+struct UninitializedThisVariableInfo :VerificationTypeInfo{ 
+};
+
+struct ObjectVariableInfo :VerificationTypeInfo{  
     u2 cpool_index; 
 };
 
-struct UninitializedVariableInfo { 
-    u1 tag; /* 8 */
+struct UninitializedVariableInfo :VerificationTypeInfo{  
     u2 offset; 
 };
 
-union VerificationTypeInfo { 
-    TopVariableInfo top_info; 
-    IntegerVariableInfo integer_info;
-    FloatVariableInfo float_info; 
-    LongVariableInfo long_info; 
-    DoubleVariableInfo double_info;
-    NullVariableInfo null_info; 
-    UninitializedThisVariableInfo uninit_this_info;
-    ObjectVariableInfo object_info;
-    UninitializedVariableInfo uninit_info; 
+
+struct StackMapFrame { 
+    u1 frame_type;
 };
 
-struct SameFrame {
-    u1 frame_type; /* 0-63 */ 
+struct SameFrame : StackMapFrame {
+    /* 0-63 */ 
 };
 
-struct SameLocals1StackItemFrame { 
-    u1 frame_type;/* 64-127 */ 
-    VerificationTypeInfo stack[1]; 
+struct SameLocals1StackItemFrame : StackMapFrame{ 
+    /* 64-127 */ 
+    VerificationTypeInfo** stack;//stack[1]; 
 };
 
-struct SameLocals1StackItemFrameExtended {
-    u1 frame_type;/* 247 */ 
+struct SameLocals1StackItemFrameExtended : StackMapFrame{
+    /* 247 */ 
     u2 offset_delta; 
-    VerificationTypeInfo stack[1]; 
+    VerificationTypeInfo** stack;// stack[1]; 
 };
 
-struct ChopFrame { 
-    u1 frame_type;/* 248-250 */ 
+struct ChopFrame : StackMapFrame{ 
+    /* 248-250 */ 
     u2 offset_delta; 
 };
 
-struct SameFrameExtended { 
-    u1 frame_type; /* 251 */
+struct SameFrameExtended : StackMapFrame{ 
+    /* 251 */
     u2 offset_delta;
 };
 
-struct AppendFrame { 
-    u1 frame_type; /* 252-254 */
+struct AppendFrame : StackMapFrame{ 
+    /* 252-254 */
     u2 offset_delta; 
-    VerificationTypeInfo * locals;// locals[frame_type - 251]; 
+    VerificationTypeInfo ** locals;// locals[frame_type - 251]; 
 };
 
-union StackMapFrame { 
-    SameFrame same_frame;
-    SameLocals1StackItemFrame item_frame;
-    SameLocals1StackItemFrameExtended item_frame_extended;
-    ChopFrame chop_frame;
-    SameFrameExtended same_frame_extended;
-    AppendFrame append_frame;
-    //full_frame; 
+struct FullFrame : StackMapFrame{
+    /* 255 */
+    u2 offset_delta;
+    u2 number_of_locals;
+    VerificationTypeInfo** locals;// locals[number_of_locals];
+    u2 number_of_stack_items;
+    VerificationTypeInfo** stack;// stack[number_of_stack_items];
 };
 
 struct StackMapTableAttribute : AttributeInfo{ 
@@ -372,10 +362,9 @@ struct ExceptionsAttribute : AttributeInfo{
     u2* exception_index_table;// exception_index_table[number_of_exceptions]; 
 };
 
-
 struct InnerClassesAttribute : AttributeInfo{ 
     u2 number_of_classes;
-    union{ 
+    struct Item{ 
         u2 inner_class_info_index; 
         u2 outer_class_info_index;
         u2 inner_name_index; 
@@ -405,7 +394,7 @@ struct SourceDebugExtensionAttribute : AttributeInfo{
 
 struct LineNumberTableAttribute: AttributeInfo{ 
     u2 line_number_table_length; 
-    union{
+    struct Item{
         u2 start_pc; 
         u2 line_number;
     }* line_number_table;//line_number_table[line_number_table_length]; 
@@ -413,17 +402,18 @@ struct LineNumberTableAttribute: AttributeInfo{
 
 struct LocalVariableTableAttribute: AttributeInfo{ 
     u2 local_variable_table_length; 
-    union{
+    struct Item{
         u2 start_pc;
         u2 length;
         u2 name_index;
-        u2 descriptor_index;u2 index; 
+        u2 descriptor_index;
+        u2 index; 
     }* local_variable_table;//local_variable_table[local_variable_table_length];
 };
 
 struct LocalVariableTypeTableAttribute: AttributeInfo{ 
     u2 local_variable_type_table_length;
-    union{ 
+    struct Item{ 
         u2 start_pc;
         u2 length;
         u2 name_index;
@@ -440,13 +430,14 @@ struct ElementValue {
     u1 tag;
     union {
         u2 const_value_index;
-        union{
+        struct{
             u2 type_name_index;
             u2 const_name_index; 
         }enum_const_value;
+
         u2 class_info_index; 
         Annotation* annotation_value; //trick
-        union{ 
+        struct{ 
             u2 num_values;
             ElementValue* values;// values[num_values]; 
         } array_value;
@@ -456,37 +447,35 @@ struct ElementValue {
 struct Annotation { 
     u2 type_index; 
     u2 num_element_value_pairs; 
-    union { 
+    struct { 
         u2 element_name_index;
         ElementValue value;
     }* element_value_pairs;// element_value_pairs[num_element_value_pairs]; 
 };
 
-
 struct RuntimeVisibleAnnotationsAttribute : AttributeInfo{ 
     u2 num_annotations;
-    Annotation* annotations;// annotations[num_annotations];
+    Annotation** annotations;// annotations[num_annotations];
 };
 
 struct RuntimeInvisibleAnnotationsAttribute: AttributeInfo{ 
     u2 num_annotations; 
-    Annotation* annotations;// annotations[num_annotations];
+    Annotation** annotations;// annotations[num_annotations];
+};
+
+struct ParameterAnnotation {
+    u2 num_annotations;
+    Annotation** annotations;
 };
 
 struct RuntimeVisibleParameterAnnotationsAttribute: AttributeInfo{ 
     u1 num_parameters; 
-    union{ 
-        u2 num_annotations; 
-        Annotation* annotations;// annotations[num_annotations];
-    }*parameter_annotations;// parameter_annotations[num_parameters];
+    ParameterAnnotation* parameter_annotations;// parameter_annotations[num_parameters];
 };
 
 struct RuntimeInvisibleParameterAnnotationsAttribute : AttributeInfo{ 
     u1 num_parameters; 
-    union{ 
-        u2 num_annotations; 
-        Annotation*annotations;// annotations[num_annotations];
-    }*parameter_annotations;//parameter_annotations[num_parameters];
+    ParameterAnnotation* parameter_annotations;//parameter_annotations[num_parameters];
 };
 
 struct AnnotationDefaultAttribute : AttributeInfo{ 
@@ -495,7 +484,7 @@ struct AnnotationDefaultAttribute : AttributeInfo{
 
 struct BootstrapMethodsAttribute : AttributeInfo{ 
     u2 num_bootstrap_methods; 
-    union{
+    struct Item{
         u2 bootstrap_method_ref;
         u2 num_bootstrap_arguments; 
         u2* bootstrap_arguments;// bootstrap_arguments[num_bootstrap_arguments];

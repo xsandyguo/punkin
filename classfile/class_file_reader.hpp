@@ -17,13 +17,16 @@ private:
     void readConstPool();
     void readInterface();
 
+    Annotation** readAnnotation(int count);
     void readField();
     void readMethod();
     void readAttribute();
+    AttributeInfo** readAttribute(int count);
     void readAttributeItem(AttributeInfo** attrs, int count);
     
     u1 resolveAttributeType(u2 nameIndex);
-
+    ParameterAnnotation* readParamAnnotation(int count);
+    VerificationTypeInfo** readVerificationTypeInfo(int count);
 private:
     ClassFileStream* fileStream_;
     ClassFileInfo* classFileInfo_;
