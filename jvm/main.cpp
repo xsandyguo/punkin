@@ -15,7 +15,7 @@ int _tmain(int argc, char** argv[])
 
     ClassFileInfo* classFileInfo = new ClassFileInfo();
 
-    reader->readFile("D:\\workspace\\java\\target\\classes\\Main.class",
+    reader->ReadFile("D:\\workspace\\java\\target\\classes\\Main.class",
         classFileInfo);
      
 

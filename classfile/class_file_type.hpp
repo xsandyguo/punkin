@@ -439,7 +439,7 @@ struct ElementValue {
         Annotation* annotation_value; //trick
         struct{ 
             u2 num_values;
-            ElementValue* values;// values[num_values]; 
+            ElementValue** values;// values[num_values]; 
         } array_value;
     }value;
 };
@@ -447,9 +447,9 @@ struct ElementValue {
 struct Annotation { 
     u2 type_index; 
     u2 num_element_value_pairs; 
-    struct { 
+    struct Pair{ 
         u2 element_name_index;
-        ElementValue value;
+        ElementValue* value;
     }* element_value_pairs;// element_value_pairs[num_element_value_pairs]; 
 };
 
@@ -469,12 +469,12 @@ struct ParameterAnnotation {
 };
 
 struct RuntimeVisibleParameterAnnotationsAttribute: AttributeInfo{ 
-    u1 num_parameters; 
+    u2 num_parameters; 
     ParameterAnnotation* parameter_annotations;// parameter_annotations[num_parameters];
 };
 
 struct RuntimeInvisibleParameterAnnotationsAttribute : AttributeInfo{ 
-    u1 num_parameters; 
+    u2 num_parameters; 
     ParameterAnnotation* parameter_annotations;//parameter_annotations[num_parameters];
 };
 

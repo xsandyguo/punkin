@@ -11,22 +11,25 @@ class ClassFileReader{
 public:
     ClassFileReader();
     ~ClassFileReader();
-    void readFile(const char* file, ClassFileInfo* classFileInfo);
+    void ReadFile(const char* file, ClassFileInfo* classFileInfo);
 
 private:
-    void readConstPool();
-    void readInterface();
+    void ReadConstPool();
+    void ReadInterface();
 
-    Annotation** readAnnotation(int count);
-    void readField();
-    void readMethod();
-    void readAttribute();
-    AttributeInfo** readAttribute(int count);
-    void readAttributeItem(AttributeInfo** attrs, int count);
+    Annotation** ReadAnnotation(int count);
+    Annotation* ReadAnnotationItem();
+    void ReadField();
+    void ReadMethod();
+    void ReadAttribute();
+    AttributeInfo** ReadAttribute(int count);
+    AttributeInfo* ReadAttributeItem();
     
-    u1 resolveAttributeType(u2 nameIndex);
-    ParameterAnnotation* readParamAnnotation(int count);
-    VerificationTypeInfo** readVerificationTypeInfo(int count);
+    u1 ResolveAttributeType(u2 nameIndex);
+    ParameterAnnotation* ReadParamAnnotation(int count);
+    VerificationTypeInfo** ReadVerificationTypeInfo(int count);
+    ElementValue* ReadElementValue();
+
 private:
     ClassFileStream* fileStream_;
     ClassFileInfo* classFileInfo_;
