@@ -16,6 +16,9 @@
     <Filter Include="base">
       <UniqueIdentifier>{cc8ee831-d8d6-4697-86dd-12e55e4efb1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="interpreter">
+      <UniqueIdentifier>{7914c4bd-dcba-4537-9e04-26bcf14e5a9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -84,6 +87,12 @@
     <ClInclude Include="base\utility.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="interpreter\byte_codes.h">
+      <Filter>interpreter</Filter>
+    </ClInclude>
+    <ClInclude Include="interpreter\byte_code_stream.h">
+      <Filter>interpreter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp">
@@ -100,6 +109,13 @@
     </ClCompile>
     <ClCompile Include="classfile\class_file_reader.cpp">
       <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile\class_file_type.cpp" />
+    <ClCompile Include="interpreter\byte_codes.cpp">
+      <Filter>interpreter</Filter>
+    </ClCompile>
+    <ClCompile Include="interpreter\byte_code_stream.cpp">
+      <Filter>interpreter</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

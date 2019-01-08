@@ -95,6 +95,8 @@
     <ClInclude Include="classfile\class_file_type.cpp" />
     <ClInclude Include="classfile\class_file_stream.hpp" />
     <ClInclude Include="classfile\class_file_type.hpp" />
+    <ClInclude Include="interpreter\byte_codes.h" />
+    <ClInclude Include="interpreter\byte_code_stream.h" />
     <ClInclude Include="jvm\vm_symbols.hpp" />
     <ClInclude Include="precompile\precompile.hpp" />
     <ClInclude Include="runtime\bytes.hpp" />
@@ -107,6 +109,8 @@
     <ClCompile Include="classfile\class_file_reader.cpp" />
     <ClCompile Include="classfile\class_file_stream.cpp" />
     <ClCompile Include="classfile\class_file_type.cpp" />
+    <ClCompile Include="interpreter\byte_codes.cpp" />
+    <ClCompile Include="interpreter\byte_code_stream.cpp" />
     <ClCompile Include="jvm\main.cpp" />
     <ClCompile Include="precompile\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
