@@ -93,6 +93,9 @@
     <ClInclude Include="interpreter\byte_code_stream.h">
       <Filter>interpreter</Filter>
     </ClInclude>
+    <ClInclude Include="interpreter\interpreter.h">
+      <Filter>interpreter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp">
@@ -115,6 +118,9 @@
       <Filter>interpreter</Filter>
     </ClCompile>
     <ClCompile Include="interpreter\byte_code_stream.cpp">
+      <Filter>interpreter</Filter>
+    </ClCompile>
+    <ClCompile Include="interpreter\interpreter.cpp">
       <Filter>interpreter</Filter>
     </ClCompile>
   </ItemGroup>

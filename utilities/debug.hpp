@@ -13,7 +13,7 @@ void warning(const char* format, ...);
 #define assert(p, msg)														 \
 do {                                                                         \
     if (!(p)) {                                                              \
-      report_vm_error(__FILE__, __LINE__, "assert(" #p ") failed", msg);     \
+      report_vm_error(__FILE__, __LINE__, "assert(" #p ") failed");     \
     }                                                                        \
 } while (0)
 

@@ -389,6 +389,7 @@ void ClassFileReader::ReadMethod(){
         return;
     }
 
+    classFileInfo_->methods = new MethodInfo*[classFileInfo_->methods_count];
     for(int i = 0; i < classFileInfo_->methods_count; ++i){
         MethodInfo * method = new MethodInfo();
         method->access_flags = fileStream_->get_u2();
