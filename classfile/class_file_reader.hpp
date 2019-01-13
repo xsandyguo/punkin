@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 #include "utilities/top.hpp"
-#include "classfile\class_file_stream.hpp"
-#include "classfile\class_file_type.hpp"
+#include "classfile/class_file_stream.hpp"
+#include "classfile/class_file_type.hpp"
 
 class ClassFileReader{
 public:

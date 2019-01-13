@@ -1,0 +1,74 @@
+﻿Build started 2019/1/13 13:05:52.
+     1>Project "D:\workspace\punkin\third_party\zlib-1.2.11\zlibvc.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "x86\ZlibDllDebug\Tmp\zlibvc.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       PreBuildEvent:
+         cd contrib\masmx86
+         bld_ml32.bat
+         :VCEnd
+          Assembling: match686.asm
+         Microsoft (R) Macro Assembler Version 10.00.40219.01
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         Microsoft (R) Macro Assembler Version 10.00.40219.01
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+          Assembling: inffas32.asm
+       ClCompile:
+         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Icontrib\.. /Icontrib\masmx86 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_WARNINGS /D ZLIB_WINAPI /D ASMV /D ASMINF /Gm- /MTd /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x86\ZlibDllDebug\Tmp\\" /Fd"x86\ZlibDllDebug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt adler32.c compress.c crc32.c deflate.c gzclose.c gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c contrib\minizip\ioapi.c contrib\minizip\iowin32.c trees.c uncompr.c contrib\minizip\unzip.c contrib\minizip\zip.c zutil.c
+         adler32.c
+         compress.c
+         crc32.c
+         deflate.c
+         Assembler code may have bugs -- use at your own risk
+         gzclose.c
+         gzlib.c
+         gzread.c
+         gzwrite.c
+         infback.c
+         inffast.c
+         Assembler code may have bugs -- use at your own risk
+         inflate.c
+         inftrees.c
+         ioapi.c
+         iowin32.c
+         trees.c
+         uncompr.c
+         unzip.c
+         zip.c
+         zutil.c
+         Generating Code...
+       ResourceCompile:
+         All outputs are up-to-date.
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"x86\ZlibDllDebug\zlibwapid.lib" /NOLOGO x86\ZlibDllDebug\Tmp\zlib.res
+         x86\ZlibDllDebug\Tmp\adler32.obj
+         x86\ZlibDllDebug\Tmp\compress.obj
+         x86\ZlibDllDebug\Tmp\crc32.obj
+         x86\ZlibDllDebug\Tmp\deflate.obj
+         x86\ZlibDllDebug\Tmp\gzclose.obj
+         x86\ZlibDllDebug\Tmp\gzlib.obj
+         x86\ZlibDllDebug\Tmp\gzread.obj
+         x86\ZlibDllDebug\Tmp\gzwrite.obj
+         x86\ZlibDllDebug\Tmp\infback.obj
+         x86\ZlibDllDebug\Tmp\inffast.obj
+         x86\ZlibDllDebug\Tmp\inflate.obj
+         x86\ZlibDllDebug\Tmp\inftrees.obj
+         x86\ZlibDllDebug\Tmp\ioapi.obj
+         x86\ZlibDllDebug\Tmp\iowin32.obj
+         x86\ZlibDllDebug\Tmp\trees.obj
+         x86\ZlibDllDebug\Tmp\uncompr.obj
+         x86\ZlibDllDebug\Tmp\unzip.obj
+         x86\ZlibDllDebug\Tmp\zip.obj
+         x86\ZlibDllDebug\Tmp\zutil.obj
+     1>LINK : warning LNK4068: /MACHINE not specified; defaulting to X86
+         zlibvc.vcxproj -> D:\workspace\punkin\third_party\zlib-1.2.11\x86\ZlibDllDebug\zlibwapid.lib
+       FinalizeBuildStatus:
+         Deleting file "x86\ZlibDllDebug\Tmp\zlibvc.unsuccessfulbuild".
+         Touching "x86\ZlibDllDebug\Tmp\zlibvc.lastbuildstate".
+     1>Done Building Project "D:\workspace\punkin\third_party\zlib-1.2.11\zlibvc.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.40

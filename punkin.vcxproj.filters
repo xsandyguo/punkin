@@ -54,9 +54,6 @@
     <ClInclude Include="classfile\class_file_reader.hpp">
       <Filter>classfile</Filter>
     </ClInclude>
-    <ClInclude Include="classfile\class_file_type.cpp">
-      <Filter>classfile</Filter>
-    </ClInclude>
     <ClInclude Include="base\debug.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -96,6 +93,19 @@
     <ClInclude Include="interpreter\interpreter.h">
       <Filter>interpreter</Filter>
     </ClInclude>
+    <ClInclude Include="classfile\class_loader.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\klass.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="jvm\oop.h">
+      <Filter>jvm</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_type.cpp" />
+    <ClInclude Include="jvm\linker.h">
+      <Filter>jvm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp">
@@ -113,7 +123,6 @@
     <ClCompile Include="classfile\class_file_reader.cpp">
       <Filter>classfile</Filter>
     </ClCompile>
-    <ClCompile Include="classfile\class_file_type.cpp" />
     <ClCompile Include="interpreter\byte_codes.cpp">
       <Filter>interpreter</Filter>
     </ClCompile>
@@ -122,6 +131,18 @@
     </ClCompile>
     <ClCompile Include="interpreter\interpreter.cpp">
       <Filter>interpreter</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile\class_loader.cpp">
+      <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile\klass.cpp">
+      <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="jvm\oop.cpp">
+      <Filter>jvm</Filter>
+    </ClCompile>
+    <ClCompile Include="jvm\linker.cpp">
+      <Filter>jvm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

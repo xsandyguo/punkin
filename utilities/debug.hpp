@@ -10,16 +10,23 @@ void report_vm_error(const char* file, int line, const char* error_msg,
 void warning(const char* format, ...);
  
 
-#define assert(p, msg)														 \
+#define assert_msg(p, msg)														 \
 do {                                                                         \
     if (!(p)) {                                                              \
-      report_vm_error(__FILE__, __LINE__, "assert(" #p ") failed");     \
+      report_vm_error(__FILE__, __LINE__, "assert(" #p ") failed", msg);     \
     }                                                                        \
-} while (0)
+} while (0);
 
 
-#define THROW_MSG
+#define THROW_UNSUPPORTED()\
+do {                                                                          \
+    throw "usupported";   \
+} while (0);
 
+#define THROW_ILLEGAL_OPERATE()\
+do {                                                                          \
+    throw "illegal operate";   \
+} while (0);
 
 #endif
 

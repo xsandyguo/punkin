@@ -20,25 +20,25 @@ class Bytes {
 
   // Efficient reading and writing of unaligned unsigned data in platform-specific byte ordering
   // (no special code is needed since x86 CPUs can access unaligned data)
-  static inline u2   get_native_u2(address p)         { return *(u2*)p; }
-  static inline u4   get_native_u4(address p)         { return *(u4*)p; }
-  static inline u8   get_native_u8(address p)         { return *(u8*)p; }
+  static inline u2   get_native_u2(addr p)         { return *(u2*)p; }
+  static inline u4   get_native_u4(addr p)         { return *(u4*)p; }
+  static inline u8   get_native_u8(addr p)         { return *(u8*)p; }
 
-  static inline void put_native_u2(address p, u2 x)   { *(u2*)p = x; }
-  static inline void put_native_u4(address p, u4 x)   { *(u4*)p = x; }
-  static inline void put_native_u8(address p, u8 x)   { *(u8*)p = x; }
+  static inline void put_native_u2(addr p, u2 x)   { *(u2*)p = x; }
+  static inline void put_native_u4(addr p, u4 x)   { *(u4*)p = x; }
+  static inline void put_native_u8(addr p, u8 x)   { *(u8*)p = x; }
 
 
   // Efficient reading and writing of unaligned unsigned data in Java
   // byte ordering (i.e. big-endian ordering). Byte-order reversal is
   // needed since x86 CPUs use little-endian format.
-  static inline u2   get_Java_u2(address p)           { return swap_u2(get_native_u2(p)); }
-  static inline u4   get_Java_u4(address p)           { return swap_u4(get_native_u4(p)); }
-  static inline u8   get_Java_u8(address p)           { return swap_u8(get_native_u8(p)); }
+  static inline u2   get_Java_u2(addr p)           { return swap_u2(get_native_u2(p)); }
+  static inline u4   get_Java_u4(addr p)           { return swap_u4(get_native_u4(p)); }
+  static inline u8   get_Java_u8(addr p)           { return swap_u8(get_native_u8(p)); }
 
-  static inline void put_Java_u2(address p, u2 x)     { put_native_u2(p, swap_u2(x)); }
-  static inline void put_Java_u4(address p, u4 x)     { put_native_u4(p, swap_u4(x)); }
-  static inline void put_Java_u8(address p, u8 x)     { put_native_u8(p, swap_u8(x)); }
+  static inline void put_Java_u2(addr p, u2 x)     { put_native_u2(p, swap_u2(x)); }
+  static inline void put_Java_u4(addr p, u4 x)     { put_native_u4(p, swap_u4(x)); }
+  static inline void put_Java_u8(addr p, u8 x)     { put_native_u8(p, swap_u8(x)); }
 
 
   // Efficient swapping of byte ordering
@@ -53,7 +53,7 @@ class Bytes {
 // ordering to native byte ordering and vice versa.
 inline u2 Bytes::swap_u2(u2 x) {
 #ifdef AMD64
-  address p = (address) &x;
+  addr p = (addr) &x;
   return  ( (u2(p[0]) << 8 ) | ( u2(p[1])) );
 #else
   __asm {
@@ -67,7 +67,7 @@ inline u2 Bytes::swap_u2(u2 x) {
 
 inline u4 Bytes::swap_u4(u4 x) {
 #ifdef AMD64
-  address p = (address) &x;
+  addr p = (addr) &x;
   return ( (u4(p[0]) << 24) | (u4(p[1]) << 16) | (u4(p[2]) << 8) | u4(p[3])) ;
 #else
   __asm {
@@ -81,7 +81,7 @@ inline u4 Bytes::swap_u4(u4 x) {
 
 #ifdef AMD64
 inline u8 Bytes::swap_u8(u8 x) {
-  address p = (address) &x;
+  addr p = (addr) &x;
   return ( (u8(p[0]) << 56) | (u8(p[1]) << 48) | (u8(p[2]) << 40) | (u8(p[3]) << 32) |
            (u8(p[4]) << 24) | (u8(p[5]) << 16) | (u8(p[6]) << 8)  | u8(p[7])) ;
 }

@@ -42,6 +42,7 @@
     <EmbedManifest>true</EmbedManifest>
     <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Configuration)\build</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -95,9 +96,13 @@
     <ClInclude Include="classfile\class_file_type.cpp" />
     <ClInclude Include="classfile\class_file_stream.hpp" />
     <ClInclude Include="classfile\class_file_type.hpp" />
+    <ClInclude Include="classfile\class_loader.h" />
+    <ClInclude Include="classfile\klass.h" />
     <ClInclude Include="interpreter\byte_codes.h" />
     <ClInclude Include="interpreter\byte_code_stream.h" />
     <ClInclude Include="interpreter\interpreter.h" />
+    <ClInclude Include="jvm\linker.h" />
+    <ClInclude Include="jvm\oop.h" />
     <ClInclude Include="jvm\vm_symbols.hpp" />
     <ClInclude Include="precompile\precompile.hpp" />
     <ClInclude Include="runtime\bytes.hpp" />
@@ -109,11 +114,14 @@
   <ItemGroup>
     <ClCompile Include="classfile\class_file_reader.cpp" />
     <ClCompile Include="classfile\class_file_stream.cpp" />
-    <ClCompile Include="classfile\class_file_type.cpp" />
+    <ClCompile Include="classfile\class_loader.cpp" />
+    <ClCompile Include="classfile\klass.cpp" />
     <ClCompile Include="interpreter\byte_codes.cpp" />
     <ClCompile Include="interpreter\byte_code_stream.cpp" />
     <ClCompile Include="interpreter\interpreter.cpp" />
+    <ClCompile Include="jvm\linker.cpp" />
     <ClCompile Include="jvm\main.cpp" />
+    <ClCompile Include="jvm\oop.cpp" />
     <ClCompile Include="precompile\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
