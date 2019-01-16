@@ -19,6 +19,9 @@
     <Filter Include="interpreter">
       <UniqueIdentifier>{7914c4bd-dcba-4537-9e04-26bcf14e5a9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="oop">
+      <UniqueIdentifier>{4d333513-a6ef-4dd0-a800-7b762a098897}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -99,12 +102,26 @@
     <ClInclude Include="classfile\klass.h">
       <Filter>classfile</Filter>
     </ClInclude>
-    <ClInclude Include="jvm\oop.h">
-      <Filter>jvm</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_file_type.cpp" />
     <ClInclude Include="jvm\linker.h">
       <Filter>jvm</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\field.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\method.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_type.cpp">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\jarray.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\jobject.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\oop.h">
+      <Filter>oop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,11 +155,23 @@
     <ClCompile Include="classfile\klass.cpp">
       <Filter>classfile</Filter>
     </ClCompile>
-    <ClCompile Include="jvm\oop.cpp">
-      <Filter>jvm</Filter>
-    </ClCompile>
     <ClCompile Include="jvm\linker.cpp">
       <Filter>jvm</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile\field.cpp">
+      <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile\method.cpp">
+      <Filter>classfile</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\jarray.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\jobject.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\oop.cpp">
+      <Filter>oop</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

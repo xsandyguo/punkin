@@ -258,19 +258,15 @@ void OperandStack::push(Operand operand){
     operands_.push_back(operand);
 }
 
-class LocalVariableSolt {
-public:
-    Operand GetVarVal(int index);
-    void SetVarVal(int index, Operand val);
 
-private:
-
+struct StackFrame {
+	Method* method;
+    OperandStack stack; 
+	int maxVar;
+	Operand* varSolts;
 };
 
-
-
-class CPU{
-
+class CPU {
 public:
     void Execute(Method* method_);
 
@@ -374,7 +370,7 @@ public:
          
         DestoryFrame(stackFrames_[framePos_--]);
 
-        JavaStackFrame* frame = currentFrame();
+        StackFrame* frame = currentFrame();
         frame->GetOperandStack().push(op);
     }
 
@@ -472,7 +468,7 @@ public:
 
         DestoryFrame(stackFrames_[framePos_--]);
 
-        JavaStackFrame* frame = currentFrame();
+        StackFrame* frame = currentFrame();
         frame->GetOperandStack().push(op);
     }
 
@@ -676,7 +672,7 @@ public:
 
         DestoryFrame(stackFrames_[framePos_--]);
 
-        JavaStackFrame* frame = currentFrame();
+        StackFrame* frame = currentFrame();
         frame->GetOperandStack().push(op);
     }
  
@@ -888,7 +884,7 @@ public:
 
         CheckNullObject(ref);
 
-        JavaStackFrame* frame = new JavaStackFrame();
+        StackFrame* frame = new StackFrame();
         stackFrames_[framePos_++] = frame;
         method->Invoke(ref, args);
 
@@ -915,7 +911,7 @@ public:
 
         CheckNullObject(ref);
 
-        JavaStackFrame* frame = new JavaStackFrame();
+        StackFrame* frame = new StackFrame();
         stackFrames_[framePos_++] = frame;
         method->Invoke(ref, args);
 
@@ -938,7 +934,7 @@ public:
             args[i] = pop();
         }
           
-        JavaStackFrame* frame = new JavaStackFrame();
+        StackFrame* frame = new StackFrame();
         stackFrames_[framePos_++] = frame;
         method->Invoke(args);
 
@@ -965,7 +961,7 @@ public:
 
         CheckNullObject(ref);
 
-        JavaStackFrame* frame = new JavaStackFrame();
+        StackFrame* frame = new StackFrame();
         stackFrames_[framePos_++] = frame;
         method->Invoke(ref, args);
 
@@ -979,7 +975,7 @@ public:
 
         DestoryFrame(stackFrames_[framePos_--]);
 
-        JavaStackFrame* frame = currentFrame();
+        StackFrame* frame = currentFrame();
         frame->GetOperandStack().push(op);
     }
   
@@ -1182,7 +1178,7 @@ public:
     }
 
     void return_0(){
-        JavaStackFrame* frame = currentFrame();
+        StackFrame* frame = currentFrame();
         framePos_--;
 
         DestoryFrame(frame);
@@ -1321,7 +1317,6 @@ private:
     inline byte         GetLocalByte(int index);
 
 
-    
     inline char      GetLocalChar(int index);
     inline long      GetLocalLong(int index);
 private:
@@ -1355,8 +1350,8 @@ private:
     void SetLocalVar(u2 index, Operand val);  
     Operand GetLocalVar(u2 index);
     void PopFrame();
-    void DestoryFrame(JavaStackFrame* frame);
-    JavaStackFrame* currentFrame();
+    void DestoryFrame(StackFrame* frame);
+    StackFrame* currentFrame();
 
     bool has_more_code();
 
@@ -1366,17 +1361,9 @@ private:
     LocalVariableSolt localVars_;
 
     int framePos_;
-    JavaStackFrame* stackFrames_[MAX_STACK_FRAME]; 
+	StackFrame* stackFrames_[MAX_STACK_FRAME]; 
 };
 
-class JavaStackFrame{
-public:
-    OperandStack& GetOperandStack();
-
-private: 
-    OperandStack operandStack_;
-    LocalVariableSolt localVars_;
-};
 
 
 #endif

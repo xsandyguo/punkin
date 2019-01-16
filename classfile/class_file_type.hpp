@@ -85,16 +85,16 @@
 
 
 
-#define  ARRAY_ELE_TYPE_MIN               4
-#define  ARRAY_ELE_TYPE_BOOLEAN           4
-#define  ARRAY_ELE_TYPE_CHAR              5
-#define  ARRAY_ELE_TYPE_FLOAT             6
-#define  ARRAY_ELE_TYPE_DOUBLE            7
-#define  ARRAY_ELE_TYPE_BYTE              8
-#define  ARRAY_ELE_TYPE_SHORT             9
-#define  ARRAY_ELE_TYPE_INT               10
-#define  ARRAY_ELE_TYPE_LONG              11
-#define  ARRAY_ELE_TYPE_MAX               11
+#define ARRAY_ELE_TYPE_MIN               4
+#define ARRAY_ELE_TYPE_BOOLEAN           4
+#define ARRAY_ELE_TYPE_CHAR              5
+#define ARRAY_ELE_TYPE_FLOAT             6
+#define ARRAY_ELE_TYPE_DOUBLE            7
+#define ARRAY_ELE_TYPE_BYTE              8
+#define ARRAY_ELE_TYPE_SHORT             9
+#define ARRAY_ELE_TYPE_INT               10
+#define ARRAY_ELE_TYPE_LONG              11
+#define ARRAY_ELE_TYPE_MAX               11
 
 #define ATTRIBUTE_TYPE_CONSTANT_VALUE                         1
 #define ATTRIBUTE_TYPE_CODE                                   2
@@ -156,16 +156,16 @@ struct ConstPoolInfo{
     u1 tag; 
 };
 
-struct ConstPoolClassInfo : ConstPoolInfo{  
+struct ConstPoolClassInfo : ConstPoolInfo {
     u2 name_index; 
 };
 
-struct ConstPoolFieldRefInfo : ConstPoolInfo{ 
+struct ConstPoolFieldRefInfo : ConstPoolInfo {
     u2 class_index; 
     u2 name_and_type_index; 
 };
 
-struct ConstPoolMethodRefInfo : ConstPoolInfo{ 
+struct ConstPoolMethodRefInfo : ConstPoolInfo {
     u2 class_index;
     u2 name_and_type_index; 
 };

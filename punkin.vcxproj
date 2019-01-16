@@ -97,13 +97,17 @@
     <ClInclude Include="classfile\class_file_stream.hpp" />
     <ClInclude Include="classfile\class_file_type.hpp" />
     <ClInclude Include="classfile\class_loader.h" />
+    <ClInclude Include="classfile\field.h" />
     <ClInclude Include="classfile\klass.h" />
+    <ClInclude Include="classfile\method.h" />
     <ClInclude Include="interpreter\byte_codes.h" />
     <ClInclude Include="interpreter\byte_code_stream.h" />
     <ClInclude Include="interpreter\interpreter.h" />
     <ClInclude Include="jvm\linker.h" />
-    <ClInclude Include="jvm\oop.h" />
+    <ClInclude Include="oop\oop.h" />
     <ClInclude Include="jvm\vm_symbols.hpp" />
+    <ClInclude Include="oop\jarray.h" />
+    <ClInclude Include="oop\jobject.h" />
     <ClInclude Include="precompile\precompile.hpp" />
     <ClInclude Include="runtime\bytes.hpp" />
     <ClInclude Include="targetver.h" />
@@ -115,13 +119,17 @@
     <ClCompile Include="classfile\class_file_reader.cpp" />
     <ClCompile Include="classfile\class_file_stream.cpp" />
     <ClCompile Include="classfile\class_loader.cpp" />
+    <ClCompile Include="classfile\field.cpp" />
     <ClCompile Include="classfile\klass.cpp" />
+    <ClCompile Include="classfile\method.cpp" />
     <ClCompile Include="interpreter\byte_codes.cpp" />
     <ClCompile Include="interpreter\byte_code_stream.cpp" />
     <ClCompile Include="interpreter\interpreter.cpp" />
     <ClCompile Include="jvm\linker.cpp" />
     <ClCompile Include="jvm\main.cpp" />
-    <ClCompile Include="jvm\oop.cpp" />
+    <ClCompile Include="oop\oop.cpp" />
+    <ClCompile Include="oop\jarray.cpp" />
+    <ClCompile Include="oop\jobject.cpp" />
     <ClCompile Include="precompile\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
