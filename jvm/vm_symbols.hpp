@@ -1,7 +1,7 @@
 #ifndef JVM_VM_SYMBOLS_HPP
 #define JVM_VM_SYMBOLS_HPP
 
-class vmSymbols{
+namespace vmSymbols{
 	void java_lang_ClassFormatError();
 };
 

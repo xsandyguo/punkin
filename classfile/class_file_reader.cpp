@@ -5,7 +5,7 @@
 #include "class_file_reader.hpp"
 
 
-ClassFileReader::ClassFileReader(){
+ClassFileReader::ClassFileReader(byte* code, int count){
     this->fileBuffer_ = NULL;
     this->classFileInfo_ = NULL;
     this->file_ = NULL;

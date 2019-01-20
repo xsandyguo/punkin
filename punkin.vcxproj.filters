@@ -22,6 +22,9 @@
     <Filter Include="oop">
       <UniqueIdentifier>{4d333513-a6ef-4dd0-a800-7b762a098897}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gc">
+      <UniqueIdentifier>{5c4eaead-8a2a-4fe9-acaa-69525769c8be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -93,24 +96,6 @@
     <ClInclude Include="interpreter\byte_code_stream.h">
       <Filter>interpreter</Filter>
     </ClInclude>
-    <ClInclude Include="interpreter\interpreter.h">
-      <Filter>interpreter</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_loader.h">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\klass.h">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="jvm\linker.h">
-      <Filter>jvm</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\field.h">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\method.h">
-      <Filter>classfile</Filter>
-    </ClInclude>
     <ClInclude Include="classfile\class_file_type.cpp">
       <Filter>classfile</Filter>
     </ClInclude>
@@ -122,6 +107,39 @@
     </ClInclude>
     <ClInclude Include="oop\oop.h">
       <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\url_class_loader.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\class_loader.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\field.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\klass.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\method.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\bootstrap_class_loader.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\unzip.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="gc\memory.h">
+      <Filter>gc</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\jthread.h">
+      <Filter>runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\operand.h">
+      <Filter>runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\virtual_machine.h">
+      <Filter>runtime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,24 +164,6 @@
     <ClCompile Include="interpreter\byte_code_stream.cpp">
       <Filter>interpreter</Filter>
     </ClCompile>
-    <ClCompile Include="interpreter\interpreter.cpp">
-      <Filter>interpreter</Filter>
-    </ClCompile>
-    <ClCompile Include="classfile\class_loader.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
-    <ClCompile Include="classfile\klass.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
-    <ClCompile Include="jvm\linker.cpp">
-      <Filter>jvm</Filter>
-    </ClCompile>
-    <ClCompile Include="classfile\field.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
-    <ClCompile Include="classfile\method.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
     <ClCompile Include="oop\jarray.cpp">
       <Filter>oop</Filter>
     </ClCompile>
@@ -172,6 +172,36 @@
     </ClCompile>
     <ClCompile Include="oop\oop.cpp">
       <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\class_loader.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\field.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\klass.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\method.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\url_class_loader.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\bootstrap_class_loader.cpp">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\unzip.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="gc\memory.cpp">
+      <Filter>gc</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\jthread.cpp">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\virtual_machine.cpp">
+      <Filter>runtime</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

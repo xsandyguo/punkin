@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,12 +20,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -96,36 +98,43 @@
     <ClInclude Include="classfile\class_file_type.cpp" />
     <ClInclude Include="classfile\class_file_stream.hpp" />
     <ClInclude Include="classfile\class_file_type.hpp" />
-    <ClInclude Include="classfile\class_loader.h" />
-    <ClInclude Include="classfile\field.h" />
-    <ClInclude Include="classfile\klass.h" />
-    <ClInclude Include="classfile\method.h" />
+    <ClInclude Include="gc\memory.h" />
+    <ClInclude Include="oop\bootstrap_class_loader.h" />
+    <ClInclude Include="oop\class_loader.h" />
+    <ClInclude Include="oop\field.h" />
+    <ClInclude Include="oop\klass.h" />
+    <ClInclude Include="oop\method.h" />
+    <ClInclude Include="oop\url_class_loader.h" />
     <ClInclude Include="interpreter\byte_codes.h" />
     <ClInclude Include="interpreter\byte_code_stream.h" />
-    <ClInclude Include="interpreter\interpreter.h" />
-    <ClInclude Include="jvm\linker.h" />
+    <ClInclude Include="runtime\virtual_machine.h" />
     <ClInclude Include="oop\oop.h" />
     <ClInclude Include="jvm\vm_symbols.hpp" />
     <ClInclude Include="oop\jarray.h" />
     <ClInclude Include="oop\jobject.h" />
     <ClInclude Include="precompile\precompile.hpp" />
     <ClInclude Include="runtime\bytes.hpp" />
+    <ClInclude Include="runtime\jthread.h" />
+    <ClInclude Include="runtime\operand.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utilities\debug.hpp" />
     <ClInclude Include="utilities\top.hpp" />
     <ClInclude Include="utilities\types.hpp" />
+    <ClInclude Include="utilities\unzip.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_reader.cpp" />
     <ClCompile Include="classfile\class_file_stream.cpp" />
-    <ClCompile Include="classfile\class_loader.cpp" />
-    <ClCompile Include="classfile\field.cpp" />
-    <ClCompile Include="classfile\klass.cpp" />
-    <ClCompile Include="classfile\method.cpp" />
+    <ClCompile Include="gc\memory.cpp" />
+    <ClCompile Include="oop\bootstrap_class_loader.cpp" />
+    <ClCompile Include="oop\class_loader.cpp" />
+    <ClCompile Include="oop\field.cpp" />
+    <ClCompile Include="oop\klass.cpp" />
+    <ClCompile Include="oop\method.cpp" />
+    <ClCompile Include="oop\url_class_loader.cpp" />
     <ClCompile Include="interpreter\byte_codes.cpp" />
     <ClCompile Include="interpreter\byte_code_stream.cpp" />
-    <ClCompile Include="interpreter\interpreter.cpp" />
-    <ClCompile Include="jvm\linker.cpp" />
+    <ClCompile Include="runtime\virtual_machine.cpp" />
     <ClCompile Include="jvm\main.cpp" />
     <ClCompile Include="oop\oop.cpp" />
     <ClCompile Include="oop\jarray.cpp" />
@@ -134,7 +143,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="runtime\jthread.cpp" />
     <ClCompile Include="utilities\debug.cpp" />
+    <ClCompile Include="utilities\unzip.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -42,11 +42,23 @@ enum BasicDataType{
     BASIC_TYPE_ILLEGAL 
 };
 
-class Klass;
 
+#define PRIMITIVE_TYPE_KLASS_NAME_BOOL		"boolean"
+#define PRIMITIVE_TYPE_KLASS_NAME_CHAR		"char"
+#define PRIMITIVE_TYPE_KLASS_NAME_BYTE		"byte"
+#define PRIMITIVE_TYPE_KLASS_NAME_SHORT		"short"
+#define PRIMITIVE_TYPE_KLASS_NAME_INT		"int"
+#define PRIMITIVE_TYPE_KLASS_NAME_LONG		"long"
+#define PRIMITIVE_TYPE_KLASS_NAME_FLOAT		"float"
+#define PRIMITIVE_TYPE_KLASS_NAME_DOUBLE	"double"
 
- 
+#define PRIMITIVE_TYPE_KLASS_NAME_COUNT     8
 
+struct primitive_type_klass_size{
+	const char* name;
+	int size;
+};
 
+extern primitive_type_klass_size KLASS_TYPE_SIZE [];
 
 #endif

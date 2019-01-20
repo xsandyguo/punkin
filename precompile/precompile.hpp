@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <Windows.h>
 #include <SDKDDKVer.h>
 
 #include <stdio.h>

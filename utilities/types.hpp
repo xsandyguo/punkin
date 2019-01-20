@@ -13,23 +13,9 @@ typedef __int64            su8;
 
 typedef unsigned char      byte;
 
-#define TRAPS
 #define addr         void*
 #define BitsPerByte     8
- 
 
-enum BasicType{
-    T_CHAR  ,
-    T_BYTE  ,
-    T_SHORT ,
-    T_FLOAT ,
-    T_DOUBLE,
-    T_INT   ,
-    T_LONG  ,
-    T_OBJECT,
-    T_VOID  ,
-    T_ILLEGAL
-};
 
 #endif
 

@@ -9,9 +9,11 @@
 
 class ClassFileReader{
 public:
-    ClassFileReader();
+    ClassFileReader(byte* code, int count);
     ~ClassFileReader();
     void ReadFile(const char* file, ClassFileInfo* classFileInfo);
+
+	Klass* Read();
 
 private:
     void ReadConstPool();
