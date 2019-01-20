@@ -6,48 +6,48 @@
 
 class Klass;
 
-class Executable{
-public:
-	Executable();
-	~Executable();
-public:
-	const char* GetName();
-	void        SetName(const char* name);
+class Executable {
+  public:
+    Executable();
+    ~Executable();
+  public:
+    const std::string& GetName();
+    void        SetName(const std::string& name);
 
-	int GetModifier();
-	void SetModifier(int modifier);
+    int GetModifier();
+    void SetModifier(int modifier);
 
-	Klass*      GetDeclareClass();
-	void        SetDeclareClass(Klass* klass);
+    Klass*      GetDeclareClass();
+    void        SetDeclareClass(Klass* klass);
 
-	std::vector<Klass*>& GetParamerterTypes(); 
-	void        SetParameterTypes(std::vector<Klass*>& parameterTypes);
-	int         GetParameterCount();
+    const std::vector<Klass*>& GetParamerterTypes();
+    void        SetParameterTypes(const std::vector<Klass*>& parameterTypes);
+    int         GetParameterCount();
 
-	Klass*      GetReturnType();
-	void        SetReturnType(Klass* returnType); 
+    Klass*      GetReturnType();
+    void        SetReturnType(Klass* returnType);
 
-	Klass*      GetType();
-	void		SetType(Klass* klass);
+    Klass*      GetType();
+    void		SetType(Klass* klass);
 
-	jobject Invoke(jobject obj, std::vector<jobject>& parameters);
-private:
-	int midifers_;
-	Klass* returnType_;
-	Klass* klass_;
-	const char* name_; 
-	std::vector<Klass*> parameterTypes_;
+    jobject Invoke(jobject obj, const std::vector<jobject>& parameters);
+  private:
+    int modifier_;
+    Klass* returnType_;
+    Klass* klass_;
+    std::string name_;
+    std::vector<Klass*> parameterTypes_;
 };
 
 
-class Method : public Executable{
+class Method : public Executable {
 
 };
 
 
-class Constructor : public Executable{
-public:
-	jobject New();
+class Constructor : public Executable {
+  public:
+    jobject New();
 };
 
 #endif

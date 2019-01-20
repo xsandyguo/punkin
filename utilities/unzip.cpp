@@ -2751,7 +2751,7 @@ typedef struct
 } unz_s, *unzFile;
 
 
-int unzStringFileNameCompare (const char* fileName1,const char* fileName2,int iCaseSensitivity);
+int unzStringFileNameCompare (const std::string& fileName1,const std::string& fileName2,int iCaseSensitivity);
 //   Compare two filename (fileName1,fileName2).
 
 z_off_t unztell (unzFile file);
@@ -2845,7 +2845,7 @@ int unzlocal_getLong (LUFILE *fin,uLong *pX)
 
 
 // My own strcmpi / strcasecmp 
-int strcmpcasenosensitive_internal (const char* fileName1,const char *fileName2)
+int strcmpcasenosensitive_internal (const std::string& fileName1,const char *fileName2)
 {
 	for (;;)
 	{

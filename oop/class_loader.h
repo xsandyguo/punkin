@@ -2,34 +2,35 @@
 #define OOP_CLASS_LOADER_H
 
 #include "utilities/top.hpp"
-#include <vector>
+#include <list>
+#include <map>
+#include <string>
 
 class Klass;
 
-class ClassLoader{
-public:
-	ClassLoader();
-	ClassLoader(ClassLoader* parent);
-	~ClassLoader();
-public:
-    Klass* LoadClass(const char* name);
+class ClassLoader {
+  public:
+    ClassLoader();
+    ClassLoader(ClassLoader* parent);
+    ~ClassLoader();
+  public:
+    Klass* LoadClass(const std::string& name);
 
-	static std::vector<ClassLoader*>& GetAllInstance();
+    static std::list<ClassLoader*>& GetAllInstance();
 
-protected:
-	virtual Klass* FindClass(const char* name) = 0;
-    Klass* DefineClass(const char* name, byte* codes, int length);
+  protected:
+    virtual Klass* FindClass(const std::string& name) = 0;
+    Klass* DefineClass(const std::string& name, byte* codes, int length);
 
-	void ResolveKlass(Klass* klass);
+    void ResolveKlass(Klass* klass);
 
-private:
-	Klass* FindLoadedKlass(const char* name);
+  private:
+    Klass* FindLoadedKlass(const std::string& name);
 
-private:
-    const char* file_;
-	ClassLoader* parent_;
-	std::vector<Klass*> loadedKlass_;
-	static std::vector<ClassLoader*> instances_;
+  private:
+    ClassLoader* parent_;
+    std::map<std::string, Klass*> loadedKlass_;
+    static std::list<ClassLoader*> instances_;
 };
 
 #endif

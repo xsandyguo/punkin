@@ -3,14 +3,15 @@
 
 #include "oop/class_loader.h"
 
+
 class UrlClassLoader : public ClassLoader{
 public:
-	UrlClassLoader(const char* jar);
+	UrlClassLoader(const std::string& jar);
 	~UrlClassLoader();
 
-	virtual Klass* FindClass(const char* name);
+	virtual Klass* FindClass(const std::string& name);
 private:
-	const char* jar_;
+	const std::string jar_;
 };
 
 #endif 

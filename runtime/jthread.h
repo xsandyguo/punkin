@@ -2,45 +2,45 @@
 #define RUNTIME_JTHREAD_H
 
 #include <vector>
+#include <list>
+#include <thread>
+
+#include "runtime/operand_stack.h"
 
 class Method;
 class ClassLoader;
 class Operand;
 
-class StackFrame{
-	Method* method;
-	OperandStack stack; 
-	int maxVar;
-	Operand* varSolts;
-};
-
-class OperandStack {
-public:
-	Operand pop();
-	void push(Operand operand);
-private:
-	std::vector<Operand> operands_;
+class StackFrame {
+    Method* method;
+    OperandStack stack;
+    int maxVar;
+    Operand* varSolts;
 };
 
 
-class JThread{
-public:
-	JThread(Method* entry);
-	~JThread();
+class JThread {
+  public:
+    JThread(Method* entry);
+    ~JThread();
 
-public:
+  public:
+    void Start();
+    void Join();
 
-	void Start();
+    static std::list<JThread*> GetAllThread();
+    static JThread* Current();
 
-	static std::vector<JThread*> GetAllThread();
-	static JThread* Current();
+    std::list<StackFrame*>& GetFrames();
 
-	std::vector<StackFrame*>& GetFrames();
+  private:
+    void Start0();
 
-private:
-	std::vector<StackFrame*> frames_;
-	static std::vector<JThread*> threads_;
-	Method* entry_;
+  private:
+    std::list<StackFrame*> frames_;
+    static std::list<JThread*> threads_;
+    Method* entry_;
+    std::thread* thread_;
 };
 
 #endif

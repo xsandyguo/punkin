@@ -3,10 +3,11 @@
 
 #include "oop/url_class_loader.h"
 
+#include <string>
+
 class BootstrapClassLoader : public UrlClassLoader{
 public:
-
-private:
+	BootstrapClassLoader(const std::string& path); 
 };
 
 #endif

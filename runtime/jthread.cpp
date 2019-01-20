@@ -4,40 +4,43 @@
 
 #include <thread>
 
-std::vector<JThread*> JThread::threads_;
+std::list<JThread*> JThread::threads_;
 
 
 JThread::JThread(Method* method):
-entry_(method){
-	threads_.push_back(this);
+    entry_(method) {
+    threads_.push_back(this);
 }
 
-JThread::~JThread(){
+JThread::~JThread() {
+    threads_.remove(this);
 
+    if (thread_->joinable()) {
+        thread_->join();
+    }
 }
 
-void JThread::Start(){
-	VirtualMachine vm;
-	vm.Execute(entry_);
+void JThread::Start() {
+    thread_ = new std::thread(std::bind(&JThread::Start0, this));
 }
 
-JThread* JThread::Current(){
-	return NULL;
+void JThread::Join() {
+    thread_->join();
 }
 
-std::vector<JThread*> JThread::GetAllThread(){
-	return threads_;
+void JThread::Start0() {
+    VirtualMachine vm;
+    vm.Execute(entry_);
 }
 
-std::vector<StackFrame*>& JThread::GetFrames(){
-	return frames_;
+JThread* JThread::Current() {
+    return NULL;
 }
 
-Operand OperandStack::pop(){
-	Operand ret = operands_.back();
-	operands_.pop_back();
+std::list<JThread*> JThread::GetAllThread() {
+    return threads_;
 }
 
-void OperandStack::push(Operand operand){
-	operands_.push_back(operand);
+std::list<StackFrame*>& JThread::GetFrames() {
+    return frames_;
 }

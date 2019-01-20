@@ -3,65 +3,61 @@
 #include "classfile/class_file_reader.hpp"
 
 
-std::vector<ClassLoader*> ClassLoader::instances_;
+std::list<ClassLoader*> ClassLoader::instances_;
 
 ClassLoader::ClassLoader()
-	:parent_(NULL){ 
+    :parent_(NULL) {
 }
 
 ClassLoader::ClassLoader(ClassLoader* parent)
-	:parent_(parent){
+    :parent_(parent) {
 
 }
 
-ClassLoader::~ClassLoader(){
+ClassLoader::~ClassLoader() {
 
 }
 
-std::vector<ClassLoader*>& ClassLoader::GetAllInstance(){
-	return instances_;
+std::list<ClassLoader*>& ClassLoader::GetAllInstance() {
+    return instances_;
 }
 
-Klass* ClassLoader::DefineClass(const char* name, byte* codes, int length){
-	ClassFileReader reader(codes, length);
-	Klass* klass = reader.Read();
-	klass->SetName(name);
-	klass->SetClassLoader(this);
+Klass* ClassLoader::DefineClass(const std::string& name, byte* codes, int length) {
+    ClassFileReader reader(codes, length);
+    Klass* klass = reader.Read();
+    klass->SetName(name);
+    klass->SetClassLoader(this);
 
-	return klass;
+    return klass;
 }
 
-Klass* ClassLoader::LoadClass(const char* name){
-	Klass* klass = FindLoadedKlass(name);
+Klass* ClassLoader::LoadClass(const std::string& name) {
+    Klass* klass = FindLoadedKlass(name);
 
-	if(parent_ == NULL){
-		klass = parent_->LoadClass(name);
-	}
+    if(parent_ == NULL) {
+        klass = parent_->LoadClass(name);
+    }
 
-	if(klass == NULL){
-		klass = FindClass(name);
-	}
+    if(klass == NULL) {
+        klass = FindClass(name);
+    }
 
-	if(klass == NULL){
-		throw "not found klass";
-	}
+    if(klass == NULL) {
+        throw "not found klass";
+    }
 
-	return klass;
+    return klass;
 }
 
-Klass* ClassLoader::FindLoadedKlass(const char* name){
-	for(std::vector<Klass*>::iterator itor = loadedKlass_.begin();
-		itor != loadedKlass_.end(); itor++){
-		Klass* klass = *itor;
+Klass* ClassLoader::FindLoadedKlass(const std::string& name) {
+    std::map<std::string, Klass*>::iterator itor = loadedKlass_.find(name);
+    if (itor != loadedKlass_.end()) {
+        return itor->second;
+    }
 
-		if(!strcmp(klass->GetName(), name)){
-			return klass;
-		}
-	}
-
-	return NULL;
+    return NULL;
 }
 
-void ClassLoader::ResolveKlass(Klass* klass){
+void ClassLoader::ResolveKlass(Klass* klass) {
 
 }

@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utilities\types.hpp">
@@ -141,6 +142,9 @@
     <ClInclude Include="runtime\virtual_machine.h">
       <Filter>runtime</Filter>
     </ClInclude>
+    <ClInclude Include="runtime\operand_stack.h">
+      <Filter>runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp">
@@ -201,6 +205,12 @@
       <Filter>runtime</Filter>
     </ClCompile>
     <ClCompile Include="runtime\virtual_machine.cpp">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\operand_stack.cpp">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\operand.cpp">
       <Filter>runtime</Filter>
     </ClCompile>
   </ItemGroup>

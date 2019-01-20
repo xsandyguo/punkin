@@ -6,4 +6,4 @@
 CString AnsiToWideString(const char *from, int length) ;
 std::string WideToAnsiDirect(const std::wstring & in) ;
 std::string WideToAnsi(const std::wstring& w);
-std::wstring AnsiToWideChar(const char* ansi, UINT num_bytes) ;
+std::wstring AnsiToWideChar(const std::string& ansi, UINT num_bytes) ;

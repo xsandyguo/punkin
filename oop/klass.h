@@ -33,22 +33,22 @@ public:
     int GetModifier();
 	void SetModifier(int modifier);
 
-    Method* ResolveMethodByName(const char* name);  
+    Method* ResolveMethodByName(const std::string& name);
 
     u1   GetValueType();
 
 	bool IsResolved();
 
 public:
-    const char* GetName();
-	void SetName(const char* name);
+    const std::string& GetName();
+	void SetName(const std::string& name);
      
     std::vector<Field*> GetDeclaredFields();
-    Field* GetDeclaredField(const char* name);
+    Field* GetDeclaredField(const std::string& name);
 
     std::vector<Method*> GetDeclaredMethods();
-    Method* GetDeclaredMethod(const char* name);
-    Method* GetDeclaredMethod(const char* name, std::vector<Klass*>& parameterTypes);
+    Method* GetDeclaredMethod(const std::string& name);
+    Method* GetDeclaredMethod(const std::string& name, std::vector<Klass*>& parameterTypes);
 
     std::vector<Constructor*> GetDeclaredConstructors();
     Constructor* GetDeclaredConstructor(std::vector<Klass*>& parameterTypes);
@@ -68,7 +68,7 @@ private:
      std::vector<Constructor*> constructors_;
      std::vector<Method*> methods_; 
 	 std::vector<Field*> fields_;
-     const char* name_;
+     std::string name_;
      std::vector<ConstantPool*> constantPools_;
 	 bool resolved_;
 };

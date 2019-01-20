@@ -3,123 +3,131 @@
 #include "oop/klass.h"
 
 
-Klass::Klass(){
+Klass::Klass() {
 
 }
 
-Klass::~Klass(){
+Klass::~Klass() {
 
 }
 
-bool Klass::IsPrimitive(){
+bool Klass::IsPrimitive() {
 
 }
 
-bool Klass::IsEnum(){
+bool Klass::IsEnum() {
 
 }
 
-bool Klass::IsAnnotation(){
+bool Klass::IsAnnotation() {
 
 }
 
-bool Klass::IsAssigableFrom(Klass* klass){
+bool Klass::IsAssigableFrom(Klass* klass) {
 
 }
 
-bool Klass::IsArray(){
+bool Klass::IsArray() {
 
 }
 
-bool Klass::IsInterface(){
+bool Klass::IsInterface() {
 
 }
 
-bool Klass::IsSynthetic(){
+bool Klass::IsSynthetic() {
 
 }
 
-bool Klass::IsInstance(jobject obj){
+bool Klass::IsInstance(jobject obj) {
 
 }
 
-int Klass::GetModifier(){
-	return modifier_;
+int Klass::GetModifier() {
+    return modifier_;
 }
 
-void Klass::SetModifier(int modifier){
-	this->modifier_ = modifier;
+void Klass::SetModifier(int modifier) {
+    this->modifier_ = modifier;
+}
+
+Method * Klass::ResolveMethodByName(const std::string & name) {
+    return nullptr;
 }
 
 
-Method* ResolveMethodByName(const char* name){
-
+Method* ResolveMethodByName(const std::string& name) {
+    return NULL;
 }
 
-u1   Klass::GetValueType(){
-
+bool Klass::IsResolved() {
+    return resolved_;
 }
 
-Klass* Klass::GetSuperKlass(){
-	return this->superKlass_;
-}
-
-void Klass::SetSuperKlass(Klass* superKlass){
-	this->superKlass_ = superKlass;
-}
-
-const char* Klass::GetName(){
-	return this->name_;
-}
-
-void Klass::SetName(const char* name){
-	this->name_ = name;
-}
-
-std::vector<Field*> Klass::GetDeclaredFields(){
-	return fields_;
-}
-
-Field* Klass::GetDeclaredField(const char* name){
-	 
-}
-
-std::vector<Method*>Klass:: GetDeclaredMethods(){
+u1   Klass::GetValueType() {
 
 }
 
-Method* Klass::GetDeclaredMethod(const char* name){
+Klass* Klass::GetSuperKlass() {
+    return this->superKlass_;
+}
+
+void Klass::SetSuperKlass(Klass* superKlass) {
+    this->superKlass_ = superKlass;
+}
+
+const std::string& Klass::GetName() {
+    return this->name_;
+}
+
+void Klass::SetName(const std::string& name) {
+    this->name_ = name;
+}
+
+std::vector<Field*> Klass::GetDeclaredFields() {
+    return fields_;
+}
+
+Field* Klass::GetDeclaredField(const std::string& name) {
 
 }
 
-Method* Klass::GetDeclaredMethod(const char* name, std::vector<Klass*>& parameterTypes){
+std::vector<Method*>Klass:: GetDeclaredMethods() {
 
 }
 
-std::vector<Constructor*> Klass::GetDeclaredConstructors(){
+Method* Klass::GetDeclaredMethod(const std::string& name) {
 
 }
 
-Constructor* Klass::GetDeclaredConstructor(std::vector<Klass*>& parameterTypes){
+Method* Klass::GetDeclaredMethod(const std::string& name, std::vector<Klass*>& parameterTypes) {
 
 }
 
-std::vector<Klass*> Klass::GetDeclaredClasses(){
-	 
-}
-
-ClassLoader* Klass::GetClassLoader(){
-	return this->classLoader_;
-}
-
-void Klass::SetClassLoader(ClassLoader* classLoader){
-	this->classLoader_ = classLoader;
-}
-
-void Klass::SetConstantPool(std::vector<ConstantPool*>& constantPools){
+std::vector<Constructor*> Klass::GetDeclaredConstructors() {
 
 }
 
-jobject Klass::NewInstance(){
+Constructor* Klass::GetDeclaredConstructor(std::vector<Klass*>& parameterTypes) {
+
+}
+
+std::vector<Klass*> Klass::GetDeclaredClasses() {
+
+}
+
+ClassLoader* Klass::GetClassLoader() {
+    return this->classLoader_;
+}
+
+void Klass::SetClassLoader(ClassLoader* classLoader) {
+    this->classLoader_ = classLoader;
+}
+
+void Klass::SetConstantPool(std::vector<ConstantPool*>& constantPools) {
+
+}
+
+jobject Klass::NewInstance() {
 
 }

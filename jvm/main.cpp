@@ -5,24 +5,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#include "utilities\top.hpp"
-#include "classfile\class_file_reader.hpp"
+#include "utilities/top.hpp"
+#include "oop/method.h"
+#include "oop/klass.h"
+#include "runtime/jthread.h"
 #include "oop/bootstrap_class_loader.h"
 
-int _tmain(int argc, char** argv[])
-{ 
-    ClassFileReader* reader = new ClassFileReader();
-
-    ClassFileInfo* classFileInfo = new ClassFileInfo();
-
-    reader->ReadFile("D:\\workspace\\java\\target\\classes\\Main.class",
-        classFileInfo);
-     
-	ClassLoader* classLoader = new BootstrapClassLoader();
-	Klass* klass = classLoader->LoadClass(entrySym_);
+int _tmain(int argc, char** argv[]) {  
+	BootstrapClassLoader* classLoader = 
+		new BootstrapClassLoader("D:\\workspace\\java\\target\\classes\\");
+	Klass* klass = classLoader->LoadClass("com.petstore.Main");
 	Method* method = klass->GetDeclaredMethod("main");
 
+	JThread * thread = new JThread(method);
+	thread->Start();
 
     return 0;
 }

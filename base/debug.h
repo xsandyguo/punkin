@@ -76,10 +76,10 @@ DIP_EXPORT void LogMessageW(LOG_CATEGORY category,
                            const wchar_t* fmt, ...);
 
 DIP_EXPORT void LogMessageA(LOG_CATEGORY category, 
-                            const char* file,
-                            const char* func,
+                            const std::string& file,
+                            const std::string& func,
                             int line,
-                            const char* fmt, ...);
+                            const std::string& fmt, ...);
 
 #ifndef LOG_ANSI
 #define LOG_MESSAGE(cat, x, ...) \

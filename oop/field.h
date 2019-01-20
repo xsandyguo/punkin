@@ -1,7 +1,9 @@
 #ifndef CLASSFILE_FIELD_H
 #define CLASSFILE_FIELD_H
 
+#include <string>
 #include "oop/oop.h"
+
 class Klass;
 
 class Field {
@@ -10,8 +12,8 @@ public:
 	~Field();
 
 public:
-	const char* GetName();
-	void        SetName(const char* name);
+	const std::string& GetName();
+	void        SetName(const std::string& name);
 
 	Klass*      GetType();
 	void        SetType(Klass* type);
@@ -49,7 +51,7 @@ private:
 	addr GetFieldData(jobject obj);
 private:
 	int offset_;
-	const char* name_;
+	std::string name_;
 	int modifier_;
 	Klass* type_;
 	int index_;

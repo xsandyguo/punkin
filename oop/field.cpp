@@ -1,6 +1,13 @@
 #include "oop/field.h"
 #include "oop/jobject.h"
 
+Field::Field() {
+
+}
+
+Field::~Field() {
+
+}
 
 void Field::SetIndex(int index){
 	this->index_ = index;
@@ -10,11 +17,11 @@ int Field::GetIndex(){
 	return this->index_;
 }
 
-const char* Field::GetName(){
+const std::string& Field::GetName(){
 	return this->name_;
 }
 
-void        Field::SetName(const char* name){
+void        Field::SetName(const std::string& name){
 	this->name_ = name;
 }
 

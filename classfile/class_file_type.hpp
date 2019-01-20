@@ -10,7 +10,7 @@
 #define CLASS_FILE_ACC_FINAL				    0x0010
 #define CLASS_FILE_ACC_SUPER				    0x0020
 #define CLASS_FILE_ACC_INTERFACE		    0x0200
-#define CLASS_FILE_ACC_ABSTRACT			    0x0400 
+#define CLASS_FILE_ACC_ABSTRACT			    0x0400
 #define CLASS_FILE_ACC_SYNTHETIC		    0x1000
 #define CLASS_FILE_ACC_ANNOTATION       0x2000
 #define CLASS_FILE_ACC_ENUM             0x4000
@@ -23,7 +23,7 @@
 #define FIELD_INFO_ACC_FINAL		        0x0010
 #define FIELD_INFO_ACC_VOLATILE         0x0040
 #define FIELD_INFO_ACC_TRANSIENT        0x0080
-#define FIELD_INFO_ACC_SYNTHETIC        0x1000 
+#define FIELD_INFO_ACC_SYNTHETIC        0x1000
 #define FIELD_INFO_ACC_ENUM             0x4000
 
 
@@ -53,18 +53,18 @@
 #define INNER_CALSS_ACC_ENUM            0x4000
 
 #define CONSTANT_POOL_TYPE_CLASS                 7
-#define CONSTANT_POOL_TYPE_FIELD_REF             9 
-#define CONSTANT_POOL_TYPE_METHOD_REF            10 
+#define CONSTANT_POOL_TYPE_FIELD_REF             9
+#define CONSTANT_POOL_TYPE_METHOD_REF            10
 #define CONSTANT_POOL_TYPE_INTERFACE_METHOD_REF  11
-#define CONSTANT_POOL_TYPE_STRING                8 
-#define CONSTANT_POOL_TYPE_INTERGER              3 
-#define CONSTANT_POOL_TYPE_FLOAT                 4 
-#define CONSTANT_POOL_TYPE_LONG                  5 
-#define CONSTANT_POOL_TYPE_DOUBLE                6 
-#define CONSTANT_POOL_TYPE_NAME_AND_TYPE         12 
-#define CONSTANT_POOL_TYPE_UTF8                  1 
-#define CONSTANT_POOL_TYPE_METHOD_HANDLE         15 
-#define CONSTANT_POOL_TYPE_METHOD_TYPE           16 
+#define CONSTANT_POOL_TYPE_STRING                8
+#define CONSTANT_POOL_TYPE_INTERGER              3
+#define CONSTANT_POOL_TYPE_FLOAT                 4
+#define CONSTANT_POOL_TYPE_LONG                  5
+#define CONSTANT_POOL_TYPE_DOUBLE                6
+#define CONSTANT_POOL_TYPE_NAME_AND_TYPE         12
+#define CONSTANT_POOL_TYPE_UTF8                  1
+#define CONSTANT_POOL_TYPE_METHOD_HANDLE         15
+#define CONSTANT_POOL_TYPE_METHOD_TYPE           16
 #define CONSTANT_POOL_TYPE_INVOKE_DYNAMIC        18
 
 
@@ -152,73 +152,73 @@ extern const char* attribute_type_map[];
 #define METHOD_REF_KIND_invokeInterface     9
 
 
-struct ConstPoolInfo{
-    u1 tag; 
+struct ConstPoolInfo {
+    u1 tag;
 };
 
 struct ConstPoolClassInfo : ConstPoolInfo {
-    u2 name_index; 
+    u2 name_index;
 };
 
 struct ConstPoolFieldRefInfo : ConstPoolInfo {
-    u2 class_index; 
-    u2 name_and_type_index; 
+    u2 class_index;
+    u2 name_and_type_index;
 };
 
 struct ConstPoolMethodRefInfo : ConstPoolInfo {
     u2 class_index;
-    u2 name_and_type_index; 
+    u2 name_and_type_index;
 };
 
-struct ConstPoolInterfaceMethodRefInfo : ConstPoolInfo{ 
-    u2 class_index; 
-    u2 name_and_type_index; 
+struct ConstPoolInterfaceMethodRefInfo : ConstPoolInfo {
+    u2 class_index;
+    u2 name_and_type_index;
 };
 
-struct ConstPoolStringInfo: ConstPoolInfo{ 
-    u2 string_index; 
+struct ConstPoolStringInfo: ConstPoolInfo {
+    u2 string_index;
 };
 
-struct ConstPoolIntegerInfo: ConstPoolInfo{ 
-    u4 bytes; 
-};
-
-struct ConstPoolFloatInfo: ConstPoolInfo{ 
+struct ConstPoolIntegerInfo: ConstPoolInfo {
     u4 bytes;
 };
 
-struct ConstPoolLongInfo : ConstPoolInfo{ 
+struct ConstPoolFloatInfo: ConstPoolInfo {
+    u4 bytes;
+};
+
+struct ConstPoolLongInfo : ConstPoolInfo {
     u4 high_bytes;
     u4 low_bytes;
 };
 
-struct ConstPoolDoubleInfo : ConstPoolInfo{ 
-    u4 high_bytes; 
-    u4 low_bytes; 
+struct ConstPoolDoubleInfo : ConstPoolInfo {
+    u4 high_bytes;
+    u4 low_bytes;
 };
 
-struct ConstPoolNameAndTypeInfo: ConstPoolInfo{ 
-    u2 name_index; 
-    u2 descriptor_index; 
+struct ConstPoolNameAndTypeInfo: ConstPoolInfo {
+    u2 name_index;
+    u2 descriptor_index;
 };
 
-struct ConstPoolUtf8Info: ConstPoolInfo{ 
-    u2 length; 
-    u1* bytes; //u1[length] 
+struct ConstPoolUtf8Info: ConstPoolInfo {
+    u2 length;
+    u1* bytes; //u1[length]
 };
 
-struct ConstPoolMethodHandleInfo : ConstPoolInfo{ 
-    u1 reference_kind; 
+struct ConstPoolMethodHandleInfo : ConstPoolInfo {
+    u1 reference_kind;
     u2 reference_index;
 };
 
-struct ConstPoolMethodTypeInfo: ConstPoolInfo{ 
-    u2 descriptor_index; 
+struct ConstPoolMethodTypeInfo: ConstPoolInfo {
+    u2 descriptor_index;
 };
 
-struct ConstPoolInvokeDynamicInfo : ConstPoolInfo{ 
-    u2 bootstrap_method_attr_index; 
-    u2 name_and_type_index; 
+struct ConstPoolInvokeDynamicInfo : ConstPoolInfo {
+    u2 bootstrap_method_attr_index;
+    u2 name_and_type_index;
 };
 
 struct AttributeInfo {
@@ -228,38 +228,38 @@ struct AttributeInfo {
 };
 
 struct FieldInfo {
-    u2 access_flags; 
-    u2 name_index; 
-    u2 descriptor_index; 
-    u2 attributes_count; 
+    u2 access_flags;
+    u2 name_index;
+    u2 descriptor_index;
+    u2 attributes_count;
     AttributeInfo** attributes;//attribute_info[arrtribute_count]
 };
 
 struct MethodInfo {
     u2 access_flags;
     u2 name_index;
-    u2 descriptor_index; 
+    u2 descriptor_index;
     u2 attributes_count;
     AttributeInfo** attributes; //attribute_info[arrtribute_count]
 };
 
-struct ConstantValueAttribute : AttributeInfo{ 
-    u2 constantvalue_index; 
+struct ConstantValueAttribute : AttributeInfo {
+    u2 constantvalue_index;
 };
 
-struct CodeAttribute : AttributeInfo{ 
+struct CodeAttribute : AttributeInfo {
     u2 max_stack;
     u2 max_locals;
     u4 code_length;
     u1* code;//code[code_length];
-    u2 exception_table_length; 
-    struct ExceptionTable{
+    u2 exception_table_length;
+    struct ExceptionTable {
         u2 start_pc;
-        u2 end_pc; 
+        u2 end_pc;
         u2 handler_pc;
         u2 catch_type;
     }*exception_table;//exception_table[exception_table_length];
-    u2 attributes_count; 
+    u2 attributes_count;
     AttributeInfo** attributes;//attributes[attributes_count];
 };
 
@@ -285,76 +285,76 @@ struct CodeAttribute : AttributeInfo{
 #define STACK_MAP_FRAME_VARIFY_TYPE_OBJECT        7
 #define STACK_MAP_FRAME_VARIFY_TYPE_UNINIT        8
 
-struct VerificationTypeInfo { 
-    u1 tag; 
+struct VerificationTypeInfo {
+    u1 tag;
 };
 
-struct TopVariableInfo :VerificationTypeInfo{  
+struct TopVariableInfo :VerificationTypeInfo {
 };
 
-struct IntegerVariableInfo:VerificationTypeInfo {  
+struct IntegerVariableInfo:VerificationTypeInfo {
 };
 
-struct FloatVariableInfo:VerificationTypeInfo { 
+struct FloatVariableInfo:VerificationTypeInfo {
 };
 
-struct LongVariableInfo:VerificationTypeInfo {  
+struct LongVariableInfo:VerificationTypeInfo {
 };
 
-struct DoubleVariableInfo:VerificationTypeInfo{  
+struct DoubleVariableInfo:VerificationTypeInfo {
 };
 
-struct NullVariableInfo : VerificationTypeInfo{ 
+struct NullVariableInfo : VerificationTypeInfo {
 };
 
-struct UninitializedThisVariableInfo :VerificationTypeInfo{ 
+struct UninitializedThisVariableInfo :VerificationTypeInfo {
 };
 
-struct ObjectVariableInfo :VerificationTypeInfo{  
-    u2 cpool_index; 
+struct ObjectVariableInfo :VerificationTypeInfo {
+    u2 cpool_index;
 };
 
-struct UninitializedVariableInfo :VerificationTypeInfo{  
-    u2 offset; 
+struct UninitializedVariableInfo :VerificationTypeInfo {
+    u2 offset;
 };
 
 
-struct StackMapFrame { 
+struct StackMapFrame {
     u1 frame_type;
 };
 
 struct SameFrame : StackMapFrame {
-    /* 0-63 */ 
+    /* 0-63 */
 };
 
-struct SameLocals1StackItemFrame : StackMapFrame{ 
-    /* 64-127 */ 
-    VerificationTypeInfo** stack;//stack[1]; 
+struct SameLocals1StackItemFrame : StackMapFrame {
+    /* 64-127 */
+    VerificationTypeInfo** stack;//stack[1];
 };
 
-struct SameLocals1StackItemFrameExtended : StackMapFrame{
-    /* 247 */ 
-    u2 offset_delta; 
-    VerificationTypeInfo** stack;// stack[1]; 
+struct SameLocals1StackItemFrameExtended : StackMapFrame {
+    /* 247 */
+    u2 offset_delta;
+    VerificationTypeInfo** stack;// stack[1];
 };
 
-struct ChopFrame : StackMapFrame{ 
-    /* 248-250 */ 
-    u2 offset_delta; 
+struct ChopFrame : StackMapFrame {
+    /* 248-250 */
+    u2 offset_delta;
 };
 
-struct SameFrameExtended : StackMapFrame{ 
+struct SameFrameExtended : StackMapFrame {
     /* 251 */
     u2 offset_delta;
 };
 
-struct AppendFrame : StackMapFrame{ 
+struct AppendFrame : StackMapFrame {
     /* 252-254 */
-    u2 offset_delta; 
-    VerificationTypeInfo ** locals;// locals[frame_type - 251]; 
+    u2 offset_delta;
+    VerificationTypeInfo ** locals;// locals[frame_type - 251];
 };
 
-struct FullFrame : StackMapFrame{
+struct FullFrame : StackMapFrame {
     /* 255 */
     u2 offset_delta;
     u2 number_of_locals;
@@ -363,115 +363,115 @@ struct FullFrame : StackMapFrame{
     VerificationTypeInfo** stack;// stack[number_of_stack_items];
 };
 
-struct StackMapTableAttribute : AttributeInfo{ 
-    u2 number_of_entries; 
+struct StackMapTableAttribute : AttributeInfo {
+    u2 number_of_entries;
     StackMapFrame* entries; // entries[number_of_entries];
 };
 
-struct ExceptionsAttribute : AttributeInfo{ 
-    u2 number_of_exceptions; 
-    u2* exception_index_table;// exception_index_table[number_of_exceptions]; 
+struct ExceptionsAttribute : AttributeInfo {
+    u2 number_of_exceptions;
+    u2* exception_index_table;// exception_index_table[number_of_exceptions];
 };
 
-struct InnerClassesAttribute : AttributeInfo{ 
+struct InnerClassesAttribute : AttributeInfo {
     u2 number_of_classes;
-    struct Item{ 
-        u2 inner_class_info_index; 
+    struct Item {
+        u2 inner_class_info_index;
         u2 outer_class_info_index;
-        u2 inner_name_index; 
+        u2 inner_name_index;
         u2 inner_class_access_flags;
     }* classes;// classes[number_of_classes];
 };
 
-struct EnclosingMethodAttribute : AttributeInfo{ 
+struct EnclosingMethodAttribute : AttributeInfo {
     u2 class_index;
     u2 method_index;
 };
 
-struct SyntheticAttribute : AttributeInfo{ 
+struct SyntheticAttribute : AttributeInfo {
 };
 
-struct SignatureAttribute : AttributeInfo{ 
-    u2 signature_index; 
+struct SignatureAttribute : AttributeInfo {
+    u2 signature_index;
 };
 
-struct SourceFileAttribute : AttributeInfo{ 
-    u2 sourcefile_index; 
+struct SourceFileAttribute : AttributeInfo {
+    u2 sourcefile_index;
 };
 
-struct SourceDebugExtensionAttribute : AttributeInfo{ 
+struct SourceDebugExtensionAttribute : AttributeInfo {
     u1* debug_extension;// debug_extension[attribute_length];
 };
 
-struct LineNumberTableAttribute: AttributeInfo{ 
-    u2 line_number_table_length; 
-    struct Item{
-        u2 start_pc; 
+struct LineNumberTableAttribute: AttributeInfo {
+    u2 line_number_table_length;
+    struct Item {
+        u2 start_pc;
         u2 line_number;
-    }* line_number_table;//line_number_table[line_number_table_length]; 
+    }* line_number_table;//line_number_table[line_number_table_length];
 };
 
-struct LocalVariableTableAttribute: AttributeInfo{ 
-    u2 local_variable_table_length; 
-    struct Item{
+struct LocalVariableTableAttribute: AttributeInfo {
+    u2 local_variable_table_length;
+    struct Item {
         u2 start_pc;
         u2 length;
         u2 name_index;
         u2 descriptor_index;
-        u2 index; 
+        u2 index;
     }* local_variable_table;//local_variable_table[local_variable_table_length];
 };
 
-struct LocalVariableTypeTableAttribute: AttributeInfo{ 
+struct LocalVariableTypeTableAttribute: AttributeInfo {
     u2 local_variable_type_table_length;
-    struct Item{ 
+    struct Item {
         u2 start_pc;
         u2 length;
         u2 name_index;
-        u2 signature_index; 
+        u2 signature_index;
         u2 index;
     }*local_variable_type_table;//local_variable_type_table[local_variable_type_table_length];
 };
 
-struct DeprecatedAttribute: AttributeInfo{ 
+struct DeprecatedAttribute: AttributeInfo {
 };
 
 struct Annotation;
 
-struct ElementValue { 
+struct ElementValue {
     u1 tag;
     union {
         u2 const_value_index;
-        struct{
+        struct {
             u2 type_name_index;
-            u2 const_name_index; 
-        }enum_const_value;
+            u2 const_name_index;
+        } enum_const_value;
 
-        u2 class_info_index; 
+        u2 class_info_index;
         Annotation* annotation_value; //trick
-        struct{ 
+        struct {
             u2 num_values;
-            ElementValue** values;// values[num_values]; 
+            ElementValue** values;// values[num_values];
         } array_value;
-    }value;
+    } value;
 };
 
-struct Annotation { 
-    u2 type_index; 
-    u2 num_element_value_pairs; 
-    struct Pair{ 
+struct Annotation {
+    u2 type_index;
+    u2 num_element_value_pairs;
+    struct Pair {
         u2 element_name_index;
         ElementValue* value;
-    }* element_value_pairs;// element_value_pairs[num_element_value_pairs]; 
+    }* element_value_pairs;// element_value_pairs[num_element_value_pairs];
 };
 
-struct RuntimeVisibleAnnotationsAttribute : AttributeInfo{ 
+struct RuntimeVisibleAnnotationsAttribute : AttributeInfo {
     u2 num_annotations;
     Annotation** annotations;// annotations[num_annotations];
 };
 
-struct RuntimeInvisibleAnnotationsAttribute: AttributeInfo{ 
-    u2 num_annotations; 
+struct RuntimeInvisibleAnnotationsAttribute: AttributeInfo {
+    u2 num_annotations;
     Annotation** annotations;// annotations[num_annotations];
 };
 
@@ -480,45 +480,45 @@ struct ParameterAnnotation {
     Annotation** annotations;
 };
 
-struct RuntimeVisibleParameterAnnotationsAttribute: AttributeInfo{ 
-    u2 num_parameters; 
+struct RuntimeVisibleParameterAnnotationsAttribute: AttributeInfo {
+    u2 num_parameters;
     ParameterAnnotation* parameter_annotations;// parameter_annotations[num_parameters];
 };
 
-struct RuntimeInvisibleParameterAnnotationsAttribute : AttributeInfo{ 
-    u2 num_parameters; 
+struct RuntimeInvisibleParameterAnnotationsAttribute : AttributeInfo {
+    u2 num_parameters;
     ParameterAnnotation* parameter_annotations;//parameter_annotations[num_parameters];
 };
 
-struct AnnotationDefaultAttribute : AttributeInfo{ 
-    ElementValue default_value; 
+struct AnnotationDefaultAttribute : AttributeInfo {
+    ElementValue default_value;
 };
 
-struct BootstrapMethodsAttribute : AttributeInfo{ 
-    u2 num_bootstrap_methods; 
-    struct Item{
+struct BootstrapMethodsAttribute : AttributeInfo {
+    u2 num_bootstrap_methods;
+    struct Item {
         u2 bootstrap_method_ref;
-        u2 num_bootstrap_arguments; 
+        u2 num_bootstrap_arguments;
         u2* bootstrap_arguments;// bootstrap_arguments[num_bootstrap_arguments];
     }*bootstrap_methods;// bootstrap_methods[num_bootstrap_methods];
 };
 
-struct ClassFileInfo{
+struct ClassFileInfo {
     u4 magic;
     u2 minor_version;
-    u2 major_version; 
-    u2 constant_pool_count; 
-    ConstPoolInfo** constant_pool;// constant_pool[constant_pool_count-1]; 
-    u2 access_flags; 
-    u2 this_class; 
-    u2 super_class; 
-    u2 interfaces_count; 
-    u2* interfaces;//interfaces[interfaces_count]; 
-    u2 fields_count; 
-    FieldInfo** fields;// fields[fields_count]; 
-    u2 methods_count; 
-    MethodInfo** methods;// methods[methods_count]; 
-    u2 attributes_count; 
+    u2 major_version;
+    u2 constant_pool_count;
+    ConstPoolInfo** constant_pool;// constant_pool[constant_pool_count-1];
+    u2 access_flags;
+    u2 this_class;
+    u2 super_class;
+    u2 interfaces_count;
+    u2* interfaces;//interfaces[interfaces_count];
+    u2 fields_count;
+    FieldInfo** fields;// fields[fields_count];
+    u2 methods_count;
+    MethodInfo** methods;// methods[methods_count];
+    u2 attributes_count;
     AttributeInfo** attributes; //attributes[attributes_count];
 };
 
