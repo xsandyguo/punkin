@@ -1,10 +1,10 @@
 #ifndef CLASSFILE_KLASS_H
 #define CLASSFILE_KLASS_H
 
-#include <string> 
+#include <string>
 #include <vector>
 
-#include "oop/oop.h" 
+#include "oop/oop.h"
 
 class Klass;
 class Field;
@@ -12,15 +12,15 @@ class Method;
 class Constructor;
 class ClassLoader;
 
-class ConstantPool{
+class ConstantPool {
 
 };
 
-class Klass{
-public:
-	Klass();
-	~Klass();
-public:
+class Klass {
+  public:
+    Klass();
+    ~Klass();
+  public:
     bool IsPrimitive();
     bool IsEnum();
     bool IsAnnotation();
@@ -31,46 +31,59 @@ public:
     bool IsInstance(jobject obj);
 
     int GetModifier();
-	void SetModifier(int modifier);
+    void SetModifier(int modifier);
 
     Method* ResolveMethodByName(const std::string& name);
 
+    Method* GetStaticConstructor();
+
     u1   GetValueType();
 
-	bool IsResolved();
+    bool IsResolved();
 
-public:
+  public:
     const std::string& GetName();
-	void SetName(const std::string& name);
-     
-    std::vector<Field*> GetDeclaredFields();
+    void SetName(const std::string& name);
+
+    std::vector<Field*>& GetDeclaredFields();
     Field* GetDeclaredField(const std::string& name);
 
-    std::vector<Method*> GetDeclaredMethods();
+    std::vector<Method*>& GetDeclaredMethods();
     Method* GetDeclaredMethod(const std::string& name);
     Method* GetDeclaredMethod(const std::string& name, std::vector<Klass*>& parameterTypes);
 
-    std::vector<Constructor*> GetDeclaredConstructors();
+    std::vector<Constructor*>& GetDeclaredConstructors();
     Constructor* GetDeclaredConstructor(std::vector<Klass*>& parameterTypes);
 
-    std::vector<Klass*> GetDeclaredClasses(); 
+    std::vector<Klass*>& GetDeclaredClasses();
 
     ClassLoader* GetClassLoader();
     void SetClassLoader(ClassLoader* classLoader);
     void SetConstantPool(std::vector<ConstantPool*>& constantPools);
 
-	Klass* GetSuperKlass();
-	void SetSuperKlass(Klass* superKlass);
-private:
-     int modifier_; 
-     Klass* superKlass_; 
-     ClassLoader* classLoader_;
-     std::vector<Constructor*> constructors_;
-     std::vector<Method*> methods_; 
-	 std::vector<Field*> fields_;
-     std::string name_;
-     std::vector<ConstantPool*> constantPools_;
-	 bool resolved_;
+    Klass* GetSuperKlass();
+    void SetSuperKlass(Klass* superKlass);
+
+    addr GetStaticData();
+    void SetStaticData(addr data);
+
+    int GetStaticDataSize();
+    int GetInstanceDataSize();
+  private:
+    int modifier_;
+    Klass* superKlass_;
+    ClassLoader* classLoader_;
+    std::vector<Constructor*> constructors_;
+    std::vector<Method*> methods_;
+    std::vector<Field*> fields_;
+    std::string name_;
+    std::vector<ConstantPool*> constantPools_;
+    bool resolved_;
+    std::vector<Klass*> declaredKlasses_;
+    addr staticData_;
+    int staticDataSize_;
+    int instanceDataSize_;
+    Method* staticConstructor_;
 };
 
 #endif

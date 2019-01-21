@@ -18,6 +18,8 @@ class ClassLoader {
 
     static std::list<ClassLoader*>& GetAllInstance();
 
+    std::map<std::string, Klass*>& GetLoadedKlasses();
+
   protected:
     virtual Klass* FindClass(const std::string& name) = 0;
     Klass* DefineClass(const std::string& name, byte* codes, int length);
@@ -26,6 +28,7 @@ class ClassLoader {
 
   private:
     Klass* FindLoadedKlass(const std::string& name);
+
 
   private:
     ClassLoader* parent_;

@@ -1,7 +1,10 @@
 #include "oop/klass.h"
 #include "oop/class_loader.h"
 #include "classfile/class_file_reader.hpp"
-
+#include "gc/memory.h"
+#include "runtime/jthread.h"
+#include "oop/field.h"
+#include "oop/method.h"
 
 std::list<ClassLoader*> ClassLoader::instances_;
 
@@ -22,11 +25,38 @@ std::list<ClassLoader*>& ClassLoader::GetAllInstance() {
     return instances_;
 }
 
+std::map<std::string, Klass*>& ClassLoader::GetLoadedKlasses() {
+    return loadedKlass_;
+}
+
 Klass* ClassLoader::DefineClass(const std::string& name, byte* codes, int length) {
     ClassFileReader reader(codes, length);
     Klass* klass = reader.Read();
+
+
+    std::vector<Method*>& methods = klass->GetDeclaredMethods();
+    std::vector<Method*>::iterator itor;
+
+    for (itor = methods.begin(); itor != methods.end(); ++itor) {
+        Method* method = *itor;
+
+    }
+
+    int dataSize = klass->GetStaticDataSize();
+    if (dataSize > 0) {
+        addr data = MemoryGC::Instance().Alloc(dataSize);
+        klass->SetStaticData(data);
+    }
+
+    Method* constructor = klass-> GetStaticConstructor();
+    if (constructor) {
+        JThread::Current()->Run(constructor);
+    }
+
     klass->SetName(name);
     klass->SetClassLoader(this);
+
+    loadedKlass_[name] = klass;
 
     return klass;
 }

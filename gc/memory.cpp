@@ -25,16 +25,23 @@ void MemoryGC::MarkLocalVar() {
 
     for(itor = threads.begin(); itor != threads.end(); ++ itor) {
         JThread* thread = *itor;
-
+        thread->GetFrames();
     }
 }
 
 void MemoryGC::MarkStaticMember() {
-    std::vector<ClassLoader*>& classLoaders = ClassLoader::GetAllInstance();
-    std::vector<ClassLoader*>::iterator itor;
+    std::list<ClassLoader*>& classLoaders = ClassLoader::GetAllInstance();
+    std::list<ClassLoader*>::iterator itor;
     for(itor = classLoaders.begin(); itor != classLoaders.end(); ++itor) {
         ClassLoader* loader = *itor;
 
+        std::map<std::string, Klass*>& klasses = loader->GetLoadedKlass();
+        std::map<std::string, Klass*>::iterator itor;
+        for (itor = klasses.begin(); itor != klasses.end(); ++itor) {
+            Klass* klass = itor->second;
+
+
+        }
     }
 
 }

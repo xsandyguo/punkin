@@ -5,7 +5,7 @@
 
 
 UrlClassLoader::UrlClassLoader(const std::string& jar)
-	:jar_(jar) {
+    :jar_(jar) {
 
 }
 
@@ -13,6 +13,6 @@ UrlClassLoader::~UrlClassLoader() {
 
 }
 
-Klass* UrlClassLoader::FindClass(const std::string& name){
-	return NULL;
+Klass* UrlClassLoader::FindClass(const std::string& name) {
+    return NULL;
 }

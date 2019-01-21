@@ -1,6 +1,6 @@
 #ifndef INTERPRETER_OOP_H
 #define INTERPRETER_OOP_H
- 
+
 #include "utilities/top.hpp"
 
 class JObject;
@@ -14,7 +14,7 @@ typedef __int64         jlong;
 typedef float           jfloat;
 typedef double          jdouble;
 typedef JObject*        jobject;
-typedef jint            jsize; 
+typedef jint            jsize;
 
 union jvalue {
     jbool    z;
@@ -28,18 +28,18 @@ union jvalue {
     jobject  l;
 };
 
-enum BasicDataType{
+enum BasicDataType {
     BASIC_TYPE_BOOL         =1,
-    BASIC_TYPE_CHAR         ,
-    BASIC_TYPE_BYTE         ,
-    BASIC_TYPE_SHORT        ,
-    BASIC_TYPE_INTEGER      ,
-    BASIC_TYPE_FLOAT        ,
-    BASIC_TYPE_LONG         ,
-    BASIC_TYPE_DOUBLE       ,
-    BASIC_TYPE_REF          ,
-    BASIC_TYPE_VOID         , 
-    BASIC_TYPE_ILLEGAL 
+    BASIC_TYPE_CHAR,
+    BASIC_TYPE_BYTE,
+    BASIC_TYPE_SHORT,
+    BASIC_TYPE_INTEGER,
+    BASIC_TYPE_FLOAT,
+    BASIC_TYPE_LONG,
+    BASIC_TYPE_DOUBLE,
+    BASIC_TYPE_REF,
+    BASIC_TYPE_VOID,
+    BASIC_TYPE_ILLEGAL
 };
 
 
@@ -54,11 +54,12 @@ enum BasicDataType{
 
 #define PRIMITIVE_TYPE_KLASS_NAME_COUNT     8
 
-struct primitive_type_klass_size{
-	const char* name;
-	int size;
+struct primitive_type_klass_size {
+    const char* name;
+    int size;
 };
 
 extern primitive_type_klass_size KLASS_TYPE_SIZE [];
+
 
 #endif

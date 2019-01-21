@@ -4,14 +4,15 @@
 #include "oop/class_loader.h"
 
 
-class UrlClassLoader : public ClassLoader{
-public:
-	UrlClassLoader(const std::string& jar);
-	~UrlClassLoader();
+class UrlClassLoader : public ClassLoader {
+  public:
+    UrlClassLoader(const std::string& jar);
+    ~UrlClassLoader();
 
-	virtual Klass* FindClass(const std::string& name);
-private:
-	const std::string jar_;
+    virtual Klass* FindClass(const std::string& name);
+
+  private:
+    const std::string jar_;
 };
 
-#endif 
+#endif

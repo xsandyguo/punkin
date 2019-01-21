@@ -2,13 +2,17 @@
 
 #include "runtime/virtual_machine.h"
 
+#include <exception>
 #include <thread>
 
 std::list<JThread*> JThread::threads_;
 
 
-JThread::JThread(Method* method):
-    entry_(method) {
+thread_local JThread* tls;
+
+JThread::JThread(ClassLoader* classLoader,
+                 const std::string& symbol) :
+    classLoader_(classLoader), methodSymbol_(symbol) {
     threads_.push_back(this);
 }
 
@@ -29,12 +33,23 @@ void JThread::Join() {
 }
 
 void JThread::Start0() {
-    VirtualMachine vm;
-    vm.Execute(entry_);
+    tls = this;
+
+    try {
+        Klass* klass = classLoader_->LoadClass(methodSymbol_);
+        Method* method = klass->GetDeclaredMethod("main");
+        vm_.Execute(method);
+    } catch (...) {
+        tls = NULL;
+    }
+}
+
+void JThread::Run(Method* method) {
+    vm_.Execute(method);
 }
 
 JThread* JThread::Current() {
-    return NULL;
+    return tls;
 }
 
 std::list<JThread*> JThread::GetAllThread() {
