@@ -3,6 +3,24 @@
 
 #include <float.h>
 
+
+void VirtualMachine::InvokeMethod(Method* method) {
+    Operand* args = new Operand[method->GetParameterCount()];
+    for (int i = 0; i < method->GetParameterCount(); ++i) {
+        args[i] = pop();
+    }
+
+    JObject* ref = pop_jref();
+
+    CheckNullObject(ref);
+
+    StackFrame* frame = new StackFrame();
+    stackFrames_[framePos_++] = frame;
+
+    framePos_--;
+    DestoryFrame(frame);
+}
+
 typedef void (VirtualMachine::*ins_fun_ptr)(void);
 
 
@@ -94,7 +112,7 @@ ins_fun_ptr INSTRUCTION_FUNS [] = {
     &VirtualMachine::bastore,
     &VirtualMachine::castore,
     &VirtualMachine::sastore,
-    &VirtualMachine::pop,
+    &VirtualMachine::pop0,
     &VirtualMachine::pop2,
     &VirtualMachine::dup,
     &VirtualMachine::dup_x1,

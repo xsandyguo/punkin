@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "runtime/operand.h"
+#include "runtime/stack_frame.h"
+#include "oop/jarray.h"
 #include "oop/class_loader.h"
 #include "oop/klass.h"
 #include "classfile/class_file_type.hpp"
@@ -12,7 +14,7 @@
 
 
 #define INSTRUCT_FUN_IF_ICMP(name, cmp)        \
-void if_##name(){                       \
+void if_icmp##name(){							\
     byte offset1 = next_byte();                 \
     byte offset2 = next_byte();                 \
     int v2 = pop_jint();                        \
@@ -24,7 +26,7 @@ void if_##name(){                       \
 }
 
 #define INSTRUCT_FUN_IF_0CMP(name, cmp)         \
-    void if_##name(){                    \
+    void if##name(){							\
         byte offset1 = next_byte();              \
         byte offset2 = next_byte();              \
         int v1 = pop_jint();                     \
@@ -39,52 +41,52 @@ void if_##name(){                       \
 void type##aload(){                                  \
     int index = pop_jint();                          \
     JArray* ar = pop_jarray();                       \
-    push_##type(get_##type_array(ar, index));       \
+    push_##type(ar->get_##type(index));				 \
 }                                                    \
                                                      \
-void type##astore(){                                  \
+void type##astore(){                                 \
     double val = pop_##type();                       \
     int index = pop_jint();                          \
     JArray* ar = pop_jarray();                       \
-                                                     \
-    set_##type_array(index, val)                     \
+    ar->set_##type(index, val);                      \
 }
 
-#define INSTRUCT_FUN_LOAD_STORE_VAR(prefix)  \
-void prefix##store(int index){          \
-    prefix##store(next_byte());                 \
+
+#define INSTRUCT_FUN_LOAD_STORE_VAR(prefix)	   \
+void prefix##store(int index){				   \
+    prefix##store(next_byte());                \
 }                                              \
-void prefix##store0(int index){         \
+void prefix##store_0(){			               \
     prefix##store(0);                          \
 }                                              \
-void prefix##store1(int index){         \
+void prefix##store_1(){			               \
     prefix##store(1);                          \
 }                                              \
-void prefix##store2(int index){         \
+void prefix##store_2(){			               \
     prefix##store(2);                          \
 }                                              \
-void prefix##store3(int index){         \
+void prefix##store_3(){			               \
     prefix##store(3);                          \
 }                                              \
-void prefix##load(){                    \
-    prefix##load(next_byte());                  \
+void prefix##load(){						   \
+    prefix##load(next_byte());                 \
 }                                              \
-void prefix##load0(){                   \
+void prefix##load_0(){						   \
     prefix##load(0);                           \
 }                                              \
-void prefix##load1(){                   \
+void prefix##load_1(){						   \
     prefix##load(1);                           \
 }                                              \
-void prefix##load2(){                   \
+void prefix##load_2(){						   \
     prefix##load(2);                           \
 }                                              \
-void prefix##load3(){                   \
+void prefix##load_3(){						   \
     prefix##load(3);                           \
 }
 
 #define INSTRUCT_FUN_MATH_CALC(prefix, type) \
 void prefix##add(){                          \
-    push_##type(pop##type() + pop_##type()); \
+    push_##type(pop_##type() + pop_##type()); \
 }                                            \
 void prefix##sub(){                          \
     type v2 = pop_##type();                  \
@@ -112,68 +114,53 @@ void prefix##neg(){                          \
 
 
 #define INSTRUCT_FUN_INT_REM_CALC(prefix, type) \
-void prefix##rem(){                          \
-    type v2 = pop_##type();                 \
-    type v1 = pop_##type();                 \
-    push_##type(v1 % v2);                         \
-}                                            \
+void prefix##rem(){                             \
+    type v2 = pop_##type();                     \
+    type v1 = pop_##type();                     \
+    push_##type(v1 % v2);                       \
+}
 
-#define INSTRUCT_FUN_FLOAT_REM_CALC(prefix, type) \
-void prefix##rem(){                          \
-    type v2 = pop_##type();                 \
-    type v1 = pop_##type();                 \
-                                             \
-    type ret = fmod(v1, v2);               \
-    push_##type(ret);                         \
-}                                            \
-
-
-
-#define INSTRUCT_FUN_BIT_CALC(prefix, type) \\
-void prefix##or(){                                 \
-    ##type v2 = pop_##type();               \
-    ##type v1 = pop_##type();               \
-    push_##type(v1 | v2);                   \
-}                                           \
-void prefix##shl(){                                \
-    ##type v2 = pop_##type();               \
-    ##type v1 = pop_##type();               \
-                                            \
-    push_##type(v1 << (v2 & 0x2F));         \
-}                                           \
-void prefix##shr(){                                \
-    ##type v2 = pop_##type();               \
-    ##type v1 = pop_##type();               \
-                                            \
-    push_##type(v1 >> (v2 & 0x2F));         \
-}                                           \
-void prefix##ushl(){                               \
-    unsigned ##type v2 = pop_##type();      \
-    unsigned ##type v1 = pop_##type();      \
-                                            \
-    push_##type(v1 << (v2 & 0x2F));         \
-}                                           \
-void lushr(){                               \
-    unsigned ##type v2 = pop_##type();      \
-    unsigned ##type v1 = pop_##type();      \
-                                            \
-    push_##type(v1 >> (v2 & 0x2F));         \
-}                                           \
-void prefix##xor(){                                \
-    ##type v2 = pop_##type();               \
-    ##type v1 = pop_##type();               \
-                                            \
-    push_##type(v1 ^ v2);                   \
+#define INSTRUCT_FUN_FLOAT_REM_CALC(prefix, type)   \
+void prefix##rem(){									\
+    type v2 = pop_##type();							\
+    type v1 = pop_##type();							\
+													\
+    type ret = fmod(v1, v2);						\
+    push_##type(ret);								\
 }
 
 
-class NativeStack {
-
-};
-
-class JavaStack {
-
-};
+#define INSTRUCT_FUN_BIT_CALC(prefix, type, orgin) \
+void prefix##or(){                          \
+    type v2 = pop_##type();                 \
+    type v1 = pop_##type();                 \
+    push_##type(v1 | v2);                   \
+}                                           \
+void prefix##shl(){                         \
+    type v2 = pop_##type();                 \
+    type v1 = pop_##type();                 \
+    push_##type(v1 << (v2 & 0x2F));         \
+}                                           \
+void prefix##shr(){                         \
+    type v2 = pop_##type();                 \
+    type v1 = pop_##type();                 \
+    push_##type(v1 >> (v2 & 0x2F));         \
+}                                           \
+void prefix##xor(){                         \
+    type v2 = pop_##type();                 \
+    type v1 = pop_##type();                 \
+    push_##type(v1 ^ v2);                   \
+}											\
+void prefix##ushl(){                        \
+    unsigned orgin v2 = pop_##type();        \
+    unsigned orgin v1 = pop_##type();        \
+    push_##type(v1 << (v2 & 0x2F));         \
+}                                           \
+void prefix##ushr(){                        \
+    unsigned orgin v2 = pop_##type();        \
+    unsigned orgin v1 = pop_##type();        \
+    push_##type(v1 >> (v2 & 0x2F));         \
+}
 
 
 class VirtualMachine {
@@ -181,7 +168,6 @@ class VirtualMachine {
     void Execute(Method* method_);
 
   public:
-
     INSTRUCT_FUN_LOAD_STORE_VAR(a)
     INSTRUCT_FUN_LOAD_STORE_VAR(d)
     INSTRUCT_FUN_LOAD_STORE_VAR(f)
@@ -202,52 +188,51 @@ class VirtualMachine {
     INSTRUCT_FUN_FLOAT_REM_CALC(f, jfloat)
 
     INSTRUCT_FUN_INT_REM_CALC(i, jint)
-    INSTRUCT_FUN_INT_REM_CALC(l, jlnt)
+    INSTRUCT_FUN_INT_REM_CALC(l, jlong)
 
-    INSTRUCT_FUN_IF_ICMP(icmp_eq, ==)
-    INSTRUCT_FUN_IF_ICMP(icmp_ne, !=)
-    INSTRUCT_FUN_IF_ICMP(icmp_lt, <)
-    INSTRUCT_FUN_IF_ICMP(icmp_le, <=)
-    INSTRUCT_FUN_IF_ICMP(icmp_gt, >)
-    INSTRUCT_FUN_IF_ICMP(icmp_ge, >=)
+    INSTRUCT_FUN_IF_ICMP(eq, == )
+    INSTRUCT_FUN_IF_ICMP(ne, != )
+    INSTRUCT_FUN_IF_ICMP(lt, < )
+    INSTRUCT_FUN_IF_ICMP(le, <= )
+    INSTRUCT_FUN_IF_ICMP(gt, > )
+    INSTRUCT_FUN_IF_ICMP(ge, >= )
 
-    INSTRUCT_FUN_IF_0CMP(eq, ==)
-    INSTRUCT_FUN_IF_0CMP(ne, !=)
-    INSTRUCT_FUN_IF_0CMP(lt, <)
-    INSTRUCT_FUN_IF_0CMP(le, <=)
-    INSTRUCT_FUN_IF_0CMP(gt, >)
-    INSTRUCT_FUN_IF_0CMP(ge, >=)
+    INSTRUCT_FUN_IF_0CMP(eq, == )
+    INSTRUCT_FUN_IF_0CMP(ne, != )
+    INSTRUCT_FUN_IF_0CMP(lt, < )
+    INSTRUCT_FUN_IF_0CMP(le, <= )
+    INSTRUCT_FUN_IF_0CMP(gt, > )
+    INSTRUCT_FUN_IF_0CMP(ge, >= )
 
-    INSTRUCT_FUN_BIT_CALC(l, jlong)
-    INSTRUCT_FUN_BIT_CALC(i, jint)
+    INSTRUCT_FUN_BIT_CALC(l, jlong, __int64)
+    INSTRUCT_FUN_BIT_CALC(i, jint, int)
 
     void aaload() {
         int index = pop_jint();
         JArray* ar =  pop_jarray();
-
-        BasicDataType type = ar->GetComponentType();
+        BasicDataType type = ar->get_component_type()->GetType();
 
         switch(type) {
         case BASIC_TYPE_CHAR:
-            push_jchar(ar->GetCharItem(index));
+            push_jchar(ar->get_jchar(index));
             break;
         case BASIC_TYPE_SHORT:
-            push_jshort(ar->GetShortItem(index));
+            push_jshort(ar->get_jshort(index));
             break;
         case BASIC_TYPE_INTEGER:
-            push_jint(ar->GetIntItem(index));
+            push_jint(ar->get_jint(index));
             break;
         case BASIC_TYPE_LONG:
-            push_jlong(ar->GetLongItem(index));
+            push_jlong(ar->get_jlong(index));
             break;
         case BASIC_TYPE_FLOAT:
-            push_jfloat(ar->GetFloatItem(index));
+            push_jfloat(ar->get_jfloat(index));
             break;
         case BASIC_TYPE_DOUBLE:
-            push_jdouble(ar->GetDoubleItem(index));
+            push_jdouble(ar->get_jdouble(index));
             break;
         case BASIC_TYPE_REF:
-            push_jref(ar->GetRefItem(index));
+            push_jref(ar->get_jobject(index));
             break;
         }
     }
@@ -255,13 +240,12 @@ class VirtualMachine {
     void aastore() {
         JObject* val = pop_jref();
         int index = pop_jint();
-        pop_jarray()->SetRefItem(index, val);
+        pop_jarray()->set_jobject(index, val);
     }
 
     void aconst_null() {
         push_jref(NULL);
     }
-
 
     void anewarray() {
         u2 index =  ReadU2AsSymIndex();
@@ -272,23 +256,13 @@ class VirtualMachine {
             throw "invalid count";
         }
 
-        push_jref(new JArray(new JObject*[count], count, BASIC_TYPE_REF, klass));
+        push_jref(new JArray(new JObject*[count], count, klass));
     }
 
-    void areturn() {
-        Operand op = pop();
-
-        DestoryFrame(stackFrames_[framePos_--]);
-
-        StackFrame* frame = currentFrame();
-        frame->GetOperandStack().push(op);
-    }
 
     void arraylength() {
-        push_jint(pop_jarray()->GetLength());
+        push_jint(pop_jarray()->get_length());
     }
-
-
 
     void athrow() {
         THROW_UNSUPPORTED();
@@ -298,7 +272,7 @@ class VirtualMachine {
         int index = pop_jint();
         JArray* ar = pop_jarray();
 
-        push_jint(SignedExtend(ar->GetByteItem(index)));
+        push_jint(SignedExtend(ar->get_jbyte(index)));
     }
 
     void bastore() {
@@ -306,7 +280,7 @@ class VirtualMachine {
         int index = pop_jint();
         JArray* ar = pop_jarray();
 
-        ar->SetByteItem(index, c);
+        ar->set_jbyte(index, c);
     }
 
     void bipush() {
@@ -315,14 +289,14 @@ class VirtualMachine {
 
     void caload() {
         int index = pop_jint();
-        char c = pop_jarray()->GetCharItem(index);
+        jchar c = pop_jarray()->get_jchar(index);
         push_jint(ZeroExtend(c));
     }
 
     void castore() {
-        char c = pop_jchar();
+        jchar c = pop_jchar();
         int index = pop_jint();
-        pop_jarray()->SetCharItem(index, c);
+        pop_jarray()->set_jchar(index, c);
     }
 
     void cheeckcast() {
@@ -335,21 +309,20 @@ class VirtualMachine {
     }
 
     void d2f() {
-        push_jfloat((float)pop_jdouble());
+        push_jfloat((jfloat)pop_jdouble());
     }
 
     void d2i() {
-        push_jint((int)pop_jdouble());
+        push_jint((jint)pop_jdouble());
     }
 
     void d2l() {
-        push_jlong((long)pop_jdouble());
+        push_jlong((jlong)pop_jdouble());
     }
 
-
     void dcmp() {
-        double val2 = pop_jdouble();
-        double val1 = pop_jdouble();
+        jdouble val2 = pop_jdouble();
+        jdouble val1 = pop_jdouble();
 
         if(val1 == val2) {
             push_jint(1);
@@ -360,8 +333,12 @@ class VirtualMachine {
         }
     }
 
-    void dcmp1() {
+    void dcmpl() {
         dcmp();
+    }
+
+    void dcmpg() {
+
     }
 
     void dconst_0() {
@@ -373,15 +350,6 @@ class VirtualMachine {
     }
 
 
-    void dreturn() {
-        Operand op = pop();
-
-        DestoryFrame(stackFrames_[framePos_--]);
-
-        StackFrame* frame = currentFrame();
-        frame->GetOperandStack().push(op);
-    }
-
 
     void dup() {
         Operand val = top();
@@ -392,7 +360,7 @@ class VirtualMachine {
         Operand op1 = pop();
         Operand op2 = pop();
 
-        if(!op1.IsFirstDataType() || !op2.IsFirstDataType()) {
+        if(!op1.IsCategoryOneType() || !op2.IsCategoryOneType()) {
             throw "unsupported";
         }
 
@@ -408,8 +376,8 @@ class VirtualMachine {
             Operand& ref2 = top();
             Operand& ref3 = top();
 
-            if(ref1.IsFirstDataType() && ref2.IsFirstDataType()
-                    && ref3.IsFirstDataType()) {
+            if(ref1.IsCategoryOneType() && ref2.IsCategoryOneType()
+                    && ref3.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
                 Operand op3 = pop();
@@ -430,8 +398,8 @@ class VirtualMachine {
             Operand& ref2 = top();
             Operand& ref3 = top();
 
-            if(ref1.IsFirstDataType() && ref2.IsFirstDataType()
-                    && ref3.IsFirstDataType()) {
+            if(ref1.IsCategoryOneType() && ref2.IsCategoryOneType()
+                    && ref3.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
                 Operand op3 = pop();
@@ -453,8 +421,8 @@ class VirtualMachine {
             Operand& ref3 = top();
             Operand& ref4 = top();
 
-            if(ref1.IsFirstDataType() && ref2.IsFirstDataType()
-                    && ref3.IsFirstDataType() && ref4.IsFirstDataType()) {
+            if(ref1.IsCategoryOneType() && ref2.IsCategoryOneType()
+                    && ref3.IsCategoryOneType() && ref4.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
                 Operand op3 = pop();
@@ -474,7 +442,7 @@ class VirtualMachine {
             Operand& ref2 = top();
             Operand& ref3 = top();
 
-            if(!ref1.IsFirstDataType() && ref2.IsFirstDataType() && ref3.IsFirstDataType()) {
+            if(!ref1.IsCategoryOneType() && ref2.IsCategoryOneType() && ref3.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
                 Operand op3 = pop();
@@ -485,7 +453,7 @@ class VirtualMachine {
                 return;
             }
 
-            if(ref1.IsFirstDataType() && ref2.IsFirstDataType() && !ref3.IsFirstDataType()) {
+            if(ref1.IsCategoryOneType() && ref2.IsCategoryOneType() && !ref3.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
                 Operand op3 = pop();
@@ -506,7 +474,7 @@ class VirtualMachine {
             Operand& ref1 = top();
             Operand& ref2 = top();
 
-            if(ref1.IsFirstDataType() && ref2.IsFirstDataType()) {
+            if(ref1.IsCategoryOneType() && ref2.IsCategoryOneType()) {
                 Operand op1 = pop();
                 Operand op2 = pop();
 
@@ -520,7 +488,7 @@ class VirtualMachine {
 
 
         Operand op1 = pop();
-        if(!op1.IsFirstDataType()) {
+        if(!op1.IsCategoryOneType()) {
             push(op1);
             push(op1);
             return;
@@ -558,8 +526,12 @@ class VirtualMachine {
         }
     }
 
-    void fcmp1() {
+    void fcmpl() {
         fcmp();
+    }
+
+    void fcmpg() {
+
     }
 
     void fconst_0() {
@@ -574,26 +546,17 @@ class VirtualMachine {
         push_jfloat(2.0f);
     }
 
-
-
-    void freturn() {
-        Operand op = pop();
-
-        DestoryFrame(stackFrames_[framePos_--]);
-
-        StackFrame* frame = currentFrame();
-        frame->GetOperandStack().push(op);
-    }
-
-
-
     void getfield() {
         byte index1 = next_byte();
         byte index2 = next_byte();
         JObject* obj = pop_jref();
 
+        CheckNullObject(obj);
+
         u2 index = index1 << 8 | index2;
-        JObject* val =  obj->GetRefFieldVal(index);
+
+        JObject* val = ResolveField(index)->Get(obj);
+
         push_jref(val);
     }
 
@@ -753,8 +716,6 @@ class VirtualMachine {
         SetLocalInt(index, ret);
     }
 
-
-
     void instanceof() {
         byte offset1 = next_byte();
         byte offset2 = next_byte();
@@ -782,110 +743,40 @@ class VirtualMachine {
         u2 sym = offset1 << 8 | offset2;
 
         Method* method = ResolveMethod(sym);
-        MethodMeta* meta = method->GetMeta();
 
-        Operand* args = new Operand[meta->GetParameterCount()];
-        for(int i = 0; i < meta->GetParameterCount(); ++i) {
-            args[i] = pop();
-        }
-
-        JObject* ref = pop_jref();
-
-        CheckNullObject(ref);
-
-        StackFrame* frame = new StackFrame();
-        stackFrames_[framePos_++] = frame;
-        method->Invoke(ref, args);
-
-        framePos_--;
-        DestoryFrame(frame);
+        InvokeMethod(method);
     }
 
     void invokespecial() {
         byte offset1 = next_byte();
         byte offset2 = next_byte();
 
-
         u2 sym = offset1 << 8 | offset2;
 
         Method* method = ResolveMethod(sym);
-        MethodMeta* meta = method->GetMeta();
 
-        Operand* args = new Operand[meta->GetParameterCount()];
-        for(int i = 0; i < meta->GetParameterCount(); ++i) {
-            args[i] = pop();
-        }
-
-        JObject* ref = pop_jref();
-
-        CheckNullObject(ref);
-
-        StackFrame* frame = new StackFrame();
-        stackFrames_[framePos_++] = frame;
-        method->Invoke(ref, args);
-
-        framePos_--;
-        DestoryFrame(frame);
+        InvokeMethod(method);
     }
 
     void invokestatic() {
         byte offset1 = next_byte();
         byte offset2 = next_byte();
 
-
         u2 sym = offset1 << 8 | offset2;
 
         Method* method = ResolveMethod(sym);
-        MethodMeta* meta = method->GetMeta();
-
-        Operand* args = new Operand[meta->GetParameterCount()];
-        for(int i = 0; i < meta->GetParameterCount(); ++i) {
-            args[i] = pop();
-        }
-
-        StackFrame* frame = new StackFrame();
-        stackFrames_[framePos_++] = frame;
-        method->Invoke(args);
-
-        framePos_--;
-        DestoryFrame(frame);
+        InvokeMethod(method);
     }
 
     void invokevirtual() {
         byte offset1 = next_byte();
         byte offset2 = next_byte();
 
-
         u2 sym = offset1 << 8 | offset2;
 
         Method* method = ResolveMethod(sym);
-        MethodMeta* meta = method->GetMeta();
 
-        Operand* args = new Operand[meta->GetParameterCount()];
-        for(int i = 0; i < meta->GetParameterCount(); ++i) {
-            args[i] = pop();
-        }
-
-        JObject* ref = pop_jref();
-
-        CheckNullObject(ref);
-
-        StackFrame* frame = new StackFrame();
-        stackFrames_[framePos_++] = frame;
-        method->Invoke(ref, args);
-
-        framePos_--;
-        DestoryFrame(frame);
-    }
-
-
-    void ireturn() {
-        Operand op = pop();
-
-        DestoryFrame(stackFrames_[framePos_--]);
-
-        StackFrame* frame = currentFrame();
-        frame->GetOperandStack().push(op);
+        InvokeMethod(method);
     }
 
     void jsr() {
@@ -893,7 +784,7 @@ class VirtualMachine {
         byte offset2 = next_byte();
         u2 offset = offset1 << 8 | offset2;
 
-        PushRetAddr(offset);
+        push_jretaddr(offset);
     }
 
     void jsr_w() {
@@ -904,27 +795,27 @@ class VirtualMachine {
 
         u4 offset = (offset1 << 24) | (offset2 << 16) | (offset3 << 8) | offset4;
 
-        PushRetAddr(offset);
+        push_jretaddr(offset);
     }
 
     void l2d() {
-        long val = pop_jlong();
+        jlong val = pop_jlong();
         push_jdouble(val);
     }
 
     void l2f() {
-        long val = pop_jlong();
+        jlong val = pop_jlong();
         push_jfloat(val);
     }
 
     void l2i() {
-        long val = pop_jlong();
+        jlong val = pop_jlong();
         push_jint(val);
     }
 
     void lcmp() {
-        long v2 = pop_jlong();
-        long v1 = pop_jlong();
+        jlong v2 = pop_jlong();
+        jlong v1 = pop_jlong();
         if(v1 == v2) {
             push_jint(0);
         } else if(v1 > v2) {
@@ -997,8 +888,8 @@ class VirtualMachine {
 
     }
 
-    void pop() {
-        if(top().IsFirstDataType()) {
+    void pop0() {
+        if(top().IsCategoryOneType()) {
             pop();
         } else {
             THROW_ILLEGAL_OPERATE();
@@ -1010,7 +901,7 @@ class VirtualMachine {
             Operand& v1 = top();
             Operand& v2 = top(1);
 
-            if(v1.IsFirstDataType() && v2.IsFirstDataType()) {
+            if(v1.IsCategoryOneType() && v2.IsCategoryOneType()) {
                 pop();
                 pop();
                 return;
@@ -1019,7 +910,7 @@ class VirtualMachine {
 
 
         Operand& v1 = top();
-        if(!v1.IsFirstDataType()) {
+        if(!v1.IsCategoryOneType()) {
             pop();
             return;
         }
@@ -1036,43 +927,42 @@ class VirtualMachine {
     }
 
     void putfieldVal(jobject obj,  u2 sym, Operand& val) {
-        u2 sym = ReadU2AsSymIndex();
+        sym = ReadU2AsSymIndex();
 
         Field* field = ResolveField(sym);
         Klass* klass = field->GetType();
 
-
         CheckOperandType(top(), klass);
 
-
-        if(!klass->IsPrimitiveType()) {
+        if(!klass->IsPrimitive()) {
             field->Set(NULL, pop_jref());
             return;
         }
 
-
-        u1 type = klass->GetValueType();
-
+        BasicDataType type = klass->GetType();
         switch(type) {
-        case JVT_CHAR:
+        case BASIC_TYPE_BOOL:
+            field->SetBoolean(NULL, pop_jbool());
+            break;
+        case BASIC_TYPE_CHAR:
             field->SetChar(NULL, pop_jchar());
             break;
-        case JVT_BYTE:
-            field->SetByte(NULL, PopByte());
+        case BASIC_TYPE_BYTE:
+            field->SetByte(NULL, pop_jbyte());
             break;
-        case JVT_SHORT:
-            field->SetShort(NULL, PopShort());
+        case BASIC_TYPE_SHORT:
+            field->SetShort(NULL, pop_jshort());
             break;
-        case JVT_INTEGER:
+        case BASIC_TYPE_INTEGER:
             field->SetInt(NULL, pop_jint());
             break;
-        case JVT_LONG:
+        case BASIC_TYPE_LONG:
             field->SetLong(NULL, pop_jlong());
             break;
-        case JVT_FLOAT:
+        case BASIC_TYPE_FLOAT:
             field->SetFloat(NULL, pop_jfloat());
             break;
-        case JVT_DOUBLE:
+        case BASIC_TYPE_DOUBLE:
             field->SetDouble(NULL, pop_jdouble());
             break;
         }
@@ -1080,10 +970,8 @@ class VirtualMachine {
         THROW_ILLEGAL_OPERATE();
     }
 
-
-
     void ret_0() {
-        SetIP(PopRetAddr());
+        SetIP(pop_jretaddr());
     }
 
     void return_0() {
@@ -1096,6 +984,7 @@ class VirtualMachine {
     void saload() {
 
     }
+
     void sastore() {
 
     }
@@ -1111,7 +1000,7 @@ class VirtualMachine {
         Operand v1 = pop();
         Operand v2 = pop();
 
-        if(!v1.IsFirstDataType() || !v2.IsFirstDataType()) {
+        if(!v1.IsCategoryOneType() || !v2.IsCategoryOneType()) {
             THROW_ILLEGAL_OPERATE();
         }
 
@@ -1127,12 +1016,6 @@ class VirtualMachine {
         THROW_UNSUPPORTED();
     }
 
-
-  private:
-
-    bool IsIIncWide(byte code);
-    boolean IsMuliWide(byte code);
-
     void ldc() {
         byte index = next_byte();
 
@@ -1146,10 +1029,11 @@ class VirtualMachine {
 
     }
 
-    void CheckOperandType(Operand& op, Klass* klass);
 
-    Method* ResolveMethod(u2 sym);
-    Field* ResolveField(u2 sym);
+  private:
+    bool IsIIncWide(byte code);
+    bool IsMuliWide(byte code);
+
 
     inline void aload(u2 index) {
         push(GetLocalVar(index));
@@ -1192,43 +1076,99 @@ class VirtualMachine {
         SetLocalVar(index, val );
     }
 
+    inline void astore(u2 index) {
+        Operand val = pop();
+        SetLocalVar(index, val);
+    }
+
+    void areturn() {
+        Operand op = pop();
+
+        DestoryFrame(stackFrames_[framePos_--]);
+
+        StackFrame* frame = currentFrame();
+        frame->stack.push(op);
+    }
+
+
+    void ireturn() {
+        Operand op = pop();
+
+        DestoryFrame(stackFrames_[framePos_--]);
+
+        StackFrame* frame = currentFrame();
+        frame->stack.push(op);
+    }
+
+    void dreturn() {
+        Operand op = pop();
+
+        DestoryFrame(stackFrames_[framePos_--]);
+
+        StackFrame* frame = currentFrame();
+        frame->stack.push(op);
+    }
+
+    void freturn() {
+        Operand op = pop();
+
+        DestoryFrame(stackFrames_[framePos_--]);
+
+        StackFrame* frame = currentFrame();
+        frame->stack.push(op);
+    }
 
     Operand GetStaticVal(u2 symIdx);
 
     inline void CheckNullObject(JObject* ref);
     bool IsInstanceOf(JObject* obj, u2 symIdx);
+
+
   private:
     inline void push_jref(JObject* val);
-    inline void push_jchar(char c);
-    inline void push_jbyte(byte c);
-    inline void push_jshort(short val);
-    inline void push_jint(int val);
-    inline void push_jlong(long val);
-    inline void push_jfloat(float val);
-    inline void push_jdouble(double val);
+    inline void push_jchar(jchar c);
+    inline void push_jbool(jbool val);
+    inline void push_jbyte(jbyte c);
+    inline void push_jshort(jshort val);
+    inline void push_jint(jint val);
+    inline void push_jlong(jlong val);
+    inline void push_jfloat(jfloat val);
+    inline void push_jdouble(jdouble val);
     inline void push_jretaddr(u4 offset);
 
     inline JArray*      pop_jarray();
     inline JObject*     pop_jref();
-    inline char         pop_jchar();
-    inline byte         pop_jbyte();
-    inline short        pop_jshort();
-    inline int          pop_jint();
-    inline long         pop_jlong();
-    inline float        pop_jfloat();
-    inline double       pop_jdouble();
-    inline int          pop_jretaddr();
+    inline jchar         pop_jchar();
+    inline jbool		 pop_jbool();
+    inline jbyte         pop_jbyte();
+    inline jshort        pop_jshort();
+    inline jint          pop_jint();
+    inline jlong         pop_jlong();
+    inline jfloat        pop_jfloat();
+    inline jdouble       pop_jdouble();
+    inline jint          pop_jretaddr();
 
-    inline double       GetLocalDouble(int index);
-    inline float        GetLocalFloat(int index);
-    inline int          GetLocalInt(int index);
+    inline jdouble       GetLocalDouble(int index);
+    inline jfloat        GetLocalFloat(int index);
+    inline jint          GetLocalInt(int index);
     inline void         SetLocalInt(int index, int val);
-    inline byte         GetLocalByte(int index);
+    inline jbyte         GetLocalByte(int index);
 
 
-    inline char      GetLocalChar(int index);
-    inline long      GetLocalLong(int index);
+    inline jchar      GetLocalChar(int index);
+    inline jlong      GetLocalLong(int index);
+
   private:
+
+    void CheckOperandType(Operand& op, Klass* klass);
+
+    Method* ResolveMethod(u2 sym);
+    Field* ResolveField(u2 sym);
+
+
+    void InvokeMethod(Method* method);
+
+
     Operand pop();
     Operand& top();
     Operand& top(int index);
@@ -1264,14 +1204,13 @@ class VirtualMachine {
 
     bool has_more_code();
 
+
   private:
     OperandStack operandStack_;
-    JavaStack javaStack_;
-    LocalVariableSolt localVars_;
-
     int framePos_;
     StackFrame* stackFrames_[MAX_STACK_FRAME];
 };
+
 
 
 

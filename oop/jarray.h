@@ -4,124 +4,129 @@
 #include "oop/jobject.h"
 
 class JArray :      public JObject {
-public:
-	JArray(addr list, int length, Klass* componentType);
+  public:
+    JArray(addr list, int length, Klass* componentType);
 
-public:
-	int GetLength();
-	Klass* GetComponentType();
+  public:
+    inline int get_length() {
+        return length_;
+    }
 
-	inline JObject* GetRefItem(int index) {
-		CheckIndex(index);
+    Klass* get_component_type() {
+        return compoentType_;
+    }
 
-		JObject** ar = (JObject**) dataList_;
-		return ar[index];
-	}
+    inline JObject* get_jobject(int index) {
+        check_index(index);
 
-	inline jbyte     GetByteItem(int index){
-		CheckIndex(index);
+        JObject** ar = (JObject**) dataList_;
+        return ar[index];
+    }
 
-		jbyte* ar = (jbyte*)dataList_;
-		return ar[index];
-	}
+    inline jbyte     get_jbyte(int index) {
+        check_index(index);
 
-	inline jchar     GetCharItem(int index){
-		CheckIndex(index);
+        jbyte* ar = (jbyte*)dataList_;
+        return ar[index];
+    }
 
-		jchar* ar = (jchar*)dataList_;
-		return ar[index];
-	}
+    inline jchar     get_jchar(int index) {
+        check_index(index);
 
-	inline jshort    GetShortItem(int index){
-		CheckIndex(index);
-		jshort* ar = (jshort*)dataList_;
-		return ar[index];
-	}
+        jchar* ar = (jchar*)dataList_;
+        return ar[index];
+    }
 
-	inline jint      GetIntItem(int index){
-		CheckIndex(index);
-		jint* ar = (jint*)dataList_;
-		return ar[index];
-	}
+    inline jshort    get_jshort(int index) {
+        check_index(index);
+        jshort* ar = (jshort*)dataList_;
+        return ar[index];
+    }
 
-	inline jlong     GetLongItem(int index){
-		CheckIndex(index);
-		jlong* ar = (jlong*)dataList_;
-		return ar[index];
-	}
+    inline jint      get_jint(int index) {
+        check_index(index);
+        jint* ar = (jint*)dataList_;
+        return ar[index];
+    }
 
-	inline jfloat    GetFloatItem(int index){
-		CheckIndex(index);
-		jfloat* ar = (jfloat*)dataList_;
-		return ar[index];
-	}
+    inline jlong     get_jlong(int index) {
+        check_index(index);
+        jlong* ar = (jlong*)dataList_;
+        return ar[index];
+    }
 
-	inline jdouble   GetDoubleItem(int index){
-		CheckIndex(index);
-		jdouble* ar = (jdouble*)dataList_;
-		return ar[index];
-	}
+    inline jfloat    get_jfloat(int index) {
+        check_index(index);
+        jfloat* ar = (jfloat*)dataList_;
+        return ar[index];
+    }
 
-	inline void SetRefItem(int index, JObject* val){
-		CheckIndex(index);
-		JObject** ar = (JObject**) dataList_;
-		ar[index] = val;
-	}
+    inline jdouble   get_jdouble(int index) {
+        check_index(index);
+        jdouble* ar = (jdouble*)dataList_;
+        return ar[index];
+    }
 
-	inline void SetCharItem(int index, jchar val){ 
-		CheckIndex(index);
-		jchar* ar = (jchar*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jobject(int index, JObject* val) {
+        check_index(index);
+        JObject** ar = (JObject**) dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetByteItem(int index, jbyte val){ 
-		CheckIndex(index);
-		jbyte* ar = (jbyte*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jchar(int index, jchar val) {
+        check_index(index);
+        jchar* ar = (jchar*)dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetShortItem(int index, jshort val){ 
-		CheckIndex(index);
-		jshort* ar = (jshort*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jbyte(int index, jbyte val) {
+        check_index(index);
+        jbyte* ar = (jbyte*)dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetIntItem(int index, jint val){
-		CheckIndex(index);
-		jint* ar = (jint*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jshort(int index, jshort val) {
+        check_index(index);
+        jshort* ar = (jshort*)dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetLongItem(int index, jlong val){ 
-		CheckIndex(index);
-		jlong* ar = (jlong*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jint(int index, jint val) {
+        check_index(index);
+        jint* ar = (jint*)dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetFloatItem(int index, jfloat val){
-		CheckIndex(index);
-		jfloat* ar = (jfloat*)dataList_;
-		[index] = val;
-	}
+    inline void set_jlong(int index, jlong val) {
+        check_index(index);
+        jlong* ar = (jlong*)dataList_;
+        ar[index] = val;
+    }
 
-	inline void SetDoubleItem(int index, jdouble val){
-		CheckIndex(index);
-		jdouble* ar = (jdouble*)dataList_;
-		ar[index] = val;
-	}
+    inline void set_jfloat(int index, jfloat val) {
+        check_index(index);
+        jfloat* ar = (jfloat*)dataList_;
+        ar[index] = val;
+    }
 
-private:
-	void CheckIndex(int index);
+    inline void set_jdouble(int index, jdouble val) {
+        check_index(index);
+        jdouble* ar = (jdouble*)dataList_;
+        ar[index] = val;
+    }
 
-private:
-	addr dataList_;
-	int length_;
-	Klass* compoentType_;
+  private:
+    void check_index(int index);
+
+  private:
+    addr dataList_;
+    int length_;
+    Klass* compoentType_;
 };
 
 
-class JThrowable :  public JObject{};
-class JString :     public JObject{};
+class JThrowable :  public JObject {};
+class JString :     public JObject {};
 class BoolArray :   public JArray {};
 class ByteArray :   public JArray {};
 class CharArray :   public JArray {};

@@ -5,44 +5,60 @@
 
 class Operand {
   public:
-    bool IsFirstDataType();
-
-    inline Operand():type_(BASIC_TYPE_ILLEGAL) {
+    inline Operand():
+        type_(BASIC_TYPE_ILLEGAL) {
     }
 
-    inline Operand(BasicDataType type):type_(type) {
+    inline Operand(BasicDataType type):
+        type_(type) {
     }
 
-    inline Operand(BasicDataType type, jchar val):type_(type) {
+    inline Operand(BasicDataType type, jchar val):
+        type_(type) {
         SetCharVal(val);
     }
 
-    inline Operand(BasicDataType type, jbyte val):type_(type) {
+    inline Operand(BasicDataType type, jbyte val):
+        type_(type) {
         SetByteVal(val);
     }
 
-    inline Operand(BasicDataType type, jshort val):type_(type) {
+    inline Operand(BasicDataType type, jshort val):
+        type_(type) {
         SetShortVal(val);
     }
 
-    inline Operand(BasicDataType type, jint val):type_(type) {
+    inline Operand(BasicDataType type, jint val):
+        type_(type) {
         SetIntVal(val);
     }
 
-    inline Operand(BasicDataType type, jlong val):type_(type) {
+    inline Operand(BasicDataType type, jlong val):
+        type_(type) {
         SetLongVal(val);
     }
 
-    inline Operand(BasicDataType type, jfloat val):type_(type) {
+    inline Operand(BasicDataType type, jfloat val):
+        type_(type) {
         SetFloatVal(val);
     }
 
-    inline Operand(BasicDataType type, jdouble val):type_(type) {
+    inline Operand(BasicDataType type, jdouble val):
+        type_(type) {
         SetDoubleVal(val);
     }
 
-    inline Operand(BasicDataType type, JObject* val):type_(type) {
+    inline Operand(BasicDataType type, JObject* val):
+        type_(type) {
         SetRefVal(val);
+    }
+
+    inline bool IsCategoryOneType() {
+        return type_ != BASIC_TYPE_DOUBLE && type_ != BASIC_TYPE_FLOAT;
+    }
+
+    inline bool IsCategoryTwoType() {
+        return type_ == BASIC_TYPE_DOUBLE || type_ == BASIC_TYPE_FLOAT;
     }
 
     inline jchar GetCharVal() {

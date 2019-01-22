@@ -145,6 +145,9 @@
     <ClInclude Include="runtime\operand_stack.h">
       <Filter>runtime</Filter>
     </ClInclude>
+    <ClInclude Include="runtime\stack_frame.h">
+      <Filter>runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="classfile\class_file_stream.cpp">
@@ -211,6 +214,9 @@
       <Filter>runtime</Filter>
     </ClCompile>
     <ClCompile Include="runtime\operand.cpp">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\stack_frame.cpp">
       <Filter>runtime</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,19 +5,13 @@
 #include <list>
 #include <thread>
 
+#include "runtime/virtual_machine.h"
 #include "runtime/operand_stack.h"
 
 class Method;
 class ClassLoader;
 class Operand;
-
-class StackFrame {
-    Method* method;
-    OperandStack stack;
-    int maxVar;
-    Operand* varSolts;
-};
-
+class StackFrame;
 
 class JThread {
   public:

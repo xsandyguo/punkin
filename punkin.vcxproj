@@ -109,6 +109,7 @@
     <ClInclude Include="interpreter\byte_codes.h" />
     <ClInclude Include="interpreter\byte_code_stream.h" />
     <ClInclude Include="runtime\operand_stack.h" />
+    <ClInclude Include="runtime\stack_frame.h" />
     <ClInclude Include="runtime\virtual_machine.h" />
     <ClInclude Include="oop\oop.h" />
     <ClInclude Include="jvm\vm_symbols.hpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="interpreter\byte_code_stream.cpp" />
     <ClCompile Include="runtime\operand.cpp" />
     <ClCompile Include="runtime\operand_stack.cpp" />
+    <ClCompile Include="runtime\stack_frame.cpp" />
     <ClCompile Include="runtime\virtual_machine.cpp" />
     <ClCompile Include="jvm\main.cpp" />
     <ClCompile Include="oop\oop.cpp" />

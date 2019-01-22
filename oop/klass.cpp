@@ -5,44 +5,57 @@
 #include "classfile/class_file_type.hpp"
 
 
-Klass::Klass() {
-
+Klass::Klass():
+    instanceDataSize_(0),
+    staticDataSize_(0) {
 }
 
 Klass::~Klass() {
 
 }
 
-bool Klass::IsPrimitive() {
+void Klass::Init() {
+    this->ComputeInstanceSize();
+    this->ComputeStaticSize();
+}
 
+bool Klass::IsPrimitive() {
+    return false;
 }
 
 bool Klass::IsEnum() {
 
+    return false;
 }
 
 bool Klass::IsAnnotation() {
 
+    return false;
 }
 
 bool Klass::IsAssigableFrom(Klass* klass) {
 
+    return false;
 }
 
 bool Klass::IsArray() {
 
+    return false;
 }
 
 bool Klass::IsInterface() {
 
+    return false;
 }
 
 bool Klass::IsSynthetic() {
 
+    return false;
 }
 
 bool Klass::IsInstance(jobject obj) {
 
+    return false;
 }
 
 int Klass::GetModifier() {
@@ -57,7 +70,6 @@ Method * Klass::ResolveMethodByName(const std::string & name) {
     return nullptr;
 }
 
-
 Method* Klass::GetStaticConstructor() {
     return staticConstructor_;
 }
@@ -70,8 +82,8 @@ bool Klass::IsResolved() {
     return resolved_;
 }
 
-u1   Klass::GetValueType() {
-
+BasicDataType Klass::GetType() {
+    return type_;
 }
 
 Klass* Klass::GetSuperKlass() {
@@ -91,6 +103,10 @@ void Klass::SetStaticData(addr data) {
 }
 
 int Klass::GetStaticDataSize() {
+    return staticDataSize_;
+}
+
+void Klass::ComputeStaticSize() {
     std::vector<Field*>& fields = fields_;
     std::vector<Field*>::iterator fieldItor;
 
@@ -117,11 +133,15 @@ int Klass::GetStaticDataSize() {
     }
 
     staticDataSize_ = length;
-
-    return staticDataSize_;
 }
 
+
+
 int Klass::GetInstanceDataSize() {
+    return instanceDataSize_;
+}
+
+void Klass::ComputeInstanceSize() {
     int length = sizeof(JObject);
     Klass* klass = this;
 
@@ -145,8 +165,6 @@ int Klass::GetInstanceDataSize() {
     }
 
     instanceDataSize_ = length;
-
-    return instanceDataSize_;
 }
 
 const std::string& Klass::GetName() {
@@ -162,7 +180,15 @@ std::vector<Field*>& Klass::GetDeclaredFields() {
 }
 
 Field* Klass::GetDeclaredField(const std::string& name) {
+    std::vector<Field*>::iterator itor;
+    for (itor = fields_.begin(); itor != fields_.end(); ++itor) {
+        Field* field = *itor;
+        if (!field->GetName().compare(name)) {
+            return *itor;
+        }
+    }
 
+    return NULL;
 }
 
 std::vector<Method*>& Klass:: GetDeclaredMethods() {
@@ -170,11 +196,43 @@ std::vector<Method*>& Klass:: GetDeclaredMethods() {
 }
 
 Method* Klass::GetDeclaredMethod(const std::string& name) {
-
+    return GetDeclaredMethod(name, std::vector<Klass*>());
 }
 
 Method* Klass::GetDeclaredMethod(const std::string& name, std::vector<Klass*>& parameterTypes) {
+    std::vector<Method*>::iterator itor;
+    for (itor = methods_.begin(); itor != methods_.end(); ++itor) {
+        Method* method = *itor;
+        if (method->GetName().compare(name)) {
+            continue;
+        }
 
+        const std::vector<Klass*>& types = method->GetParamerterTypes();
+        if (types.size() != parameterTypes.size()) {
+            continue;
+        }
+
+        if (types.empty()) {
+            return method;
+        }
+
+        bool match = true;
+        for (int i = 0; i < types.size(); ++i) {
+            Klass* a = types.at(i);
+            Klass* b = parameterTypes.at(i);
+
+            if (a != b) {
+                match = false;
+                break;
+            }
+        }
+
+        if (match) {
+            return method;
+        }
+    }
+
+    return NULL;
 }
 
 std::vector<Constructor*>& Klass::GetDeclaredConstructors() {
@@ -198,9 +256,5 @@ void Klass::SetClassLoader(ClassLoader* classLoader) {
 }
 
 void Klass::SetConstantPool(std::vector<ConstantPool*>& constantPools) {
-
-}
-
-jobject Klass::NewInstance() {
 
 }

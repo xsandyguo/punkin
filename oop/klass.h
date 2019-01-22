@@ -5,11 +5,9 @@
 #include <vector>
 
 #include "oop/oop.h"
+#include "oop/field.h"
+#include "oop/method.h"
 
-class Klass;
-class Field;
-class Method;
-class Constructor;
 class ClassLoader;
 
 class ConstantPool {
@@ -21,6 +19,8 @@ class Klass {
     Klass();
     ~Klass();
   public:
+    void Init();
+
     bool IsPrimitive();
     bool IsEnum();
     bool IsAnnotation();
@@ -34,11 +34,9 @@ class Klass {
     void SetModifier(int modifier);
 
     Method* ResolveMethodByName(const std::string& name);
-
     Method* GetStaticConstructor();
 
-    u1   GetValueType();
-
+    BasicDataType   GetType();
     bool IsResolved();
 
   public:
@@ -69,6 +67,10 @@ class Klass {
 
     int GetStaticDataSize();
     int GetInstanceDataSize();
+
+    void ComputeStaticSize();
+    void ComputeInstanceSize();
+
   private:
     int modifier_;
     Klass* superKlass_;
@@ -84,6 +86,7 @@ class Klass {
     int staticDataSize_;
     int instanceDataSize_;
     Method* staticConstructor_;
+    BasicDataType type_;
 };
 
 #endif
