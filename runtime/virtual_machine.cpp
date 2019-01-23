@@ -10,7 +10,7 @@ void VirtualMachine::InvokeMethod(Method* method) {
         args[i] = pop();
     }
 
-    JObject* ref = pop_jref();
+    JObject* ref = pop_jobject();
 
     CheckNullObject(ref);
 
@@ -192,9 +192,9 @@ ins_fun_ptr INSTRUCTION_FUNS [] = {
     &VirtualMachine::if_icmple,
     &VirtualMachine::if_acmpeq,
     &VirtualMachine::if_acmpne,
-    &VirtualMachine::goto0,
+    &VirtualMachine::goto__,
     &VirtualMachine::jsr,
-    &VirtualMachine::ret,
+    &VirtualMachine::ret__,
     &VirtualMachine::tableswitch,
     &VirtualMachine::lookupswitch,
     &VirtualMachine::ireturn,
@@ -202,7 +202,7 @@ ins_fun_ptr INSTRUCTION_FUNS [] = {
     &VirtualMachine::freturn,
     &VirtualMachine::dreturn,
     &VirtualMachine::areturn,
-    &VirtualMachine::return0,
+    &VirtualMachine::return__,
     &VirtualMachine::getstatic,
     &VirtualMachine::putstatic,
     &VirtualMachine::getfield,
@@ -211,7 +211,7 @@ ins_fun_ptr INSTRUCTION_FUNS [] = {
     &VirtualMachine::invokespecial,
     &VirtualMachine::invokestatic,
     &VirtualMachine::invokeinterface,
-    &VirtualMachine::new0,
+    &VirtualMachine::new__,
     &VirtualMachine::newarray,
     &VirtualMachine::anewarray,
     &VirtualMachine::arraylength,
