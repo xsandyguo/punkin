@@ -268,30 +268,29 @@ class VirtualMachine {
 
         ensure_not_null(obj);
 
+        throw_java_exception(obj);
+    }
+
+    void throw_java_exception(jobject ex) {
         Method* method = current_frame()->method;
         std::vector<ExceptionHandler>& handlers
             = method->GetCodeArea()->exception_table;
 
         std::vector<ExceptionHandler>::iterator itor;
-        bool handled = false;
+        do {
+            for (itor = handlers.begin(); itor != handlers.end(); ++itor) {
+                ExceptionHandler& handler = *itor;
+                Klass* type = ResolveKlassType(handler.catch_type);
+                if (!type->IsAssigableFrom(obj->GetKlass())) {
+                    continue;
+                }
 
-        do {}
-        for (itor = handlers.begin(); itor != handlers.end(); ++itor) {
-            ExceptionHandler& handler = *itor;
-            Klass* type = ResolveKlassType(handler.catch_type);
-            if (!type->IsAssigableFrom(obj->GetKlass())) {
-                continue;
+                clear_operand_stack();
+                set_ip(handler.start_pc);
+                return;
             }
-
-            clear_operand_stack();
-
-            set_ip(handler.start_pc);
-            handled = true;
-        }
-
-        if (!handled) {
-            handle_return();
-        }
+            return_frame();
+        } while (framePos_ >= 0);
     }
 
     void bipush() {
@@ -935,7 +934,7 @@ class VirtualMachine {
     }
 
     void return__() {
-        handle_return();
+        return_frame();
     }
 
     void lreturn() {
@@ -965,7 +964,7 @@ class VirtualMachine {
     inline void __return_val() {
         Operand op = pop();
 
-        handle_return();
+        return_frame();
 
         current_frame()->stack.push(op);
     }
@@ -1108,7 +1107,7 @@ class VirtualMachine {
     void SetLocalVar(u2 index, Operand val);
     Operand GetLocalVar(u2 index);
 
-    inline void handle_return() {
+    inline void return_frame() {
         delete current_frame();
         framePos_--;
     }
