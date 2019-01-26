@@ -16,6 +16,5 @@ typedef unsigned char      byte;
 #define addr         void*
 #define BitsPerByte     8
 
-
 #endif
 

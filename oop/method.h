@@ -6,6 +6,21 @@
 
 class Klass;
 
+struct ExceptionHandler {
+    u2 start_pc;
+    u2 end_pc;
+    u2 handler_pc;
+    u2 catch_type;
+};
+
+struct CodeArea {
+    u2 max_stack;
+    u2 max_locals;
+    u4 code_length;
+    u1* code;
+    std::vector<ExceptionHandler> exception_table;
+};
+
 class Executable {
   public:
     Executable();
@@ -30,6 +45,8 @@ class Executable {
     Klass*      GetType();
     void		SetType(Klass* klass);
 
+    CodeArea*   GetCodeArea();
+
     jobject Invoke(jobject obj, const std::vector<jobject>& parameters);
   private:
     int modifier_;
@@ -37,6 +54,7 @@ class Executable {
     Klass* klass_;
     std::string name_;
     std::vector<Klass*> parameterTypes_;
+    CodeArea* codeArea_;
 };
 
 

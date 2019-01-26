@@ -67,6 +67,10 @@ void Executable::SetType(Klass* klass) {
     this->klass_ = klass;
 }
 
+CodeArea* Executable::GetCodeArea() {
+    return this->codeArea_;
+}
+
 jobject Executable::Invoke(jobject obj, const std::vector<jobject>& parameters) {
 
 }

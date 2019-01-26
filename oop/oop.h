@@ -62,4 +62,33 @@ struct primitive_type_klass_size {
 extern primitive_type_klass_size KLASS_TYPE_SIZE [];
 
 
+
+inline void   set_bits(intptr_t& x, intptr_t m) {
+    x |= m;
+}
+
+inline void clear_bits(intptr_t& x, intptr_t m) {
+    x &= ~m;
+}
+
+inline intptr_t mask_bits(intptr_t  x, intptr_t m) {
+    return x & m;
+}
+
+inline jlong    mask_long_bits(jlong     x, jlong    m) {
+    return x & m;
+}
+
+// returns integer round-up to the nearest multiple of s (s must be a power of two)
+inline intptr_t round_to(intptr_t x, u4 s) {
+    const u4 m = s - 1;
+    return mask_bits(x + m, ~m);
+}
+
+// returns integer round-down to the nearest multiple of s (s must be a power of two)
+inline intptr_t round_down(intptr_t x, u4 s) {
+    const u4 m = s - 1;
+    return mask_bits(x, ~m);
+}
+
 #endif

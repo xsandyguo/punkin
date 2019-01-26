@@ -7,6 +7,7 @@ class Method;
 class Operand;
 
 struct StackFrame {
+    int ip;
     Method* method;
     OperandStack stack;
     int maxVar;
