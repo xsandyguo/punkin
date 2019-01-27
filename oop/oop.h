@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_OOP_H
 #define INTERPRETER_OOP_H
 
-#include "utilities/top.hpp"
+#include "utilities/top.h"
 
 class JObject;
 
@@ -61,8 +61,6 @@ struct primitive_type_klass_size {
 
 extern primitive_type_klass_size KLASS_TYPE_SIZE [];
 
-
-
 inline void   set_bits(intptr_t& x, intptr_t m) {
     x |= m;
 }
@@ -75,7 +73,7 @@ inline intptr_t mask_bits(intptr_t  x, intptr_t m) {
     return x & m;
 }
 
-inline jlong    mask_long_bits(jlong     x, jlong    m) {
+inline jlong    mask_long_bits(jlong    x, jlong    m) {
     return x & m;
 }
 
@@ -90,5 +88,40 @@ inline intptr_t round_down(intptr_t x, u4 s) {
     const u4 m = s - 1;
     return mask_bits(x, ~m);
 }
+
+
+inline int ZeroExtend(byte val) {
+    return (unsigned char)val;
+}
+
+inline int SignedExtend(byte val) {
+    return val;
+}
+
+inline int ZeroExtend(jbyte val) {
+    return (unsigned char)val;
+}
+
+inline int SignedExtend(jbyte val) {
+    return val;
+}
+
+inline int ZeroExtend(jshort val) {
+    return (unsigned short)val;
+}
+
+inline int SignedExtend(jshort val) {
+    return val;
+}
+
+inline int ZeroExtend(jchar val) {
+    return (unsigned short)val;
+}
+
+inline int SignedExtend(jchar val) {
+    return val;
+}
+
+
 
 #endif

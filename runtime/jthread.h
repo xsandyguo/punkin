@@ -6,7 +6,6 @@
 #include <thread>
 
 #include "runtime/virtual_machine.h"
-#include "runtime/operand_stack.h"
 
 class Method;
 class ClassLoader;
@@ -24,6 +23,11 @@ class JThread {
     void Join();
 
     void Run(Method* method);
+
+    VirtualMachine& GetVM();
+
+    ClassLoader* GetClassLoader();
+
     static std::list<JThread*> GetAllThread();
     static JThread* Current();
 
@@ -31,6 +35,7 @@ class JThread {
 
   private:
     void Start0();
+
   private:
     std::list<StackFrame*> frames_;
     static std::list<JThread*> threads_;

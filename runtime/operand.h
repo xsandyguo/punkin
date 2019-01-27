@@ -5,9 +5,8 @@
 
 class Operand {
   public:
-    inline Operand():
-        type_(BASIC_TYPE_ILLEGAL) {
-    }
+	Operand();
+	Operand(const Operand& operand);
 
     inline Operand(BasicDataType type):
         type_(type) {
@@ -22,6 +21,11 @@ class Operand {
         type_(type) {
         SetByteVal(val);
     }
+
+	inline Operand(BasicDataType type, jbool val) :
+		type_(type) {
+		SetBoolVal(val);
+	}
 
     inline Operand(BasicDataType type, jshort val):
         type_(type) {
@@ -69,6 +73,10 @@ class Operand {
         return this->val_.b;
     }
 
+	inline jbool GetBoolVal() {
+		return this->val_.z;
+	}
+
     inline jshort GetShortVal() {
         return this->val_.s;
     }
@@ -96,6 +104,10 @@ class Operand {
     inline void SetCharVal(jchar val) {
         this->val_.c = val;
     }
+
+	inline void SetBoolVal(jbool val) {
+		this->val_.z = val;
+	}
 
     inline void SetByteVal(jbyte val) {
         this->val_.b = val;

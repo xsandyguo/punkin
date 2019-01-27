@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_BYTE_CODES_H
 #define INTERPRETER_BYTE_CODES_H
 
-#include "utilities/top.hpp"
+#include "utilities/top.h"
 
 enum Code {
     _illegal              =  -1,

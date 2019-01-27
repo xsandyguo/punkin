@@ -8,9 +8,10 @@
 #include "oop/jarray.h"
 #include "oop/class_loader.h"
 #include "oop/klass.h"
-#include "classfile/class_file_type.hpp"
+#include "jvm/vm_exception.h"
+#include "classfile/class_file_type.h"
 
-#define MAX_STACK_FRAME 256
+#define MAX_STACK_FRAME		256
 
 
 #define INSTRUCT_FUN_IF_ICMP(name, cmp)        \
@@ -162,6 +163,10 @@ void prefix##ushr(){                        \
 class VirtualMachine {
   public:
     void Execute(Method* method_);
+    VirtualMachine();
+    ~VirtualMachine();
+
+    void throw_java_exception(jobject ex);
 
   public:
     INSTRUCT_FUN_LOAD_STORE_VAR(a)
@@ -248,8 +253,8 @@ class VirtualMachine {
     }
 
     void anewarray() {
-        u2 index =  next_u2_sym_index();
-        Klass* klass = ResolveKlassType(index);
+        u2 index =  next_u2();
+        Klass* klass = resolve_klass_sym(index);
 
         int count = pop_jint();
         if(count < 0) {
@@ -271,39 +276,8 @@ class VirtualMachine {
         throw_java_exception(obj);
     }
 
-    void throw_java_exception(jobject ex) {
-        Method* method = current_frame()->method;
-        std::vector<ExceptionHandler>& handlers
-            = method->GetCodeArea()->exception_table;
-
-        std::vector<ExceptionHandler>::iterator itor;
-        do {
-            for (itor = handlers.begin(); itor != handlers.end(); ++itor) {
-                ExceptionHandler& handler = *itor;
-                Klass* type = ResolveKlassType(handler.catch_type);
-                if (!type->IsAssigableFrom(obj->GetKlass())) {
-                    continue;
-                }
-
-                clear_operand_stack();
-                set_ip(handler.start_pc);
-                return;
-            }
-            return_frame();
-        } while (framePos_ >= 0);
-    }
-
     void bipush() {
         push_jint(SignedExtend(next_byte()));
-    }
-
-    void checkcast() {
-        byte byte1 = next_byte();
-        byte byte2 = next_byte();
-
-        u2 index = byte1 << 8 | byte2;
-
-        check_object_type(load(0).GetRefVal(), index);
     }
 
     void d2f() {
@@ -433,19 +407,6 @@ class VirtualMachine {
         push_jlong((long)val);
     }
 
-    void __fcmp() {
-        jfloat v2 = pop_jfloat();
-        jfloat v1 = pop_jfloat();
-
-        if(v2 == v1) {
-            push_jint(0);
-        } else if(v1 > v2) {
-            push_jint(1);
-        } else {
-            push_jint(-1);
-        }
-    }
-
     void fcmpl() {
         __fcmp();
     }
@@ -467,46 +428,23 @@ class VirtualMachine {
     }
 
     void getfield() {
-        byte index1 = next_byte();
-        byte index2 = next_byte();
         JObject* obj = pop_jobject();
 
         ensure_not_null(obj);
 
-        u2 index = index1 << 8 | index2;
-
-        JObject* val = ResolveField(index)->Get(obj);
-
-        push_jobject(val);
+        __get_field_val(obj, resolve_field_sym(false, next_u2()));
     }
 
     void getstatic() {
-        byte index1 = next_byte();
-        byte index2 = next_byte();
-
-        u2 index = index1 << 8 | index2;
-
-        push(GetStaticVal(index));
+        __get_field_val(NULL, resolve_field_sym(true, next_u2()));;
     }
 
     void goto__() {
-        byte index1 = next_byte();
-        byte index2 = next_byte();
-
-        u2 offset = index1 << 8 | index2;
-
-        skip_ip(offset);
+        skip_ip(next_u2());
     }
 
     void goto_w() {
-        byte index1 = next_byte();
-        byte index2 = next_byte();
-        byte index3 = next_byte();
-        byte index4 = next_byte();
-
-        int offset = (index1 << 24) | (index2 << 16) | (index3 << 8) | index4;
-
-        skip_ip(offset);
+        skip_ip(current_code().get_u4());
     }
 
     void i2b() {
@@ -576,144 +514,141 @@ class VirtualMachine {
     }
 
     void if_acmpeq() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 offset = next_u2();
 
         JObject* v2 = pop_jobject();
         JObject* v1 = pop_jobject();
 
         if(v1 == v2) {
-            u2 offset = offset1 << 8 | offset2;
             skip_ip(offset);
         }
     }
 
     void if_acmpne() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 offset = next_u2();
 
         JObject* v2 = pop_jobject();
         JObject* v1 = pop_jobject();
 
         if(v1 != v2) {
-            u2 offset = offset1 << 8 | offset2;
             skip_ip(offset);
         }
     }
 
     void ifnonnull() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 offset = next_u2();
 
         JObject* v1 = pop_jobject();
         if(v1 != NULL) {
-            u2 offset = offset1 << 8 | offset2;
             skip_ip(offset);
         }
     }
 
     void ifnull() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 offset = next_u2();
 
         JObject* v1 = pop_jobject();
+
         if(v1 == NULL) {
-            u2 offset = offset1 << 8 | offset2;
             skip_ip(offset);
         }
     }
 
     void iinc() {
         byte index = next_byte();
-        byte constVal = next_byte();
 
+        byte constVal = next_byte();
         int val = SignedExtend(constVal);
 
-        int ret = GetLocalInt(index);
-        ret += val;
-        SetLocalInt(index, ret);
+        Operand ret = current_frame()->GetVar(index);
+        ret.SetIntVal(ret.GetIntVal() + val);
+        current_frame()->SetVar(index, ret);
+    }
+
+    void checkcast() {
+        Klass * klass = resolve_klass_sym(next_u2());
+
+        jobject obj = load(0).GetRefVal();
+
+        if (obj == NULL) {
+            return;
+        }
+
+        if (!klass->IsInstance(obj)) {
+            vmExceptions::java_lang_ClassCastException();
+        }
     }
 
     void instanceof() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
-
-        u2 sym = offset1 << 8 | offset2;
-
         JObject* ref = pop_jobject();
-        if(ref == NULL || !IsInstanceOf(ref, sym)) {
+        Klass* t = resolve_klass_sym(next_u2());
+
+        if(ref == NULL) {
             push_jint(0);
         } else {
-            push_jint(1);
+            Klass* s = ref->GetKlass();
+            push_jint(t->IsAssigableFrom(s) ? 1 : 0);
         }
     }
 
     void invokedynamic() {
-        THROW_UNSUPPORTED()
+        vmExceptions::java_lang_InternalError();
     }
 
     void invokeinterface() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 sym = next_u2();
         byte count = next_byte();
         next_byte();
 
-        u2 sym = offset1 << 8 | offset2;
+        // Method* method = resolve_method_sym(sym);
 
-        Method* method = ResolveMethod(sym);
-
-        InvokeMethod(method);
+        //  InvokeMethod(method);
     }
 
     void invokespecial() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 sym = next_u2();
 
-        u2 sym = offset1 << 8 | offset2;
+        // Method* method = resolve_method_sym(sym);
 
-        Method* method = ResolveMethod(sym);
-
-        InvokeMethod(method);
+        // InvokeMethod(method);
     }
 
     void invokestatic() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 sym = next_u2();
 
-        u2 sym = offset1 << 8 | offset2;
+        Klass* klass = current_frame()->GetKlass();
+        ConstantPool& constantPool = klass->GetConstantPool();
+        ConstPoolMethodRefInfo* methodRef =(ConstPoolMethodRefInfo*)
+                                           constantPool.ResolveConstantInfo(sym);
+        ConstPoolUtf8Info* klassName = (ConstPoolUtf8Info*)
+                                       constantPool.ResolveConstantInfo(methodRef->class_index);
+        ConstPoolNameAndTypeInfo* nameAndType = (ConstPoolNameAndTypeInfo*)
+                                                constantPool.ResolveConstantInfo(methodRef->name_and_type_index);
+        ConstPoolUtf8Info* methodName = (ConstPoolUtf8Info*)
+                                        constantPool.ResolveConstantInfo(nameAndType->name_index);
+        ConstPoolUtf8Info* methodDesc= (ConstPoolUtf8Info*)
+                                       constantPool.ResolveConstantInfo(nameAndType->descriptor_index);
 
-        Method* method = ResolveMethod(sym);
-        InvokeMethod(method);
+        Klass* methodKlass = klass->GetClassLoader()->LoadClass(std::string(klassName));
+        Method* method = methodKlass->GetDeclaredMethod(std::string(methodName->bytes));
+
+        InvokeMethod(NULL, method);
     }
 
     void invokevirtual() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
+        u2 sym = next_u2();
 
-        u2 sym = offset1 << 8 | offset2;
+        // Method* method = resolve_method_sym(sym);
 
-        Method* method = ResolveMethod(sym);
-
-        InvokeMethod(method);
+        // InvokeMethod(method);
     }
 
     void jsr() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
-        u2 offset = offset1 << 8 | offset2;
-
-        push_jretaddr(offset);
+        push_jretaddr(next_u2());
     }
 
     void jsr_w() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
-        byte offset3 = next_byte();
-        byte offset4 = next_byte();
-
-        u4 offset = (offset1 << 24) | (offset2 << 16) | (offset3 << 8) | offset4;
-
-        push_jretaddr(offset);
+        push_jretaddr(current_code().get_u4());
     }
 
     void l2d() {
@@ -752,53 +687,29 @@ class VirtualMachine {
     }
 
     void monitorenter() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void monitorexit() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void multianewarray() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void newarray() {
-
-        THROW_UNSUPPORTED();
-        /*   int count = pop_jint();
-        byte type = next_byte();
-
-        void* list = NULL;
-
-        switch(type){
-        case AIT_CHAR:
-        case AIT_BYTE:
-        case AIT_BOOLEAN:
-        case AIT_SHORT:
-        case AIT_INT:
-        case AIT_LONG:
-        case AIT_FLOAT:
-        case AIT_DOUBLE:
-        }
-
-
-        JArray* ar = new JArray();
-
-        push_jobject(ar);*/
+        vmExceptions::java_lang_InternalError();
     }
 
     void new__() {
-        THROW_UNSUPPORTED();
-
-        u2 index = next_u2_sym_index();
+        u2 index = next_u2();
         JObject* ref;
 
         push_jobject(ref);
     }
 
     void nop() {
-        //do nothing
     }
 
     void pop__() {
@@ -811,55 +722,11 @@ class VirtualMachine {
     }
 
     void putfield() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void putstatic() {
-        THROW_UNSUPPORTED();
-    }
-
-    void putfieldVal(jobject obj,  u2 sym, Operand& val) {
-        sym = next_u2_sym_index();
-
-        Field* field = ResolveField(sym);
-        Klass* klass = field->GetType();
-
-        CheckOperandType(load(0), klass);
-
-        if(!klass->IsPrimitive()) {
-            field->Set(NULL, pop_jobject());
-            return;
-        }
-
-        BasicDataType type = klass->GetType();
-        switch(type) {
-        case BASIC_TYPE_BOOL:
-            field->SetBoolean(NULL, pop_jbool());
-            break;
-        case BASIC_TYPE_CHAR:
-            field->SetChar(NULL, pop_jchar());
-            break;
-        case BASIC_TYPE_BYTE:
-            field->SetByte(NULL, pop_jbyte());
-            break;
-        case BASIC_TYPE_SHORT:
-            field->SetShort(NULL, pop_jshort());
-            break;
-        case BASIC_TYPE_INTEGER:
-            field->SetInt(NULL, pop_jint());
-            break;
-        case BASIC_TYPE_LONG:
-            field->SetLong(NULL, pop_jlong());
-            break;
-        case BASIC_TYPE_FLOAT:
-            field->SetFloat(NULL, pop_jfloat());
-            break;
-        case BASIC_TYPE_DOUBLE:
-            field->SetDouble(NULL, pop_jdouble());
-            break;
-        }
-
-        THROW_ILLEGAL_OPERATE();
+        vmExceptions::java_lang_InternalError();
     }
 
     void ret__() {
@@ -867,9 +734,7 @@ class VirtualMachine {
     }
 
     void sipush() {
-        byte v1 = next_byte();
-        byte v2 = next_byte();
-        short ret = v1 << 8 | v2;
+        short ret = next_u2();
         push_jshort(SignedExtend(ret));
     }
 
@@ -918,19 +783,19 @@ class VirtualMachine {
     }
 
     void wide() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void ldc() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void ldc_w() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void ldc2_w() {
-        THROW_UNSUPPORTED();
+        vmExceptions::java_lang_InternalError();
     }
 
     void return__() {
@@ -966,107 +831,104 @@ class VirtualMachine {
 
         return_frame();
 
-        current_frame()->stack.push(op);
+        current_frame()->Push(op);
     }
 
     inline void __aload(u2 index) {
-        push(GetLocalVar(index));
+        push(get_local_var(index));
     }
 
     inline void __dload(u2 index) {
-        push(GetLocalVar(index));
+        push(get_local_var(index));
     }
 
     inline void __lload(u2 index) {
-        push(GetLocalVar(index));
+        push(get_local_var(index));
     }
 
     inline void __fload(u2 index) {
-        push(GetLocalVar(index));
+        push(get_local_var(index));
     }
 
     inline void __iload(u2 index) {
-        push(GetLocalVar(index));
+        push(get_local_var(index));
     }
 
     inline void __dstore(u2 index) {
         Operand val = pop();
-        SetLocalVar(index, val );
+        set_local_var(index, val );
     }
 
     inline void __lstore(u2 index) {
         Operand val = pop();
-        SetLocalVar(index, val);
+        set_local_var(index, val);
     }
 
     inline void __istore(u2 index) {
         Operand val = pop();
-        SetLocalVar(index, val );
+        set_local_var(index, val );
     }
 
     inline void __fstore(u2 index) {
         Operand val = pop();
-        SetLocalVar(index, val );
+        set_local_var(index, val );
     }
 
     inline void __astore(u2 index) {
         Operand val = pop();
-        SetLocalVar(index, val);
+        set_local_var(index, val);
     }
 
+    void __fcmp() {
+        jfloat v2 = pop_jfloat();
+        jfloat v1 = pop_jfloat();
 
+        if (v2 == v1) {
+            push_jint(0);
+        } else if (v1 > v2) {
+            push_jint(1);
+        } else {
+            push_jint(-1);
+        }
+    }
+
+    void __get_field_val(jobject obj, Field* field);
+    void __set_field_val(jobject obj, Field* field, const Operand& val);
   private:
+    void push_jobject(JObject* val);
+    void push_jchar(jchar c);
+    void push_jbool(jbool val);
+    void push_jbyte(jbyte c);
+    void push_jshort(jshort val);
+    void push_jint(jint val);
+    void push_jlong(jlong val);
+    void push_jfloat(jfloat val);
+    void push_jdouble(jdouble val);
+    void push_jretaddr(u4 offset);
 
-    Operand GetStaticVal(u2 symIdx);
+    JArray*   pop_jarray();
+    JObject*  pop_jobject();
+    jchar     pop_jchar();
+    jbool	  pop_jbool();
+    jbyte     pop_jbyte();
+    jshort    pop_jshort();
+    jint      pop_jint();
+    jlong     pop_jlong();
+    jfloat    pop_jfloat();
+    jdouble   pop_jdouble();
+    jint      pop_jretaddr();
 
-    inline void ensure_not_null(JObject* ref);
-    bool IsInstanceOf(JObject* obj, u2 symIdx);
-    inline void clear_operand_stack();
-
-    inline void align_ip(int a) {
-        set_ip(round_to(current_ip(), 4));
-    }
-
-    inline void push_jobject(JObject* val);
-    inline void push_jchar(jchar c);
-    inline void push_jbool(jbool val);
-    inline void push_jbyte(jbyte c);
-    inline void push_jshort(jshort val);
-    inline void push_jint(jint val);
-    inline void push_jlong(jlong val);
-    inline void push_jfloat(jfloat val);
-    inline void push_jdouble(jdouble val);
-    inline void push_jretaddr(u4 offset);
-
-    inline JArray*   pop_jarray();
-    inline JObject*  pop_jobject();
-    inline jchar     pop_jchar();
-    inline jbool	 pop_jbool();
-    inline jbyte     pop_jbyte();
-    inline jshort    pop_jshort();
-    inline jint      pop_jint();
-    inline jlong     pop_jlong();
-    inline jfloat    pop_jfloat();
-    inline jdouble   pop_jdouble();
-    inline jint      pop_jretaddr();
-
-    inline jdouble   GetLocalDouble(int index);
-    inline jfloat    GetLocalFloat(int index);
-    inline jint      GetLocalInt(int index);
-    inline void      SetLocalInt(int index, int val);
-    inline jbyte     GetLocalByte(int index);
+    void align_ip(int a);
 
 
-    inline jchar     GetLocalChar(int index);
-    inline jlong     GetLocalLong(int index);
-
-    void CheckOperandType(Operand& op, Klass* klass);
-
-    Method* ResolveMethod(u2 sym);
-    Field* ResolveField(u2 sym);
-
+    Field* resolve_field_sym(bool isstatic, u2 index);
+    //Method* resolve_method_sym(u2 index);
+    Klass* resolve_klass_sym(u2 index);
 
     void InvokeMethod(Method* method);
+
+
+    void ensure_not_null(JObject* obj);
 
     Operand pop();
     void push(const Operand& op);
@@ -1074,54 +936,23 @@ class VirtualMachine {
     Operand& load(int index);
     void store(int index, const Operand& val);
 
-    byte next_byte();
+    u1 next_byte();
+    u2 next_u2();
+    u4 next_u4();
 
-    inline u4 next_u4();
-
-    inline u2   next_u2_sym_index() {
-        byte offset1 = next_byte();
-        byte offset2 = next_byte();
-
-        return offset1 << 8 | offset2;
-    }
-
-    int current_ip();
     void skip_ip(int offset);
     void set_ip(int ip);
 
-    void check_object_type(JObject* obj, u2 index);
+    void set_local_var(u2 index, const Operand& val);
+    Operand get_local_var(u2 index);
 
-    inline int ZeroExtend(byte c);
-    inline int SignedExtend(byte c);
+    void return_frame();
 
-    inline int ZeroExtend(jbyte c);
-    inline int SignedExtend(jbyte c);
-
-    inline int ZeroExtend(jshort c);
-    inline int SignedExtend(jshort c);
-
-    inline int ZeroExtend(jchar c);
-    inline int SignedExtend(jchar c);
-
-    Klass* ResolveKlassType(u2 index);
-    void SetLocalVar(u2 index, Operand val);
-    Operand GetLocalVar(u2 index);
-
-    inline void return_frame() {
-        delete current_frame();
-        framePos_--;
-    }
-
-    inline StackFrame* current_frame() {
-        return stackFrames_[framePos_];
-    }
-
-    bool has_more_code();
-
+    StackFrame* current_frame();
+    BytecodeStream& current_code();
 
   private:
-    OperandStack operandStack_;
-    int framePos_;
+    int frameTop_;
     StackFrame* stackFrames_[MAX_STACK_FRAME];
 };
 

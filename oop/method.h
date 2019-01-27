@@ -65,7 +65,8 @@ class Method : public Executable {
 
 class Constructor : public Executable {
   public:
-    jobject New();
+    jobject NewInstance();
 };
+
 
 #endif

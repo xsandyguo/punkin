@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,20 +14,21 @@
     <ProjectGuid>{6346E884-D6B7-48B0-94FE-1B7F8FF46E8A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>punkin</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -43,7 +44,7 @@
     <LinkIncremental>true</LinkIncremental>
     <EmbedManifest>true</EmbedManifest>
     <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)$(Configuration)\build</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\build\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -54,10 +55,10 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <PrecompiledHeaderFile>precompile.hpp</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>precompile.hpp</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -81,24 +82,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="base\auto_any.h" />
-    <ClInclude Include="base\basictypes.h" />
-    <ClInclude Include="base\debug.h" />
-    <ClInclude Include="base\error.h" />
-    <ClInclude Include="base\scoped_any.h" />
-    <ClInclude Include="base\scoped_ptr.h" />
-    <ClInclude Include="base\shared_any.h" />
-    <ClInclude Include="base\shared_ptr.h" />
-    <ClInclude Include="base\smart_any_fwd.h" />
-    <ClInclude Include="base\utility.h" />
-    <ClInclude Include="classfile\class_file_reader.hpp" />
-    <ClInclude Include="classfile\class_file_type.cpp" />
-    <ClInclude Include="classfile\class_file_stream.hpp" />
-    <ClInclude Include="classfile\class_file_type.hpp" />
+    <ClInclude Include="classfile\class_file_reader.h" />
+    <ClInclude Include="classfile\class_file_type.cc" />
+    <ClInclude Include="classfile\class_file_stream.h" />
+    <ClInclude Include="classfile\class_file_type.h" />
+    <ClInclude Include="classfile\constant_pool.h" />
+    <ClInclude Include="classfile\symbol.h" />
+    <ClInclude Include="gc\allocator.h" />
     <ClInclude Include="gc\memory.h" />
     <ClInclude Include="oop\bootstrap_class_loader.h" />
     <ClInclude Include="oop\class_loader.h" />
@@ -108,50 +98,51 @@
     <ClInclude Include="oop\url_class_loader.h" />
     <ClInclude Include="interpreter\byte_codes.h" />
     <ClInclude Include="interpreter\byte_code_stream.h" />
-    <ClInclude Include="runtime\operand_stack.h" />
+    <ClInclude Include="oop\virtual_table.h" />
     <ClInclude Include="runtime\stack_frame.h" />
     <ClInclude Include="runtime\virtual_machine.h" />
     <ClInclude Include="oop\oop.h" />
-    <ClInclude Include="jvm\vm_symbols.hpp" />
+    <ClInclude Include="jvm\vm_exception.h" />
     <ClInclude Include="oop\jarray.h" />
     <ClInclude Include="oop\jobject.h" />
-    <ClInclude Include="precompile\precompile.hpp" />
-    <ClInclude Include="runtime\bytes.hpp" />
+    <ClInclude Include="precompile\precompile.h" />
+    <ClInclude Include="runtime\bytes.h" />
     <ClInclude Include="runtime\jthread.h" />
     <ClInclude Include="runtime\operand.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="utilities\debug.hpp" />
-    <ClInclude Include="utilities\top.hpp" />
-    <ClInclude Include="utilities\types.hpp" />
-    <ClInclude Include="utilities\unzip.h" />
+    <ClInclude Include="utilities\debug.h" />
+    <ClInclude Include="utilities\top.h" />
+    <ClInclude Include="utilities\types.h" />
+    <ClInclude Include="utilities\utf8.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="classfile\class_file_reader.cpp" />
-    <ClCompile Include="classfile\class_file_stream.cpp" />
-    <ClCompile Include="gc\memory.cpp" />
-    <ClCompile Include="oop\bootstrap_class_loader.cpp" />
-    <ClCompile Include="oop\class_loader.cpp" />
+    <ClCompile Include="classfile\class_file_reader.cc" />
+    <ClCompile Include="classfile\class_file_stream.cc" />
+    <ClCompile Include="classfile\constant_pool.cc" />
+    <ClCompile Include="classfile\symbol.cc" />
+    <ClCompile Include="gc\memory.cc" />
+    <ClCompile Include="jvm\vm_exception.cc" />
+    <ClCompile Include="oop\bootstrap_class_loader.cc" />
+    <ClCompile Include="oop\class_loader.cc" />
     <ClCompile Include="oop\field.cpp" />
-    <ClCompile Include="oop\klass.cpp" />
-    <ClCompile Include="oop\method.cpp" />
-    <ClCompile Include="oop\url_class_loader.cpp" />
-    <ClCompile Include="interpreter\byte_codes.cpp" />
-    <ClCompile Include="interpreter\byte_code_stream.cpp" />
-    <ClCompile Include="runtime\operand.cpp" />
-    <ClCompile Include="runtime\operand_stack.cpp" />
-    <ClCompile Include="runtime\stack_frame.cpp" />
-    <ClCompile Include="runtime\virtual_machine.cpp" />
-    <ClCompile Include="jvm\main.cpp" />
-    <ClCompile Include="oop\oop.cpp" />
-    <ClCompile Include="oop\jarray.cpp" />
-    <ClCompile Include="oop\jobject.cpp" />
-    <ClCompile Include="precompile\precompile.cpp">
+    <ClCompile Include="oop\klass.cc" />
+    <ClCompile Include="oop\method.cc" />
+    <ClCompile Include="oop\url_class_loader.cc" />
+    <ClCompile Include="interpreter\byte_codes.cc" />
+    <ClCompile Include="interpreter\byte_code_stream.cc" />
+    <ClCompile Include="runtime\operand.cc" />
+    <ClCompile Include="runtime\stack_frame.cc" />
+    <ClCompile Include="runtime\virtual_machine.cc" />
+    <ClCompile Include="jvm\main.cc" />
+    <ClCompile Include="oop\oop.cc" />
+    <ClCompile Include="oop\jarray.cc" />
+    <ClCompile Include="oop\jobject.cc" />
+    <ClCompile Include="precompile\precompile.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="runtime\jthread.cpp" />
-    <ClCompile Include="utilities\debug.cpp" />
-    <ClCompile Include="utilities\unzip.cpp" />
+    <ClCompile Include="runtime\jthread.cc" />
+    <ClCompile Include="utilities\debug.cc" />
+    <ClCompile Include="utilities\utf8.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

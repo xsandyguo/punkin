@@ -112,7 +112,6 @@ void Field::SetInt(jobject obj, jint val) {
 }
 
 void Field::SetLong(jobject obj, jlong val) {
-
     *(jlong*)GetFieldData(obj) = val;
 }
 

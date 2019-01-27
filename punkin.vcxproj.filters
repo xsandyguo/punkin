@@ -27,78 +27,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="utilities\types.hpp">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\top.hpp">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_file_stream.hpp">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="runtime\bytes.hpp">
-      <Filter>runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\debug.hpp">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="jvm\vm_symbols.hpp">
-      <Filter>jvm</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="precompile\precompile.hpp">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_file_type.hpp">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_file_reader.hpp">
-      <Filter>classfile</Filter>
-    </ClInclude>
-    <ClInclude Include="base\debug.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\error.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\auto_any.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\basictypes.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\scoped_any.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\smart_any_fwd.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\scoped_ptr.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\shared_any.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\shared_ptr.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\utility.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="interpreter\byte_codes.h">
       <Filter>interpreter</Filter>
     </ClInclude>
     <ClInclude Include="interpreter\byte_code_stream.h">
       <Filter>interpreter</Filter>
-    </ClInclude>
-    <ClInclude Include="classfile\class_file_type.cpp">
-      <Filter>classfile</Filter>
     </ClInclude>
     <ClInclude Include="oop\jarray.h">
       <Filter>oop</Filter>
@@ -127,9 +60,6 @@
     <ClInclude Include="oop\bootstrap_class_loader.h">
       <Filter>oop</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\unzip.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
     <ClInclude Include="gc\memory.h">
       <Filter>gc</Filter>
     </ClInclude>
@@ -142,82 +72,130 @@
     <ClInclude Include="runtime\virtual_machine.h">
       <Filter>runtime</Filter>
     </ClInclude>
-    <ClInclude Include="runtime\operand_stack.h">
-      <Filter>runtime</Filter>
-    </ClInclude>
     <ClInclude Include="runtime\stack_frame.h">
       <Filter>runtime</Filter>
     </ClInclude>
+    <ClInclude Include="classfile\class_file_type.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_type.cc">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_stream.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\class_file_reader.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="precompile\precompile.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\debug.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\top.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\types.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\bytes.h">
+      <Filter>runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\symbol.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="jvm\vm_exception.h">
+      <Filter>jvm</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\utf8.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile\constant_pool.h">
+      <Filter>classfile</Filter>
+    </ClInclude>
+    <ClInclude Include="oop\virtual_table.h">
+      <Filter>oop</Filter>
+    </ClInclude>
+    <ClInclude Include="gc\allocator.h">
+      <Filter>gc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="classfile\class_file_stream.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\debug.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="precompile\precompile.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="jvm\main.cpp">
-      <Filter>jvm</Filter>
-    </ClCompile>
-    <ClCompile Include="classfile\class_file_reader.cpp">
-      <Filter>classfile</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter\byte_codes.cpp">
-      <Filter>interpreter</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter\byte_code_stream.cpp">
-      <Filter>interpreter</Filter>
-    </ClCompile>
-    <ClCompile Include="oop\jarray.cpp">
-      <Filter>oop</Filter>
-    </ClCompile>
-    <ClCompile Include="oop\jobject.cpp">
-      <Filter>oop</Filter>
-    </ClCompile>
-    <ClCompile Include="oop\oop.cpp">
-      <Filter>oop</Filter>
-    </ClCompile>
-    <ClCompile Include="oop\class_loader.cpp">
-      <Filter>oop</Filter>
-    </ClCompile>
     <ClCompile Include="oop\field.cpp">
       <Filter>oop</Filter>
     </ClCompile>
-    <ClCompile Include="oop\klass.cpp">
+    <ClCompile Include="oop\bootstrap_class_loader.cc">
       <Filter>oop</Filter>
     </ClCompile>
-    <ClCompile Include="oop\method.cpp">
-      <Filter>oop</Filter>
+    <ClCompile Include="interpreter\byte_code_stream.cc">
+      <Filter>interpreter</Filter>
     </ClCompile>
-    <ClCompile Include="oop\url_class_loader.cpp">
-      <Filter>oop</Filter>
+    <ClCompile Include="classfile\class_file_stream.cc">
+      <Filter>classfile</Filter>
     </ClCompile>
-    <ClCompile Include="oop\bootstrap_class_loader.cpp">
-      <Filter>oop</Filter>
+    <ClCompile Include="classfile\class_file_reader.cc">
+      <Filter>classfile</Filter>
     </ClCompile>
-    <ClCompile Include="utilities\unzip.cpp">
+    <ClCompile Include="precompile\precompile.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="jvm\main.cc">
+      <Filter>jvm</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\debug.cc">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="gc\memory.cpp">
+    <ClCompile Include="runtime\virtual_machine.cc">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\stack_frame.cc">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\operand.cc">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\jthread.cc">
+      <Filter>runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\url_class_loader.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\oop.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\method.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\klass.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\jobject.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\jarray.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="oop\class_loader.cc">
+      <Filter>oop</Filter>
+    </ClCompile>
+    <ClCompile Include="interpreter\byte_codes.cc">
+      <Filter>interpreter</Filter>
+    </ClCompile>
+    <ClCompile Include="gc\memory.cc">
       <Filter>gc</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\jthread.cpp">
-      <Filter>runtime</Filter>
+    <ClCompile Include="classfile\symbol.cc">
+      <Filter>classfile</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\virtual_machine.cpp">
-      <Filter>runtime</Filter>
+    <ClCompile Include="jvm\vm_exception.cc">
+      <Filter>jvm</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\operand_stack.cpp">
-      <Filter>runtime</Filter>
+    <ClCompile Include="utilities\utf8.cpp">
+      <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\operand.cpp">
-      <Filter>runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\stack_frame.cpp">
-      <Filter>runtime</Filter>
+    <ClCompile Include="classfile\constant_pool.cc">
+      <Filter>classfile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

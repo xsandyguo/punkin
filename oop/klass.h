@@ -4,19 +4,17 @@
 #include <string>
 #include <vector>
 
+#include "classfile/constant_pool.h"
+#include "classfile/class_file_type.h"
 #include "oop/oop.h"
 #include "oop/field.h"
 #include "oop/method.h"
 
 class ClassLoader;
 
-class ConstantPool {
-
-};
-
 class Klass {
   public:
-    Klass();
+    Klass(ClassFileInfo* classFile);
     ~Klass();
   public:
     void Init();
@@ -29,6 +27,10 @@ class Klass {
     bool IsInterface();
     bool IsSynthetic();
     bool IsInstance(jobject obj);
+    bool IsKlass();
+    bool IsAbstract();
+    bool IsFinal();
+    bool IsPublic();
 
     int GetModifier();
     void SetModifier(int modifier);
@@ -36,7 +38,7 @@ class Klass {
     Method* ResolveMethodByName(const std::string& name);
     Method* GetStaticConstructor();
 
-    BasicDataType   GetType();
+    BasicDataType GetType();
     bool IsResolved();
 
   public:
@@ -57,7 +59,6 @@ class Klass {
 
     ClassLoader* GetClassLoader();
     void SetClassLoader(ClassLoader* classLoader);
-    void SetConstantPool(std::vector<ConstantPool*>& constantPools);
 
     Klass* GetSuperKlass();
     void SetSuperKlass(Klass* superKlass);
@@ -71,20 +72,29 @@ class Klass {
     void ComputeStaticSize();
     void ComputeInstanceSize();
 
+    ConstantPool& GetConstantPool();
+
   private:
     int modifier_;
     Klass* superKlass_;
     ClassLoader* classLoader_;
+
     std::vector<Constructor*> constructors_;
     std::vector<Method*> methods_;
     std::vector<Field*> fields_;
     std::string name_;
-    std::vector<ConstantPool*> constantPools_;
-    bool resolved_;
+
+    ConstantPool constantPool_;
+
+    ClassFileInfo* classFile_;
     std::vector<Klass*> declaredKlasses_;
+
+    bool resolved_;
+
     addr staticData_;
     int staticDataSize_;
     int instanceDataSize_;
+
     Method* staticConstructor_;
     BasicDataType type_;
 };
